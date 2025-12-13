@@ -4,6 +4,7 @@ import { SectionHeader } from "../components/section/SectionHeader";
 import { AlbumCard } from "../components/cards/AlbumCard";
 import { VideoCard } from "../components/cards/VideoCard";
 import { GenreChipList } from "../components/chips/GenreChipList";
+
 export function ExplorePage() {
   return `
    <div class="bg-linear-to-b from-[#181818] via-[#0f0f0f] to-[#0f0f0f] text-white font-[Inter]" >
@@ -12,11 +13,11 @@ export function ExplorePage() {
 
   ${Header()} ${Sidebar()}
   <!--  Main content  -->
-  <div id="mainContentWrapper" class="pt-16 md:ml-64 pb-20 over">
+  <div id="mainContentWrapper" class="pt-16 md:ml-64 pb-20 ">
     <main id="mainContent" class="mt-10 ml-20 mr-15">
 
       <!-- Discover -->
-      <div class="flex gap-6 mt-6">
+      <div class="flex gap-6 mt-16">
         <!-- Item -->
         <button class="flex flex-1 items-center cursor-pointer gap-3 px-6 py-4 rounded-xl hover:bg-[#2a2a2a] bg-[#3a3a3a] transition text-white font-bold">
           <span class="material-symbols-outlined text-white/80 text-[22px]">
@@ -50,9 +51,8 @@ export function ExplorePage() {
       })}
 
       <!-- content bên dưới (horizontal scroll cards) -->
-     <div class="overflow-x-auto custom-scrollbar pb-[10px]">
-        <div  class="grid grid-flow-col gap-[15px]
-           auto-cols-[calc(100%/6-12px)]">
+     <div class="overflow-x-auto custom-scrollbar pb-2.5">
+        <div  class="grid grid-flow-col gap-3.75 auto-cols-[calc(100%/6-12px)]">
         ${AlbumCard()}
         ${AlbumCard()}
         ${AlbumCard()}
@@ -73,10 +73,10 @@ export function ExplorePage() {
       })}
 
       <!-- content bên dưới (horizontal scroll cards) -->
-     <div class="overflow-x-auto custom-scrollbar pb-[10px]">
-        <div  class="grid grid-flow-col gap-[15px]
-           auto-cols-[calc(100%/6-15px)] ">
-          ${GenreChipList()}
+     <div class="overflow-x-auto custom-scrollbar pb-2.5">
+     <div class="grid grid-flow-col gap-[10px]
+            auto-cols-[calc((100%-40px)/6)]">
+        ${GenreChipList()}
         ${GenreChipList()}
         ${GenreChipList()}
         ${GenreChipList()}
@@ -95,19 +95,18 @@ export function ExplorePage() {
       })}
 
       <!-- content bên dưới (horizontal scroll cards) -->
-     <div class="overflow-x-auto custom-scrollbar pb-[10px]">
-        <div  class="grid grid-flow-col gap-[15px]
-           auto-cols-[calc(100%/4-12px)] ">
+     <div class="overflow-x-auto custom-scrollbar pb-2.5">
+        <div  class="grid grid-flow-col gap-3.75 auto-cols-[calc(100%/4-10px)] ">
           ${VideoCard()}
-        ${VideoCard()}
-         ${VideoCard()}
           ${VideoCard()}
-           ${VideoCard()}
-            ${VideoCard()}
-             ${VideoCard()}
-              ${VideoCard()}
-               ${VideoCard()}
-                ${VideoCard()}
+          ${VideoCard()}
+          ${VideoCard()}
+          ${VideoCard()}
+          ${VideoCard()}
+          ${VideoCard()}
+          ${VideoCard()}
+          ${VideoCard()}
+          ${VideoCard()}
         </div>
      </div>
     </section>

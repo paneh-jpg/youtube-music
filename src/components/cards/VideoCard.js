@@ -1,6 +1,9 @@
 export function VideoCard() {
+  const desktopSidebarState = JSON.parse(
+    localStorage.getItem("sidebar_state") || "{}"
+  ).desktop;
   return `
-  <div class="w-[280px] shrink-0">
+  <div class="desktopSidebarState === "expanded" ? "280px" : "320px"; shrink-0">
     <!-- ===== THUMBNAIL ===== -->
     <div
       class="relative aspect-video rounded-xl overflow-hidden

@@ -1,6 +1,9 @@
 export function AlbumCard() {
+  const desktopSidebarState = JSON.parse(
+    localStorage.getItem("sidebar_state") || "{}"
+  ).desktop;
   return `
-  <div class="w-[180px] shrink-0">
+  <div class="desktopSidebarState === "expanded" ? "180px" : "206px"; shrink-0">
     <!-- ===== THUMBNAIL ===== -->
     <div
       class="relative aspect-square rounded-xl overflow-hidden

@@ -55,6 +55,7 @@ export function Sidebar() {
 }
 
 const MD_BREAKPOINT = 768;
+const SIDEBAR_STATE_KEY = "sidebar_state";
 
 export function initSidebar() {
   const sidebar = document.getElementById("sidebar");
@@ -99,7 +100,6 @@ export function initSidebar() {
     const isDesktop = window.innerWidth >= MD_BREAKPOINT;
 
     if (isDesktop) {
-      // DESKTOP SIDEBAR COLLAPSE
       sidebar.classList.toggle("md:w-64");
       sidebar.classList.toggle("md:w-24");
 
@@ -108,18 +108,28 @@ export function initSidebar() {
 
       sidebar.classList.toggle("sidebar-collapsed");
 
-      // Cập nhật nút login
+      const isCollapsed = sidebar.classList.contains("sidebar-collapsed");
+
+      localStorage.setItem(
+        SIDEBAR_STATE_KEY,
+        JSON.stringify({ desktop: isCollapsed ? "collapsed" : "expanded" })
+      );
+
       updateLoginButtonUI();
     } else {
-      // MOBILE SIDEBAR SLIDE
       sidebar.classList.toggle("-translate-x-full");
       sidebar.classList.toggle("translate-x-0");
 
       const isClosed = sidebar.classList.contains("-translate-x-full");
 
+      localStorage.setItem(
+        SIDEBAR_STATE_KEY,
+        JSON.stringify({ mobile: isClosed ? "closed" : "open" })
+      );
+
       if (isClosed) {
-        overlay.classList.remove("opacity-100", "visible");
         overlay.classList.add("opacity-0", "invisible");
+        overlay.classList.remove("opacity-100", "visible");
         document.body.classList.remove("overflow-hidden");
       } else {
         overlay.classList.remove("opacity-0", "invisible");
@@ -143,6 +153,31 @@ export function initSidebar() {
     updateLoginButtonUI();
   });
 
+  function restoreSidebarState() {
+    const saved = JSON.parse(localStorage.getItem(SIDEBAR_STATE_KEY) || "{}");
+
+    if (window.innerWidth >= MD_BREAKPOINT) {
+      if (saved.desktop === "collapsed") {
+        sidebar.classList.remove("md:w-64");
+        sidebar.classList.add("md:w-24");
+        sidebar.classList.add("sidebar-collapsed");
+
+        mainContentWrapper.classList.remove("md:ml-64");
+        mainContentWrapper.classList.add("md:ml-24");
+      }
+    } else {
+      if (saved.mobile === "open") {
+        sidebar.classList.remove("-translate-x-full");
+        sidebar.classList.add("translate-x-0");
+
+        overlay.classList.remove("opacity-0", "invisible");
+        overlay.classList.add("opacity-100", "visible");
+        document.body.classList.add("overflow-hidden");
+      }
+    }
+  }
+
+  restoreSidebarState();
   // Khởi tạo trạng thái đúng ngay từ đầu
   updateLoginButtonUI();
 }
