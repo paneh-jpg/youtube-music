@@ -1,4 +1,5 @@
 import { Header, initHeader } from "../components/header";
+import { Sidebar, initSidebar } from "../components/sidebar";
 
 export function HomePage() {
   return `
@@ -6,7 +7,7 @@ export function HomePage() {
       <!-- Overlay -->
       <div id="overlay" class="fixed inset-0 bg-black/50 opacity-0 invisible transition-opacity duration-300 z-30 md:hidden"></div>
 
-      ${Header()} 
+      ${Header()}  ${Sidebar()} 
       <!--  Main content  -->
       <div id="mainContentWrapper" class="pt-16 md:ml-64 h-screen ">
         <main id="mainContent" class="mt-6 ml-10" >
@@ -19,4 +20,5 @@ export function HomePage() {
 
 export function initHomePage() {
   initHeader();
+  initSidebar();
 }

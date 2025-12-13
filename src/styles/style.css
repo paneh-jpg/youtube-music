@@ -3,8 +3,54 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer components {
-  .btn-primary {
-    @apply bg-red-600 text-white hover:bg-red-700;
+/* Xử lý CSS đóng/mở sidebar  */
+.sidebar-collapsed .sidebar-text {
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
+  transition: opacity 0.3s ease, width 0.3s ease;
+}
+
+.sidebar-collapsed .sidebar-hide {
+  display: none;
+}
+
+.sidebar-collapsed a {
+  justify-content: center;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+@media (min-width: 768px) {
+  #sidebar.sidebar-collapsed .h-16 {
+    justify-content: center;
+  }
+
+  #sidebar.sidebar-collapsed nav a {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    padding: 0.75rem 0.5rem;
+    height: 4.5rem;
+  }
+
+  #sidebar.sidebar-collapsed nav a span:not(.material-symbols-outlined) {
+    font-size: 11px;
+    margin-top: 4px;
+    font-weight: 400 !important;
+    text-align: center;
+  }
+
+  #sidebar.sidebar-collapsed .mt-4.border-t {
+    display: none;
+  }
+
+  #sidebar.sidebar-collapsed .mt-4.px-3 {
+    display: none;
+  }
+
+  #sidebar.sidebar-collapsed .mt-6.px-4.pb-6 > div {
+    display: none;
   }
 }
