@@ -33,7 +33,7 @@ export function Sidebar() {
         <div class="js-logged mt-5 border-t border-white/10 pt-5 px-3">
           <!-- Nút full dùng khi sidebar mở -->
           <button data-navigo href="/auth" id="loginFull"
-            class=" login-btn w-full  cursor-pointer bg-white text-black py-2 rounded-full font-medium">
+            class=" login-btn w-full  cursor-pointer bg-[#484848] text-white py-2 rounded-full font-medium">
             Đăng nhập
           </button>
 

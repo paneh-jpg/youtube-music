@@ -1,5 +1,5 @@
-import { Header, initHeader } from "../components/header";
-import { Sidebar, initSidebar } from "../components/sidebar";
+import { Header, initHeader } from "../components/layout/Header";
+import { Sidebar, initSidebar } from "../components/layout/Sidebar";
 
 export function HomePage() {
   return `
