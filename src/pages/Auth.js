@@ -79,7 +79,6 @@ export function AuthPage() {
                   alternate_email
                 </span>
                 <input
-                  autocomplete="off"
                   id="signin-email"
                   type="email"
                   placeholder="you@example.com"

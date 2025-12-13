@@ -1,7 +1,8 @@
 import { router } from "./router/router";
 
 import "./styles/style.css";
-import { HomePage } from "./pages/home";
+import "./styles/base.css";
+import { HomePage, initHomePage } from "./pages/home";
 import { AuthPage, initAuthPage } from "./pages/auth";
 const app = document.querySelector("#app");
 
@@ -15,7 +16,7 @@ function render(html, init) {
 // Routers
 router
   .on("/", () => {
-    render(HomePage(), 0);
+    render(HomePage(), initHomePage);
   })
   .on("/auth", () => {
     render(AuthPage(), initAuthPage);
