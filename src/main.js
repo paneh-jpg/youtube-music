@@ -2,7 +2,7 @@ import { router } from "./router/router";
 
 import "./styles/style.css";
 import { HomePage } from "./pages/home";
-import { AuthPage } from "./pages/auth";
+import { AuthPage, initAuthPage } from "./pages/auth";
 const app = document.querySelector("#app");
 
 function render(html, init) {
@@ -18,7 +18,7 @@ router
     render(HomePage(), 0);
   })
   .on("/auth", () => {
-    render(AuthPage(), 0);
+    render(AuthPage(), initAuthPage);
   })
   .notFound(() => {
     app.innerHTML = "<h1>404</h1>";
