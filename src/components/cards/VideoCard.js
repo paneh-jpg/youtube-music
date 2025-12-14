@@ -1,4 +1,8 @@
-export function VideoCard() {
+export function VideoCard({
+  name = "Unknown",
+  thumbnail = "https://placehold.co/300x300/181818/ffffff?text=Music",
+  views = "1tr",
+} = {}) {
   const desktopSidebarState = JSON.parse(
     localStorage.getItem("sidebar_state") || "{}"
   ).desktop;
@@ -10,7 +14,7 @@ export function VideoCard() {
              group cursor-pointer"
     >
       <img
-        src="https://placehold.co/480x270/181818/ffffff?text=Video"
+        src="${thumbnail}"
         class="w-full h-full object-cover"
       />
 
@@ -55,13 +59,18 @@ export function VideoCard() {
         class="text-white text-md font-semibold
                leading-snug line-clamp-2"
       >
-        xmas day, em dau
+        ${name}
       </h3>
 
       <p class="text-white/60 text-sm line-clamp-1">
-        Kai Dinh, PiaLinh và Dangrangto • 364 N lượt xem
+        Singer • ${formatViewsFull(views)}
       </p>
     </div>
   </div>
   `;
+}
+
+export function formatViewsFull(views) {
+  const n = Number(views) || 0;
+  return `${n.toLocaleString("vi-VN")} lượt xem`;
 }

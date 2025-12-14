@@ -128,6 +128,7 @@ const initSettingsModal = async () => {
 
   const closeModal = () => {
     modal.classList.add("hidden");
+    renderProfile();
   };
 
   openBtn.onclick = () => {

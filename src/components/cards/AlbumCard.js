@@ -1,4 +1,8 @@
-export function AlbumCard() {
+export function AlbumCard({
+  thumbnail = "https://placehold.co/300x300/181818/ffffff?text=Music",
+  name = "Unknown",
+  albumType = "Đĩa đơn",
+} = {}) {
   const desktopSidebarState = JSON.parse(
     localStorage.getItem("sidebar_state") || "{}"
   ).desktop;
@@ -10,7 +14,7 @@ export function AlbumCard() {
              group cursor-pointer"
     >
       <img
-        src="https://placehold.co/300x300/181818/ffffff?text=Music"
+        src="${thumbnail}"
         class="w-full h-full object-cover"
       />
 
@@ -58,15 +62,15 @@ export function AlbumCard() {
         class="text-white text-md font-semibold leading-snug
                line-clamp-2"
       >
-        Heather
+       ${name}
       </h3>
 
     <div class= "flex">  <!-- Type -->
       <p class="text-white/60 text-sm">
-        Đĩa đơn&nbsp;  • 	&nbsp;  
+        ${albumType}&nbsp;  • 	&nbsp;  
       </p>
       <!-- Artist -->
-      <p class="text-white/60 text-sm hover:underline cursor-pointer line-clamp-1" > Conan Gray </p> 
+      <p class="text-white/60 text-sm hover:underline cursor-pointer line-clamp-1" > Singer </p> 
       </div>
     </div>
   </div>
