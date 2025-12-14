@@ -1,4 +1,5 @@
 import authorizedAxiosInstance from "../utils/authorizedAxios";
+
 import { router } from "../router/router";
 import { showLoading, hideLoading } from "../utils/loading";
 import { LoadingOverlay } from "../components/loading/LoadingOverlay";
@@ -305,10 +306,8 @@ export function initAuthPage() {
       );
 
       const token = response.data;
-
       localStorage.setItem("access_token", token.access_token);
       localStorage.setItem("refresh_token", token.refresh_token);
-
       toast.success("Đăng nhập thành công!");
 
       setTimeout(() => {
@@ -316,6 +315,7 @@ export function initAuthPage() {
       }, 1500);
     } catch (error) {
       console.error(error);
+      router.navigate("/auth");
     } finally {
       hideLoading();
     }

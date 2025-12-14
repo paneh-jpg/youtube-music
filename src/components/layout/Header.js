@@ -1,5 +1,7 @@
 import { handleLogoutAPI } from "../../api/authApi";
-import { getProfile } from "../../api/index";
+import { getProfileApi } from "../../api/userApi";
+import { hideLoading, showLoading } from "../../utils/loading";
+import { toast } from "../common/toast";
 import { LoadingOverlay } from "../loading/LoadingOverlay";
 
 export function Header() {
@@ -28,7 +30,7 @@ export function Header() {
           <div class="js-search-box flex items-center rounded-xl  focus:border-b-0 bg-[rgba(255,255,255,0.12)] border border-[rgba(255,255,255,0.15)] px-6 py-2.5 transition-all duration-150 focus-within:bg-[rgba(255,255,255,0.18)] focus-within:border-[rgba(255,255,255,0.25)]" >
             <i class="fa-solid fa-magnifying-glass text-white/70 mr-4 text-xl" ></i>
 
-            <input type="text"  placeholder="Tìm kiếm bài hát, đĩa nhạc, nghệ sĩ, podcast"
+            <input type="text" autocomplete="off" name="search-input"  placeholder="Tìm kiếm bài hát, đĩa nhạc, nghệ sĩ, podcast"
               class="js-search-input flex-1 bg-transparent text-white placeholder:text-white/50 focus:placeholder:text-white/80 focus:outline-none text-[16px]" />
 
             <!-- Clear button -->
@@ -62,17 +64,17 @@ export function Header() {
         <!-- Avatar -->
         <div id="userAvatar" class=" relative cursor-pointer select-none">
           <div id="avatarBox" class="h-7 w-7  cursor-pointer select-none rounded-full bg-gray-500 text-white hidden items-center justify-center font-semibold text-sm" >
-            A
+            
           </div>
 
           <div id="userMenu" class="absolute right-0 mt-3 w-70 rounded-2xl bg-[#1f1f1f] text-white shadow-xl border border-white/10 hidden" >
             <!-- User Info -->
             <div class="p-4">
               <p class="cursor-default font-semibold text-lg">
-                Xin chào <span id="userFullName">User Name</span>
+                Xin chào <span id="userFullName" >User Name</span>
               </p>
               <p class="cursor-default text-sm text-gray-300" id="userEmail">
-                @email
+                Gmail:
               </p>
 
               <button class="cursor-pointer text-blue-400 text-sm mt-1 hover:underline" >
@@ -84,7 +86,7 @@ export function Header() {
 
             <!-- Menu -->
             <div class="p-2 flex flex-col items-start gap-3 mb-2">
-              <a href="#" class="cursor-pointer text-sm flex gap-1.5 items-center menu-item" >
+              <a href="/profile" data-navigo class="cursor-pointer text-sm flex gap-1.5 items-center menu-item" >
                 <span class="material-symbols-outlined">account_circle</span>
                 Hồ sơ cá nhân
               </a>
@@ -107,6 +109,7 @@ export function initHeader() {
   initMobileSearch();
   initSearchSuggestions();
   updateHeaderAuthUI();
+
   handleLogout();
 }
 
@@ -222,18 +225,20 @@ function initSearchSuggestions() {
 
 async function updateHeaderAuthUI() {
   const token = localStorage.getItem("access_token");
-  if (!token) return;
-  getProfile();
+
   const loginBtn = document.querySelector(".login-btn");
   const userAvatar = document.getElementById("avatarBox");
   const userMenu = document.getElementById("userMenu");
+  const username = document.querySelector("#userFullName");
+  const userEmail = document.querySelector("#userEmail");
 
-  if (!loginBtn || !userAvatar || !userMenu) return;
+  if (!loginBtn || !userAvatar || !userMenu || !username || !userEmail) return;
 
   if (token) {
     loginBtn.classList.add("hidden");
     userAvatar.classList.remove("hidden");
     userAvatar.classList.add("flex");
+    userAvatar.textContent = userAvatar.textContent || "";
   } else {
     loginBtn.classList.remove("hidden");
     userAvatar.classList.add("hidden");
@@ -242,19 +247,45 @@ async function updateHeaderAuthUI() {
     return;
   }
 
+  try {
+    showLoading();
+    const response = await getProfileApi();
+    const user = response.data;
+
+    username.textContent = user.name;
+    userEmail.textContent = user.email;
+    userAvatar.textContent = user.name[0];
+  } catch (error) {
+    toast.error(
+      error?.response?.data?.message || error.message || "Có lỗi xảy ra"
+    );
+
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
+
+    loginBtn.classList.remove("hidden");
+    userAvatar.classList.add("hidden");
+    userAvatar.classList.remove("flex");
+    userMenu.classList.add("hidden");
+  } finally {
+    setTimeout(() => {
+      hideLoading();
+    }, 300);
+  }
+
   userAvatar.onclick = null;
   document.onclick = null;
 
-  userAvatar.addEventListener("click", (e) => {
+  userAvatar.addEventListener("click", function handleAvatarClick(e) {
     e.stopPropagation();
     userMenu.classList.toggle("hidden");
   });
 
-  userMenu.addEventListener("click", (e) => {
+  userMenu.addEventListener("click", function handleMenuClick(e) {
     e.stopPropagation();
   });
 
-  document.addEventListener("click", () => {
+  document.addEventListener("click", function handleDocumentClick() {
     userMenu.classList.add("hidden");
   });
 }

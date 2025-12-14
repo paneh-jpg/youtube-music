@@ -17,7 +17,7 @@ function baseToast({ message, icon, bg, border }) {
   ensureToastRoot();
 
   const toast = document.createElement("div");
-  toast.className = `
+  toast.className = ` z-[9999]
     pointer-events-auto
     flex items-center gap-3
     min-w-[260px] max-w-[360px]
