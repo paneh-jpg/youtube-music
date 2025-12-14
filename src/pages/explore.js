@@ -48,6 +48,7 @@ export function ExplorePage() {
         <section class="mt-30">
       ${SectionHeader({
         title: "Đĩa đơn và đĩa nhạc mới",
+        btnContent: "Xem thêm",
       })}
 
       <!-- content bên dưới (horizontal scroll cards) -->
@@ -70,11 +71,12 @@ export function ExplorePage() {
  <section class="mt-30">
       ${SectionHeader({
         title: "Tâm trạng và thể loại",
+        btnContent: "Xem thêm",
       })}
 
       <!-- content bên dưới (horizontal scroll cards) -->
      <div class="overflow-x-auto custom-scrollbar pb-2.5">
-     <div class="grid grid-flow-col gap-[10px]
+     <div class="grid grid-flow-col gap-2.5
             auto-cols-[calc((100%-40px)/6)]">
         ${GenreChipList()}
         ${GenreChipList()}
@@ -92,6 +94,7 @@ export function ExplorePage() {
        <section class="mt-30">
       ${SectionHeader({
         title: "Video nhạc mới",
+        btnContent: "Xem thêm",
       })}
 
       <!-- content bên dưới (horizontal scroll cards) -->

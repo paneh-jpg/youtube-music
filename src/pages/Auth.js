@@ -1,3 +1,11 @@
+import authorizedAxiosInstance from "../utils/authorizedAxios";
+import { router } from "../router/router";
+import { showLoading, hideLoading } from "../utils/loading";
+import { LoadingOverlay } from "../components/loading/LoadingOverlay";
+import { toast } from "../components/common/toast";
+
+const BASE_URL = import.meta.env.VITE_API_URL;
+
 export function AuthPage() {
   return `  <div class="bg-black text-white font-[Inter]">
     <!-- Background gradient -->
@@ -64,6 +72,7 @@ export function AuthPage() {
             </div>
             <div class="relative flex justify-center"></div>
           </div>
+
 
           <!-- Sign in form -->
           <form id="signInForm" class="space-y-3">
@@ -207,6 +216,11 @@ export function AuthPage() {
             </p>
           </form>
         </div>
+
+        ${LoadingOverlay()}
+  </div>
+</div>
+
       </main>
     </div>
   </div>`;
@@ -240,5 +254,70 @@ export function initAuthPage() {
     title.textContent = "Chào mừng trở lại 👋";
     subtitle.textContent =
       "Đăng nhập để tiếp tục nghe những bài hát yêu thích của bạn.";
+  });
+
+  signUpForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const name = document.getElementById("signup-name").value.trim();
+    const email = document.getElementById("signup-email").value.trim();
+    const password = document.getElementById("signup-password").value.trim();
+    const confirmPassword = document
+      .getElementById("signup-confirm")
+      .value.trim();
+
+    try {
+      showLoading();
+
+      const response = await authorizedAxiosInstance.post(
+        `${BASE_URL}/auth/register`,
+        { name, email, password, confirmPassword }
+      );
+
+      const token = response.data;
+
+      localStorage.setItem("access_token", token.access_token);
+      localStorage.setItem("refresh_token", token.refresh_token);
+
+      toast.success("Đăng ký thành công!");
+
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      hideLoading();
+    }
+  });
+
+  signInForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const email = document.getElementById("signin-email").value.trim();
+    const password = document.getElementById("signin-password").value.trim();
+
+    try {
+      showLoading();
+      const response = await authorizedAxiosInstance.post(
+        `${BASE_URL}/auth/login`,
+        { email, password }
+      );
+
+      const token = response.data;
+
+      localStorage.setItem("access_token", token.access_token);
+      localStorage.setItem("refresh_token", token.refresh_token);
+
+      toast.success("Đăng nhập thành công!");
+
+      setTimeout(() => {
+        router.navigate("/");
+      }, 1500);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      hideLoading();
+    }
   });
 }

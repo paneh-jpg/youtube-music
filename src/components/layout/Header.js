@@ -1,3 +1,7 @@
+import { handleLogoutAPI } from "../../api/authApi";
+import { getProfile } from "../../api/index";
+import { LoadingOverlay } from "../loading/LoadingOverlay";
+
 export function Header() {
   return `
     <!-- Header (Sticky)-->
@@ -56,8 +60,8 @@ export function Header() {
         </a>
 
         <!-- Avatar -->
-        <div id="userAvatar" class="relative cursor-pointer select-none">
-          <div id="avatarBox" class="h-7 w-7 cursor-pointer select-none rounded-full bg-gray-500 text-white hidden items-center justify-center font-semibold text-sm" >
+        <div id="userAvatar" class=" relative cursor-pointer select-none">
+          <div id="avatarBox" class="h-7 w-7  cursor-pointer select-none rounded-full bg-gray-500 text-white hidden items-center justify-center font-semibold text-sm" >
             A
           </div>
 
@@ -94,12 +98,16 @@ export function Header() {
         </div>
       </div>
     </header>
+
+      ${LoadingOverlay()}
   `;
 }
 
 export function initHeader() {
   initMobileSearch();
   initSearchSuggestions();
+  updateHeaderAuthUI();
+  handleLogout();
 }
 
 function initMobileSearch() {
@@ -211,3 +219,51 @@ function initSearchSuggestions() {
     if (!wrapper.contains(e.target)) closeDropdown();
   });
 }
+
+async function updateHeaderAuthUI() {
+  const token = localStorage.getItem("access_token");
+  if (!token) return;
+  getProfile();
+  const loginBtn = document.querySelector(".login-btn");
+  const userAvatar = document.getElementById("avatarBox");
+  const userMenu = document.getElementById("userMenu");
+
+  if (!loginBtn || !userAvatar || !userMenu) return;
+
+  if (token) {
+    loginBtn.classList.add("hidden");
+    userAvatar.classList.remove("hidden");
+    userAvatar.classList.add("flex");
+  } else {
+    loginBtn.classList.remove("hidden");
+    userAvatar.classList.add("hidden");
+    userAvatar.classList.remove("flex");
+    userMenu.classList.add("hidden");
+    return;
+  }
+
+  userAvatar.onclick = null;
+  document.onclick = null;
+
+  userAvatar.addEventListener("click", (e) => {
+    e.stopPropagation();
+    userMenu.classList.toggle("hidden");
+  });
+
+  userMenu.addEventListener("click", (e) => {
+    e.stopPropagation();
+  });
+
+  document.addEventListener("click", () => {
+    userMenu.classList.add("hidden");
+  });
+}
+
+const handleLogout = () => {
+  const logoutBtn = document.getElementById("logoutBtn");
+  if (!logoutBtn) return;
+
+  logoutBtn.onclick = () => {
+    handleLogoutAPI();
+  };
+};

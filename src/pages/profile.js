@@ -11,7 +11,7 @@ export function ProfilePage() {
       <!--  Main content  -->
       <div id="mainContentWrapper" class="pt-16 md:ml-64 h-screen ">
         <main id="mainContent" class="mt-6 ml-10 " >
-        <h1 class"text-3xl font-bold py-10 text-[#333]"> Hồ sơ cá nhân </h1>
+      
         </main>
       </div>
     </div>

@@ -30,7 +30,7 @@ export function Sidebar() {
         </nav>
 
         <!-- Login section -->
-        <div class="js-logged mt-5 border-t border-white/10 pt-5 px-3">
+        <div class="login-section mt-5 border-t border-white/10 pt-5 px-3">
           <!-- Nút full dùng khi sidebar mở -->
           <button data-navigo href="/auth" id="loginFull"
             class=" login-btn w-full  cursor-pointer bg-[#484848] text-white py-2 rounded-full font-medium">
@@ -56,6 +56,19 @@ export function Sidebar() {
 
 const MD_BREAKPOINT = 768;
 const SIDEBAR_STATE_KEY = "sidebar_state";
+
+function updateSidebarAuthUI() {
+  const token = localStorage.getItem("access_token");
+  const loginBtn = document.querySelector(".login-section ");
+
+  if (token) {
+    loginBtn.classList.add("hidden");
+  } else {
+    loginBtn.classList.remove("hidden");
+
+    return;
+  }
+}
 
 export function initSidebar() {
   const sidebar = document.getElementById("sidebar");
@@ -180,4 +193,5 @@ export function initSidebar() {
   restoreSidebarState();
   // Khởi tạo trạng thái đúng ngay từ đầu
   updateLoginButtonUI();
+  updateSidebarAuthUI();
 }

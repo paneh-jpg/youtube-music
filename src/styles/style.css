@@ -85,3 +85,17 @@
 .custom-scrollbar:hover::-webkit-scrollbar-thumb:hover {
   background-color: rgba(255, 255, 255, 0.55);
 }
+
+@layer components {
+  .category-item {
+    @apply whitespace-nowrap rounded-md
+           px-4 py-2 text-sm font-medium
+           bg-[#1f1f1f] text-white/90
+           hover:bg-[#2a2a2a] cursor-pointer
+           transition-colors duration-150;
+  }
+
+  .category-active {
+    @apply bg-white text-black hover:bg-white;
+  }
+}

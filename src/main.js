@@ -2,6 +2,7 @@ import { router } from "./router/router";
 
 import "./styles/style.css";
 import "./styles/base.css";
+import "./styles/animation.css";
 import { HomePage, initHomePage } from "./pages/home";
 import { AuthPage, initAuthPage } from "./pages/auth";
 import { ExplorePage, initExplorePage } from "./pages/explore";
