@@ -25,6 +25,11 @@ import {
   initVideosDetails,
   initVideosContent,
 } from "./pages/video-detail";
+import {
+  SongDetailPage,
+  initSongDetailPage,
+  initSongDetailContent,
+} from "./pages/song-detail";
 
 const app = document.querySelector("#app");
 
@@ -73,6 +78,21 @@ router
     initVideosDetails();
     initVideosContent(slug);
   })
+  .on("/songs/details/:id", (match) => {
+    const songId = decodeURIComponent(match?.data?.id || "");
+
+    //  lấy album slug từ query
+    const queryRaw = match?.queryString || "";
+    const query = queryRaw.startsWith("?") ? queryRaw.slice(1) : queryRaw;
+    const params = new URLSearchParams(query);
+    const albumSlug = params.get("album");
+
+    render(SongDetailPage());
+    initSongDetailPage({ songId, albumSlug });
+
+    initSongDetailContent({ songId, albumSlug });
+  })
+
   .notFound(() => {
     app.innerHTML = "<h1>404</h1>";
   });

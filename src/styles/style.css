@@ -105,3 +105,61 @@
   opacity: 0.35;
   cursor: not-allowed;
 }
+
+/* Ẩn Scrollbar */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* progress bar */
+.js-progress {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.18);
+  outline: none;
+}
+.js-progress::-webkit-slider-runnable-track {
+  height: 4px;
+  background: linear-gradient(
+    to right,
+    #ff0033 0%,
+    #ff0033 var(--p, 0%),
+    rgba(255, 255, 255, 0.18) var(--p, 0%),
+    rgba(255, 255, 255, 0.18) 100%
+  );
+}
+.js-progress::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  background: #ff0033;
+  margin-top: -4px; /* căn giữa track */
+  cursor: pointer;
+}
+
+/* range volume nhỏ gọn */
+.js-volume {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 3px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.2);
+  outline: none;
+}
+.js-volume::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: white;
+  cursor: pointer;
+}
