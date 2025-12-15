@@ -4,7 +4,8 @@ import { Sidebar, initSidebar } from "../components/layout/Sidebar";
 import { SettingsModal } from "../components/modals/SettingsModal";
 import { updateProfileApi } from "../api/userApi";
 import { toast } from "../components/common/toast";
-import { hideLoading, showLoading } from "../utils/loading";
+
+import { escapeHTML } from "../utils/utils";
 
 export function ProfilePage() {
   return `
@@ -158,8 +159,8 @@ const initSettingsModal = async () => {
     e.preventDefault();
 
     const userInfo = new FormData(formProfile);
-    const name = (userInfo.get("name") || "").toString().trim();
-    const email = (userInfo.get("email") || "").toString().trim();
+    const name = escapeHTML((userInfo.get("name") || "").toString().trim());
+    const email = escapeHTML((userInfo.get("email") || "").toString().trim());
 
     if (!name || !email) return;
 
@@ -176,11 +177,15 @@ const initSettingsModal = async () => {
     e.preventDefault();
     const userPw = new FormData(formPassword);
 
-    const oldPassword = (userPw.get("oldPassword") || "").toString().trim();
-    const password = (userPw.get("newPassword") || "").toString().trim();
-    const confirmPassword = (userPw.get("confirmPassword") || "")
-      .toString()
-      .trim();
+    const oldPassword = escapeHTML(
+      (userPw.get("oldPassword") || "").toString().trim()
+    );
+    const password = escapeHTML(
+      (userPw.get("newPassword") || "").toString().trim()
+    );
+    const confirmPassword = escapeHTML(
+      (userPw.get("confirmPassword") || "").toString().trim()
+    );
 
     if (!oldPassword || !password || !confirmPassword) return;
 

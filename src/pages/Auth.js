@@ -5,6 +5,8 @@ import { showLoading, hideLoading } from "../utils/loading";
 import { LoadingOverlay } from "../components/loading/LoadingOverlay";
 import { toast } from "../components/common/toast";
 
+import { escapeHTML } from "../utils/utils";
+
 const BASE_URL = import.meta.env.VITE_API_URL;
 
 export function AuthPage() {
@@ -260,12 +262,18 @@ export function initAuthPage() {
   signUpForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const name = document.getElementById("signup-name").value.trim();
-    const email = document.getElementById("signup-email").value.trim();
-    const password = document.getElementById("signup-password").value.trim();
-    const confirmPassword = document
-      .getElementById("signup-confirm")
-      .value.trim();
+    const name = escapeHTML(
+      document.getElementById("signup-name").value.trim()
+    );
+    const email = escapeHTML(
+      document.getElementById("signup-email").value.trim()
+    );
+    const password = escapeHTML(
+      document.getElementById("signup-password").value.trim()
+    );
+    const confirmPassword = escapeHTML(
+      document.getElementById("signup-confirm").value.trim()
+    );
 
     try {
       showLoading();
@@ -295,8 +303,12 @@ export function initAuthPage() {
   signInForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const email = document.getElementById("signin-email").value.trim();
-    const password = document.getElementById("signin-password").value.trim();
+    const email = escapeHTML(
+      document.getElementById("signin-email").value.trim()
+    );
+    const password = escapeHTML(
+      document.getElementById("signin-password").value.trim()
+    );
 
     try {
       showLoading();
