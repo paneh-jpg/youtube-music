@@ -1,12 +1,12 @@
 // src/components/chips/GenreChipList.js
-import { GenreColorChip } from "./GenreChip";
+import { GenreColorCate } from "./GenreCategory";
 
-export function GenreChipList({ items = [] } = {}) {
+export function GenreCateList({ items = [] } = {}) {
   return `
     <div class="space-y-3">
       ${items
         .map((g) =>
-          GenreColorChip({
+          GenreColorCate({
             label: g.name,
             color: g.color,
             slug: g.slug,

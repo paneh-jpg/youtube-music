@@ -9,6 +9,23 @@ import { ExplorePage, initExplorePage } from "./pages/explore";
 import { initLibraryPage, LibraryPage } from "./pages/library";
 import { initProfilePage, ProfilePage } from "./pages/profile";
 import { initUpgrade, Upgrade } from "./pages/upgrade";
+
+import {
+  CategoryPage,
+  initCategoryPage,
+  initCategoryContent,
+} from "./pages/categories";
+import {
+  AlbumsDetails,
+  initAlbumsDetails,
+  initAlbumsContent,
+} from "./pages/album-detail";
+import {
+  VideosDetails,
+  initVideosDetails,
+  initVideosContent,
+} from "./pages/video-detail";
+
 const app = document.querySelector("#app");
 
 function render(html, init) {
@@ -37,6 +54,24 @@ router
   })
   .on("/upgrade", () => {
     render(Upgrade(), initUpgrade);
+  })
+  .on("/categories/:slug", (match) => {
+    const slug = decodeURIComponent(match?.data?.slug || "");
+    render(CategoryPage());
+    initCategoryPage();
+    initCategoryContent(slug);
+  })
+  .on("/albums/details/:slug", (match) => {
+    const slug = decodeURIComponent(match?.data?.slug || "");
+    render(AlbumsDetails());
+    initAlbumsDetails();
+    initAlbumsContent(slug);
+  })
+  .on("/videos/details/:slug", (match) => {
+    const slug = decodeURIComponent(match?.data?.slug || "");
+    render(VideosDetails());
+    initVideosDetails();
+    initVideosContent(slug);
   })
   .notFound(() => {
     app.innerHTML = "<h1>404</h1>";

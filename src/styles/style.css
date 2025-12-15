@@ -99,3 +99,9 @@
     @apply bg-white text-black hover:bg-white;
   }
 }
+
+/* Nút mờ + disable */
+.is-disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}

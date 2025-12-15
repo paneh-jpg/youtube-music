@@ -5,13 +5,16 @@ import { AlbumCard } from "../components/cards/AlbumCard";
 import { VideoCard } from "../components/cards/VideoCard";
 
 import { getNewestAlbumList, getNewestVideoList } from "../api/exploreApi";
-import { GenreChipList } from "../components/chips/GenreChipList";
+import { GenreCateList } from "../components/chips/GenreCategoryList";
 import { getMetaList } from "../api/exploreApi";
+
+import { initCustomScrolling } from "../utils/horizontalScroll";
+
+import { router } from "../router/router";
 
 export function ExplorePage() {
   return `
-<div class="bg-linear-to-b from-[#181818] via-[#0f0f0f] to-[#0f0f0f] text-white font-[Inter]">
-
+ <div class="bg-linear-to-b from-[#181818] via-[#0f0f0f] to-[#0f0f0f] text-white font-[Inter]">
 
   <!-- Overlay -->
   <div id="overlay" class="fixed inset-0 bg-black/50 opacity-0 invisible transition-opacity duration-300 z-30 md:hidden"></div>
@@ -57,9 +60,9 @@ export function ExplorePage() {
       })}
 
       <!-- content bên dưới (horizontal scroll cards) -->
-     <div class="overflow-x-auto custom-scrollbar pb-2.5">
-        <div class="js-newest-albums grid grid-flow-col gap-3.75 auto-cols-[calc(100%/6-12px)]">
-        
+     <div class="js-album-list-container overflow-x-auto custom-scrollbar pb-2.5">
+        <div class="js-newest-albums grid grid-flow-col gap-4 auto-cols-[calc(100%/6-12px)]">
+               <!--   ALBUMs -->
         </div>
      </div>
     </section>
@@ -71,7 +74,7 @@ export function ExplorePage() {
       })}
 
       <!-- content bên dưới (horizontal scroll cards) -->
-     <div class="overflow-x-auto custom-scrollbar pb-2.5">
+     <div class="js-chip-list-container overflow-x-auto custom-scrollbar pb-2.5">
      <div class="js-genre-chips grid grid-flow-col gap-2.5 auto-cols-[calc((100%-40px)/6)]">
        
         </div>
@@ -86,9 +89,9 @@ export function ExplorePage() {
       })}
 
       <!-- content bên dưới (horizontal scroll cards) -->
-     <div class="overflow-x-auto custom-scrollbar pb-2.5">
+     <div class="js-video-list-container overflow-x-auto custom-scrollbar pb-2.5">
         <div  class="js-newest-videos grid grid-flow-col gap-3.75 auto-cols-[calc(100%/4-10px)] ">
-  
+                   <!--   VIDEO -->
         </div>
      </div>
     </section>
@@ -101,59 +104,69 @@ export function ExplorePage() {
 export function initExplorePage() {
   initHeader();
   initSidebar();
-  loadNewestAlbums();
-  loadNewestVideos();
-  loadGenreChips();
+  loadNewestAlbums().then(initCustomScrolling);
+  loadNewestVideos().then(initCustomScrolling);
+  loadGenreChips().then(initCustomScrolling);
 }
 
 async function loadNewestAlbums() {
   const container = document.querySelector(".js-newest-albums");
   if (!container) return;
 
-  try {
-    const res = await getNewestAlbumList(10);
+  const res = await getNewestAlbumList(10);
+  const items = res?.data?.items ?? [];
+  container.innerHTML = items
+    .map((item) =>
+      AlbumCard({
+        thumbnail: item.thumb,
+        name: item.name,
+        albumType: item.albumType || "Đĩa đơn",
+        artist: item.artistName || item.artist?.name || "Unknown",
+        slug: item.slug,
+      })
+    )
+    .join("");
 
-    const items = res?.data?.items ?? [];
+  container.addEventListener("click", (e) => {
+    const album = e.target.closest(".js-album");
 
-    container.innerHTML = items
-      .map((item) =>
-        AlbumCard({
-          thumbnail: item.thumb,
-          name: item.name,
-          albumType: item.albumType || "Đĩa đơn",
-          artist: item.artistName || item.artist?.name || "Unknown",
-        })
-      )
-      .join("");
-  } catch (e) {
-    console.error("loadNewestAlbums error:", e);
-    container.innerHTML = "";
-  }
+    if (!album) return;
+
+    const slug = album.dataset.slug;
+    console.log(slug);
+
+    router.navigate(`/albums/details/${encodeURIComponent(slug)}`); // add router
+  });
 }
 
 async function loadNewestVideos() {
   const container = document.querySelector(".js-newest-videos");
   if (!container) return;
 
-  try {
-    const res = await getNewestVideoList(10);
+  const res = await getNewestVideoList(10);
+  const items = res?.data?.items ?? [];
+  container.innerHTML = items
+    .map((item) =>
+      VideoCard({
+        thumbnail: item.thumb,
+        name: item.name,
+        albumType: item.albumType || "Đĩa đơn",
+        views: item.views,
+        slug: item.slug,
+      })
+    )
+    .join("");
 
-    const items = res?.data?.items ?? [];
+  container.addEventListener("click", (e) => {
+    const video = e.target.closest(".js-video");
 
-    container.innerHTML = items
-      .map((item) =>
-        VideoCard({
-          thumbnail: item.thumb,
-          name: item.name,
-          albumType: item.albumType || "Đĩa đơn",
-          views: item.views,
-        })
-      )
-      .join("");
-  } catch (e) {
-    console.error("loadNewestAlbums error:", e);
-    container.innerHTML = "";
-  }
+    if (!video) return;
+
+    const slug = video.dataset.slug;
+    console.log(slug);
+
+    router.navigate(`/videos/details/${encodeURIComponent(slug)}`); // add router
+  });
 }
 
 function chunk(arr, size) {
@@ -168,19 +181,19 @@ export async function loadGenreChips() {
 
   const res = await getMetaList();
 
-  const genres = res?.data?.lines;
+  const genres = res?.data?.categories.concat(res?.data?.lines);
 
   const perCol = 4;
   const cols = chunk(genres, perCol);
 
-  container.innerHTML = cols.map((items) => GenreChipList({ items })).join("");
+  container.innerHTML = cols.map((items) => GenreCateList({ items })).join("");
 
-  // optional: bắt sự kiện click 1 lần bằng event delegation
   container.addEventListener("click", (e) => {
     const chip = e.target.closest(".js-genre-chip");
+
     if (!chip) return;
     const slug = chip.dataset.slug;
-    console.log("click genre:", slug);
-    // router.navigate(`/genre/${slug}`)  // sau này add router
+
+    router.navigate(`/categories/${encodeURIComponent(slug)}`); // add router
   });
 }
