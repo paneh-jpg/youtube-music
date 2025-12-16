@@ -1,9 +1,9 @@
-import axiosInstance from "../utils/authorizedAxios";
+import axiosInstance from "../utils/authorizedAxios.js";
 
-import { router } from "../router/router";
-import { showLoading, hideLoading } from "../utils/loading";
-import { LoadingOverlay } from "../components/loading/LoadingOverlay";
-import { toast } from "../components/common/toast";
+import { router } from "../router/router.js";
+import { showLoading, hideLoading } from "../utils/loading.js";
+import { LoadingOverlay } from "../components/loading/LoadingOverlay.js";
+import { toast } from "../components/common/toast.js";
 
 import { escapeHTML } from "../utils/utils";
 

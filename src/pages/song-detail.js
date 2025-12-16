@@ -1,10 +1,10 @@
-import { getAlbumBySlug } from "../api/exploreApi";
-import { Header, initHeader } from "../components/layout/Header";
-import { Panel, initPanel } from "../components/layout/Panel";
-import { PlayerControl } from "../components/layout/PlayerControl";
-import { Sidebar, initSidebar } from "../components/layout/Sidebar";
-import { VideoArea } from "../components/layout/VideoArea";
-import { MusicPlayer } from "../modules/MusicPlayer";
+import { getAlbumBySlug } from "../api/exploreApi.js";
+import { Header, initHeader } from "../components/layout/Header.js";
+import { Panel, initPanel } from "../components/layout/Panel.js";
+import { PlayerControl } from "../components/layout/PlayerControl.js";
+import { Sidebar, initSidebar } from "../components/layout/Sidebar.js";
+import { VideoArea } from "../components/layout/VideoArea.js";
+import { MusicPlayer } from "../modules/MusicPlayer.js";
 
 export function SongDetailPage() {
   return `

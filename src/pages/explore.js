@@ -1,16 +1,16 @@
-import { Header, initHeader } from "../components/layout/Header";
-import { Sidebar, initSidebar } from "../components/layout/Sidebar";
-import { SectionHeader } from "../components/section/SectionHeader";
-import { AlbumCard } from "../components/cards/AlbumCard";
-import { VideoCard } from "../components/cards/VideoCard";
+import { Header, initHeader } from "../components/layout/Header.js";
+import { Sidebar, initSidebar } from "../components/layout/Sidebar.js";
+import { SectionHeader } from "../components/section/SectionHeader.js";
+import { AlbumCard } from "../components/cards/AlbumCard.js";
+import { VideoCard } from "../components/cards/VideoCard.js";
 
-import { getNewestAlbumList, getNewestVideoList } from "../api/exploreApi";
-import { GenreCateList } from "../components/chips/GenreCategoryList";
-import { getMetaList } from "../api/exploreApi";
+import { getNewestAlbumList, getNewestVideoList } from "../api/exploreApi.js";
+import { GenreCateList } from "../components/chips/GenreCategoryList.js";
+import { getMetaList } from "../api/exploreApi.js";
 
-import { initCustomScrolling } from "../utils/horizontalScroll";
+import { initCustomScrolling } from "../utils/horizontalScroll.js";
 
-import { router } from "../router/router";
+import { router } from "../router/router.js";
 
 export function ExplorePage() {
   return `

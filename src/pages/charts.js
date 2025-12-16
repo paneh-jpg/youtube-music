@@ -1,7 +1,7 @@
-import { getCountries, getTopArtists, getTopVideos } from "../api/chartApi";
-import { Header, initHeader } from "../components/layout/Header";
-import { Sidebar, initSidebar } from "../components/layout/Sidebar";
-import { formatNumber } from "../utils/utils";
+import { getCountries, getTopArtists, getTopVideos } from "../api/chartApi.js";
+import { Header, initHeader } from "../components/layout/Header.js";
+import { Sidebar, initSidebar } from "../components/layout/Sidebar.js";
+import { formatNumber } from "../utils/utils.js";
 
 export function ChartsPage() {
   return `

@@ -1,9 +1,9 @@
-import { getVideoBySlug } from "../api/exploreApi";
-import { Header, initHeader } from "../components/layout/Header";
-import { Sidebar, initSidebar } from "../components/layout/Sidebar";
-import { formatSecondsToHms, formatDateVietnamese } from "../utils/utils";
+import { getVideoBySlug } from "../api/exploreApi.js";
+import { Header, initHeader } from "../components/layout/Header.js";
+import { Sidebar, initSidebar } from "../components/layout/Sidebar.js";
+import { formatSecondsToHms, formatDateVietnamese } from "../utils/utils.js";
 
-import { router } from "../router/router";
+import { router } from "../router/router.js";
 
 export function VideosDetails() {
   return `

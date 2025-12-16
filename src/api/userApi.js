@@ -1,4 +1,4 @@
-import axiosInstance from "../utils/authorizedAxios";
+import axiosInstance from "../utils/authorizedAxios.js";
 const BASE_URL = import.meta.env.VITE_API_URL;
 
 export const getProfileApi = async () => {

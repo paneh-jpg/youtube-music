@@ -1,4 +1,4 @@
-import { showLoading, hideLoading } from "../utils/loading";
+import { showLoading, hideLoading } from "../utils/loading.js";
 const BASE_URL = import.meta.env.VITE_API_URL;
 
 export const handleLogoutAPI = async () => {

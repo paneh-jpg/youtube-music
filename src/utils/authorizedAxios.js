@@ -1,6 +1,6 @@
 import axios from "axios";
-import { toast } from "../components/common/toast";
-import { handleLogoutAPI, refreshTokenAPI } from "../api/authApi";
+import { toast } from "../components/common/toast.js";
+import { handleLogoutAPI, refreshTokenAPI } from "../api/authApi.js";
 
 let axiosInstance = axios.create();
 

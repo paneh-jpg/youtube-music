@@ -1,4 +1,4 @@
-import { formatSecondsToHms } from "../utils/utils";
+import { formatSecondsToHms } from "../utils/utils.js";
 
 export class MusicPlayer {
   constructor({

@@ -1,6 +1,6 @@
-import { Header, initHeader } from "../components/layout/Header";
-import { Sidebar, initSidebar } from "../components/layout/Sidebar";
-import { getCategoryBySlug } from "../api/exploreApi";
+import { Header, initHeader } from "../components/layout/Header.js";
+import { Sidebar, initSidebar } from "../components/layout/Sidebar.js";
+import { getCategoryBySlug } from "../api/exploreApi.js";
 
 export function CategoryPage() {
   return `

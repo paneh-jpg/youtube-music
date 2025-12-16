@@ -1,5 +1,5 @@
-import { Header, initHeader } from "../components/layout/Header";
-import { Sidebar, initSidebar } from "../components/layout/Sidebar";
+import { Header, initHeader } from "../components/layout/Header.js";
+import { Sidebar, initSidebar } from "../components/layout/Sidebar.js";
 
 export function Upgrade() {
   return `

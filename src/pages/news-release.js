@@ -1,10 +1,10 @@
-import { Header, initHeader } from "../components/layout/Header";
-import { Sidebar, initSidebar } from "../components/layout/Sidebar";
-import { SectionHeader } from "../components/section/SectionHeader";
-import { AlbumCard } from "../components/cards/AlbumCard";
-import { VideoCard } from "../components/cards/VideoCard";
-import { getNewsRelease, getNewestVideoList } from "../api/exploreApi";
-import { initCustomScrolling } from "../utils/horizontalScroll";
+import { Header, initHeader } from "../components/layout/Header.js";
+import { Sidebar, initSidebar } from "../components/layout/Sidebar.js";
+import { SectionHeader } from "../components/section/SectionHeader.js";
+import { AlbumCard } from "../components/cards/AlbumCard.js";
+import { VideoCard } from "../components/cards/VideoCard.js";
+import { getNewsRelease, getNewestVideoList } from "../api/exploreApi.js";
+import { initCustomScrolling } from "../utils/horizontalScroll.js";
 import { router } from "../router/router";
 
 export function NewsReleasePage() {

@@ -1,5 +1,5 @@
 // src/components/chips/GenreChipList.js
-import { GenreColorCate } from "./GenreCategory";
+import { GenreColorCate } from "./GenreCategory.js";
 
 export function GenreCateList({ items = [] } = {}) {
   return `

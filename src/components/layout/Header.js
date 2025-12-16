@@ -1,9 +1,9 @@
-import { handleLogoutAPI } from "../../api/authApi";
-import { getProfileApi } from "../../api/userApi";
-import { hideLoading, showLoading } from "../../utils/loading";
-import { generateAvatar } from "../../utils/utils";
-import { toast } from "../common/toast";
-import { LoadingOverlay } from "../loading/LoadingOverlay";
+import { handleLogoutAPI } from "../../api/authApi.js";
+import { getProfileApi } from "../../api/userApi.js";
+import { hideLoading, showLoading } from "../../utils/loading.js";
+import { generateAvatar } from "../../utils/utils.js";
+import { toast } from "../common/toast.js";
+import { LoadingOverlay } from "../loading/LoadingOverlay.js";
 
 export function Header() {
   return `

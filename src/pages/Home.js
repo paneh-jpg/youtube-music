@@ -1,8 +1,8 @@
-import { Header, initHeader } from "../components/layout/Header";
-import { Sidebar, initSidebar } from "../components/layout/Sidebar";
-import { LoadingOverlay } from "../components/loading/LoadingOverlay";
+import { Header, initHeader } from "../components/layout/Header.js";
+import { Sidebar, initSidebar } from "../components/layout/Sidebar.js";
+import { LoadingOverlay } from "../components/loading/LoadingOverlay.js";
 
-import { SectionHeader } from "../components/section/SectionHeader";
+import { SectionHeader } from "../components/section/SectionHeader.js";
 export function HomePage() {
   return `
     <div class="bg-linear-to-b from-[#181818] via-[#0f0f0f] to-[#0f0f0f] text-white font-[Inter]">

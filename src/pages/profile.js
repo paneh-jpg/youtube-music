@@ -1,11 +1,11 @@
-import { getProfileApi, changePasswordApi } from "../api/userApi";
-import { Header, initHeader } from "../components/layout/Header";
-import { Sidebar, initSidebar } from "../components/layout/Sidebar";
-import { SettingsModal } from "../components/modals/SettingsModal";
-import { updateProfileApi } from "../api/userApi";
-import { toast } from "../components/common/toast";
+import { getProfileApi, changePasswordApi } from "../api/userApi.js";
+import { Header, initHeader } from "../components/layout/Header.js";
+import { Sidebar, initSidebar } from "../components/layout/Sidebar.js";
+import { SettingsModal } from "../components/modals/SettingsModal.js";
+import { updateProfileApi } from "../api/userApi.js";
+import { toast } from "../components/common/toast.js";
 
-import { escapeHTML, generateAvatar } from "../utils/utils";
+import { escapeHTML, generateAvatar } from "../utils/utils.js";
 
 export function ProfilePage() {
   return `
