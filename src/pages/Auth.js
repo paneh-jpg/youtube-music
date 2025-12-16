@@ -5,7 +5,7 @@ import { showLoading, hideLoading } from "../utils/loading.js";
 import { LoadingOverlay } from "../components/loading/LoadingOverlay.js";
 import { toast } from "../components/common/toast.js";
 
-import { escapeHTML } from "../utils/utils";
+import { escapeHTML } from "../utils/utils.js";
 
 const BASE_URL = import.meta.env.VITE_API_URL;
 
