@@ -9,6 +9,9 @@ import { ExplorePage, initExplorePage } from "./pages/explore";
 import { initLibraryPage, LibraryPage } from "./pages/library";
 import { initProfilePage, ProfilePage } from "./pages/profile";
 import { initUpgrade, Upgrade } from "./pages/upgrade";
+import { ChartsPage, initChartsPage } from "./pages/charts";
+import { MoodsPage, initMoodsPage } from "./pages/moods";
+import { NewsReleasePage, initNewsReleasePage } from "./pages/news-release";
 
 import {
   CategoryPage,
@@ -44,6 +47,7 @@ function render(html, init) {
 router
   .on("/", () => {
     render(HomePage(), initHomePage);
+    initProfilePage;
   })
   .on("/auth", () => {
     render(AuthPage(), initAuthPage);
@@ -92,7 +96,15 @@ router
 
     initSongDetailContent({ songId, albumSlug });
   })
-
+  .on("/charts", () => {
+    render(ChartsPage(), initChartsPage);
+  })
+  .on("/news-release", () => {
+    render(NewsReleasePage(), initNewsReleasePage);
+  })
+  .on("/moods", () => {
+    render(MoodsPage(), initMoodsPage);
+  })
   .notFound(() => {
     app.innerHTML = "<h1>404</h1>";
   });

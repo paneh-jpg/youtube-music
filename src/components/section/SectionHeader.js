@@ -3,6 +3,7 @@ export function SectionHeader({
   showMore = true,
   showNav = true,
   underline = true,
+  hasBtn = true,
   btnContent = "",
 } = {}) {
   return `
@@ -20,7 +21,9 @@ export function SectionHeader({
         ${
           showMore
             ? `
-          <button class="rounded-full border border-white/20 px-4 py-1.5 text-sm text-white hover:bg-white/10 transition">
+          <button class="rounded-full ${
+            hasBtn ? "" : "hidden"
+          } border border-white/20 px-4 py-1.5 text-sm text-white hover:bg-white/10 transition">
            ${btnContent}
           </button>`
             : ""

@@ -4,10 +4,7 @@ import { Panel, initPanel } from "../components/layout/Panel";
 import { PlayerControl } from "../components/layout/PlayerControl";
 import { Sidebar, initSidebar } from "../components/layout/Sidebar";
 import { VideoArea } from "../components/layout/VideoArea";
-import { formatSecondsToHms } from "../utils/utils";
 import { MusicPlayer } from "../modules/MusicPlayer";
-
-import { router } from "../router/router";
 
 export function SongDetailPage() {
   return `
@@ -24,7 +21,7 @@ export function SongDetailPage() {
            <div class="h-[70vh] pb-5">
            <div class="mx-auto max-w-350 h-full max-h-full min-h-0
             overflow-y-auto overflow-x-auto custom-scrollbar
-            px-5 pt-4
+          pt-4
             grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_420px] gap-6">
                 ${VideoArea()}
                 ${Panel()}
@@ -39,6 +36,10 @@ export async function initSongDetailPage() {
   initHeader();
   initSidebar();
   initPanel();
+
+  const response = await getAlbumBySlug(albumSlug);
+  const tracks = response.data.tracks;
+  console.log(tracks);
 }
 
 export async function initSongDetailContent({ songId, albumSlug }) {
@@ -50,14 +51,16 @@ export async function initSongDetailContent({ songId, albumSlug }) {
   const progress = document.querySelector(".js-progress");
   const nextBtn = document.querySelector(".js-next");
   const prevBtn = document.querySelector(".js-prev");
+  const repeatBtn = document.querySelector(".js-repeat");
+  const shuffleBtn = document.querySelector(".js-shuffle");
   const currentTime = document.querySelector(".js-current-time");
   const durationTime = document.querySelector(".js-duration-time");
   const randomBtn = document.querySelector(".js-shuffle");
   const queueListContainer = document.querySelector(".js-queue-list");
   const songTitle = document.querySelector(".js-title");
 
-  const response = await getAlbumBySlug(albumSlug);
-  const tracks = response.data.tracks;
+  // const response = await getAlbumBySlug(albumSlug);
+  // const tracks = response.data.tracks;
 
   // Khởi tạo player
   const player = new MusicPlayer({
@@ -70,6 +73,8 @@ export async function initSongDetailContent({ songId, albumSlug }) {
     progressEl: progress,
     nextBtn: nextBtn,
     prevBtn: prevBtn,
+    repeatBtn: repeatBtn,
+    shuffleBtn: shuffleBtn,
     durationTimeEl: durationTime,
     currentTimeEl: currentTime,
     songTitleEl: songTitle,

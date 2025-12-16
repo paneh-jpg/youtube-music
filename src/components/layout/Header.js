@@ -1,6 +1,7 @@
 import { handleLogoutAPI } from "../../api/authApi";
 import { getProfileApi } from "../../api/userApi";
 import { hideLoading, showLoading } from "../../utils/loading";
+import { generateAvatar } from "../../utils/utils";
 import { toast } from "../common/toast";
 import { LoadingOverlay } from "../loading/LoadingOverlay";
 
@@ -254,9 +255,13 @@ async function updateHeaderAuthUI() {
     const response = await getProfileApi();
     const user = response.data;
 
+    const avt = generateAvatar(user.name);
+
     username.textContent = user.name;
     userEmail.textContent = user.email;
-    userAvatar.textContent = user.name[0];
+    userAvatar.textContent = avt.char;
+    userAvatar.style.color = avt.text;
+    userAvatar.style.backgroundColor = avt.bg;
   } catch (error) {
     toast.error(
       error?.response?.data?.message || error.message || "Có lỗi xảy ra"

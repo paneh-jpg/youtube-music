@@ -27,28 +27,28 @@ export function ExplorePage() {
       <!-- Discover -->
       <div class="flex gap-6 mt-16">
         <!-- Item -->
-        <button class="flex flex-1 items-center cursor-pointer gap-3 px-6 py-4 rounded-xl hover:bg-[#2a2a2a] bg-[#3a3a3a] transition text-white font-bold">
+        <a href="/news-release" data-navigo class="flex flex-1 items-center cursor-pointer gap-3 px-6 py-4 rounded-xl hover:bg-[#2a2a2a] bg-[#3a3a3a] transition text-white font-bold">
           <span class="material-symbols-outlined text-white/80 text-[22px]">
             new_releases
           </span>
           <span class="text-xl">Bản phát hành mới</span>
-        </button>
+        </a>
 
         <!-- Item -->
-        <button class="flex flex-1 items-center cursor-pointer gap-3 px-6 py-4 rounded-xl hover:bg-[#2a2a2a] bg-[#3a3a3a] transition text-white font-bold">
+        <a href="/charts" data-navigo class="flex flex-1 items-center cursor-pointer gap-3 px-6 py-4 rounded-xl hover:bg-[#2a2a2a] bg-[#3a3a3a] transition text-white font-bold">
           <span class="material-symbols-outlined text-white/80 text-[22px]">
             trending_up
           </span>
           <span class="text-xl">Bảng xếp hạng</span>
-        </button>
+        </a>
 
         <!-- Item -->
-        <button class="flex flex-1 items-center cursor-pointer gap-3 px-6 py-4 rounded-xl hover:bg-[#2a2a2a] bg-[#3a3a3a] transition text-white font-bold">
+        <a href="/moods" data-navigo class="flex flex-1 items-center cursor-pointer gap-3 px-6 py-4 rounded-xl hover:bg-[#2a2a2a] bg-[#3a3a3a] transition text-white font-bold">
           <span class="material-symbols-outlined text-white/80 text-[22px]">
             mood
           </span>
           <span class="text-xl">Tâm trạng và thể loại</span>
-        </button>
+        </a>
       </div>
 
        <!-- Discover End -->

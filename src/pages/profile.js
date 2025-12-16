@@ -5,7 +5,7 @@ import { SettingsModal } from "../components/modals/SettingsModal";
 import { updateProfileApi } from "../api/userApi";
 import { toast } from "../components/common/toast";
 
-import { escapeHTML } from "../utils/utils";
+import { escapeHTML, generateAvatar } from "../utils/utils";
 
 export function ProfilePage() {
   return `
@@ -87,8 +87,13 @@ const renderProfile = async () => {
 
     const user = response.data;
 
+    const avt = generateAvatar(user.name);
+    console.log(avt);
+
     username.textContent = user.name;
-    userAvt.textContent = user.name[0];
+    userAvt.textContent = avt.char;
+    userAvt.style.color = avt.text;
+    userAvt.style.backgroundColor = avt.bg;
   } catch (error) {
     toast.error(error.data.message || "Có lỗi xảy ra");
   }
@@ -129,7 +134,7 @@ const initSettingsModal = async () => {
 
   const closeModal = () => {
     modal.classList.add("hidden");
-    renderProfile();
+    window.location.reload();
   };
 
   openBtn.onclick = () => {

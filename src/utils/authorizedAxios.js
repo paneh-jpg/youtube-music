@@ -2,9 +2,9 @@ import axios from "axios";
 import { toast } from "../components/common/toast";
 import { handleLogoutAPI, refreshTokenAPI } from "../api/authApi";
 
-let authorizedAxiosInstance = axios.create();
+let axiosInstance = axios.create();
 
-authorizedAxiosInstance.defaults.timeout = 1000 * 60 * 10;
+axiosInstance.defaults.timeout = 1000 * 60 * 10;
 
 /**
  * Cấu hình Interceptors (vào giữa mọi request & response)
@@ -12,7 +12,7 @@ authorizedAxiosInstance.defaults.timeout = 1000 * 60 * 10;
  * http-status-code: https://www.npmjs.com/package/http-status-codes
  */
 
-authorizedAxiosInstance.interceptors.request.use(
+axiosInstance.interceptors.request.use(
   (config) => {
     // Lấy access_token từ localStorage và đính kèm vào header
     const access_token = localStorage.getItem("access_token");
@@ -32,7 +32,7 @@ authorizedAxiosInstance.interceptors.request.use(
 
 let refreshTokenPromise = null;
 
-authorizedAxiosInstance.interceptors.response.use(
+axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
@@ -69,7 +69,7 @@ authorizedAxiosInstance.interceptors.response.use(
         originalRequest.headers = originalRequest.headers || {};
         originalRequest.headers.Authorization = `Bearer ${newToken.access_token}`;
 
-        return authorizedAxiosInstance(originalRequest);
+        return axiosInstance(originalRequest);
       } catch (e) {
         await handleLogoutAPI();
         return Promise.reject(e);
@@ -81,4 +81,4 @@ authorizedAxiosInstance.interceptors.response.use(
   }
 );
 
-export default authorizedAxiosInstance;
+export default axiosInstance;

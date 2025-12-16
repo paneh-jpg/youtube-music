@@ -3,6 +3,7 @@ export function AlbumCard({
   name = "Unknown",
   albumType = "Đĩa đơn",
   slug = "",
+  id = "",
 } = {}) {
   const desktopSidebarState = JSON.parse(
     localStorage.getItem("sidebar_state") || "{}"
@@ -11,7 +12,7 @@ export function AlbumCard({
 
     <div class="desktopSidebarState === "expanded" ? "180px" : "206px"; shrink-0 ">
       <!-- ===== THUMBNAIL ===== -->
-      <div data-slug="${slug}" class="js-album  relative aspect-square rounded-xl overflow-hidden group cursor-pointer" >
+      <div data-slug="${slug}" data-id="${id}" class="js-album  relative aspect-square rounded-xl overflow-hidden group cursor-pointer" >
         <img src="${thumbnail}" class="w-full h-full object-cover" />
   
         <!-- Overlay -->

@@ -1,4 +1,4 @@
-import authorizedAxiosInstance from "../utils/authorizedAxios";
+import axiosInstance from "../utils/authorizedAxios";
 
 import { router } from "../router/router";
 import { showLoading, hideLoading } from "../utils/loading";
@@ -278,10 +278,12 @@ export function initAuthPage() {
     try {
       showLoading();
 
-      const response = await authorizedAxiosInstance.post(
-        `${BASE_URL}/auth/register`,
-        { name, email, password, confirmPassword }
-      );
+      const response = await axiosInstance.post(`${BASE_URL}/auth/register`, {
+        name,
+        email,
+        password,
+        confirmPassword,
+      });
 
       const token = response.data;
 
@@ -312,10 +314,10 @@ export function initAuthPage() {
 
     try {
       showLoading();
-      const response = await authorizedAxiosInstance.post(
-        `${BASE_URL}/auth/login`,
-        { email, password }
-      );
+      const response = await axiosInstance.post(`${BASE_URL}/auth/login`, {
+        email,
+        password,
+      });
 
       const token = response.data;
       localStorage.setItem("access_token", token.access_token);

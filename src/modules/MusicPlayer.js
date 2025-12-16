@@ -10,10 +10,11 @@ export class MusicPlayer {
     progressEl,
     nextBtn,
     prevBtn,
+    repeatBtn,
+    shuffleBtn,
     currentTimeEl,
     durationTimeEl,
     songTitleEl,
-    randomBtn,
     queueListContainer,
     tracks,
     initialSongId,
@@ -27,16 +28,22 @@ export class MusicPlayer {
     this.progressEl = progressEl;
     this.nextBtn = nextBtn;
     this.prevBtn = prevBtn;
+    this.repeatBtn = repeatBtn;
+    this.shuffleBtn = shuffleBtn;
     this.currentTimeEl = currentTimeEl;
     this.durationTimeEl = durationTimeEl;
     this.songTitleEl = songTitleEl;
-    this.randomBtn = randomBtn;
     this.queueListContainer = queueListContainer;
 
     // Data
     this.tracks = tracks;
     this.isPlaying = false;
     this.isSeeking = false;
+    this.isRandom = false;
+    this.isRepeat = false;
+
+    this.originalTracks = [...tracks];
+
     this.currentTrackIndex = this.tracks.findIndex(
       (item) => item.id === initialSongId
     );
@@ -55,7 +62,8 @@ export class MusicPlayer {
     const track = this.tracks[index];
     this.currentTrackIndex = index;
 
-    this.songImgEl.src = track.thumbnails;
+    //this.songImgEl.src = track.thumbnails
+    this.songImgEl.src = `https://picsum.photos/1920/1080?random=${Date.now()}`;
     this.currentTrackThumbEl.src = track.thumbnails;
     this.audio.src = track.audioUrl;
     this.currentTrackNameEl.textContent = track.title;
@@ -158,23 +166,47 @@ export class MusicPlayer {
   }
 
   next() {
-    let nextIndex = this.currentTrackIndex + 1;
-    if (nextIndex >= this.tracks.length) {
-      nextIndex = 0; // Quay lại bài đầu tiên
-    }
+    if (this.isRandom) {
+      this.playShuffleTrack();
+    } else {
+      let nextIndex = this.currentTrackIndex + 1;
+      if (nextIndex >= this.tracks.length) {
+        nextIndex = 0; // Quay lại bài đầu tiên
+      }
 
-    this.loadTrack(nextIndex);
-    this.play();
+      this.loadTrack(nextIndex);
+    }
   }
 
   prev() {
-    let prevIndex = this.currentTrackIndex - 1;
-    if (prevIndex < 0) {
-      prevIndex = this.tracks.length - 1;
-    }
+    if (this.isRandom) {
+      this.playShuffleTrack();
+    } else {
+      let prevIndex = this.currentTrackIndex - 1;
+      if (prevIndex < 0) {
+        prevIndex = this.tracks.length - 1;
+      }
 
-    this.loadTrack(prevIndex);
-    this.play();
+      this.loadTrack(prevIndex);
+    }
+  }
+
+  playShuffleTrack() {
+    let shuffleIndex;
+    do {
+      shuffleIndex = Math.floor(Math.random() * this.tracks.length);
+    } while (shuffleIndex === this.currentTrackIndex && this.tracks.length > 1);
+    this.loadTrack(shuffleIndex);
+  }
+
+  toggleShuffle() {
+    this.isRandom = !this.isRandom;
+    this.shuffleBtn.classList.toggle("shuffle-active", this.isRandom);
+  }
+
+  toggleRepeat() {
+    this.isRepeat = !this.isRepeat;
+    this.repeatBtn.classList.toggle("repeat-active", this.isRepeat);
   }
 
   updateTimeDisplay(currentTime, durationTime) {
@@ -224,16 +256,11 @@ export class MusicPlayer {
       }
     });
 
-    // Tự chuyển bài khi kết thúc
-    this.audio.addEventListener("ended", () => {
-      this.next();
-    });
-
-    //
     this.audio.addEventListener("timeupdate", () => {
+      if (this.isSeeking) return;
       if (this.audio.duration > 0) {
         const ratio = this.audio.currentTime / this.audio.duration;
-        const progressPercent = Math.floor(ratio * 100);
+        const progressPercent = ratio * 100;
 
         this.progressEl.value = progressPercent;
 
@@ -242,5 +269,47 @@ export class MusicPlayer {
         this.updateTimeDisplay(this.audio.currentTime, this.audio.duration);
       }
     });
+
+    // Xử lý khi tua bài
+    this.progressEl.addEventListener("pointerdown", () => {
+      this.isSeeking = true;
+    });
+
+    this.progressEl.addEventListener("input", (e) => {
+      const val = Number(e.target.value);
+      this.progressEl.style.setProperty("--p", `${val}%`);
+
+      if (this.audio.duration > 0) {
+        const previewTime = (this.audio.duration * val) / 100;
+        this.currentTimeEl.textContent = formatSecondsToHms(previewTime);
+      }
+    });
+
+    this.progressEl.addEventListener("change", (e) => {
+      if (this.audio.duration > 0) {
+        const val = Number(e.target.value);
+        this.audio.currentTime = (this.audio.duration * val) / 100;
+      }
+      this.isSeeking = false;
+    });
+
+    this.progressEl.addEventListener("pointerup", () => {
+      this.isSeeking = false;
+    });
+
+    this.audio.addEventListener("ended", () => {
+      if (this.isRepeat) {
+        // Nếu đang bật Repeat: Quay về đầu bài và phát tiếp
+        this.audio.currentTime = 0;
+        this.audio.play();
+      } else {
+        // Nếu không: Tự động chuyển bài
+        this.next();
+      }
+    });
+
+    // Chế độ phát ngẫu nhiên và lặp lại 1 bài hát
+    this.shuffleBtn.onclick = () => this.toggleShuffle();
+    this.repeatBtn.onclick = () => this.toggleRepeat();
   }
 }

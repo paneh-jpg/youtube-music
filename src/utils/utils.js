@@ -36,3 +36,73 @@ export function formatDateVietnamese(isoString) {
   const yyyy = d.getFullYear();
   return `${dd} tháng ${mm} năm ${yyyy}`;
 }
+
+export function formatNumber(num) {
+  if (!num || isNaN(num)) return "0";
+
+  if (num >= 1000000) {
+    const formatted = (num / 1000000)
+      .toFixed(2)
+      .replace(/\.00$/, "")
+      .replace(".", ",");
+    return `${formatted} Tr`;
+  } else if (num >= 1000) {
+    const formatted = (num / 1000)
+      .toFixed(1)
+      .replace(/\.0$/, "")
+      .replace(".", ",");
+    return `${formatted} N`;
+  }
+
+  return num.toString();
+}
+
+// Avt helper
+const GOOGLE_COLORS = [
+  "#F44336",
+  "#E91E63",
+  "#9C27B0",
+  "#673AB7",
+  "#3F51B5",
+  "#2196F3",
+  "#03A9F4",
+  "#00BCD4",
+  "#009688",
+  "#4CAF50",
+  "#8BC34A",
+  "#FFC107",
+  "#FF9800",
+  "#FF5722",
+];
+
+function getTextColor(bgColor) {
+  const r = parseInt(bgColor.substr(1, 2), 16);
+  const g = parseInt(bgColor.substr(3, 2), 16);
+  const b = parseInt(bgColor.substr(5, 2), 16);
+
+  const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+  return brightness > 150 ? "#000" : "#FFF";
+}
+
+function getColorIndex(name) {
+  if (!name || name.length === 0) {
+    return 0;
+  }
+
+  const firstChar = name[0].toUpperCase();
+  const charCode = firstChar.charCodeAt(0);
+
+  const numColors = GOOGLE_COLORS.length;
+  return charCode % numColors;
+}
+
+export function generateAvatar(name) {
+  const char = name[0]?.toUpperCase() || "U";
+
+  const colorIndex = getColorIndex(name);
+  const bg = GOOGLE_COLORS[colorIndex];
+
+  const text = getTextColor(bg);
+
+  return { char, bg, text };
+}

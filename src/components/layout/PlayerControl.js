@@ -1,7 +1,7 @@
 export const PlayerControl = () => {
   return `  <footer class="fixed left-0 right-0 bottom-0 z-100 bg-[#1f1f1f]">
       <!-- TOP PROGRESS -->
-      <div class="-mt-[14px]">
+      <div class="-mt-3.5">
         <input
           type="range"
           min="0"
@@ -18,7 +18,7 @@ export const PlayerControl = () => {
       <div class="px-2 py-2">
         <div class="mx-auto w-full flex items-center justify-between gap-4">
           <!-- LEFT: transport + time -->
-          <div class="w-1/4 flex items-center gap-3 min-w-[260px]">
+          <div class="w-1/4 flex items-center gap-3 min-w-65">
             <button
               type="button"
               class="js-prev h-10 w-10 rounded-full hover:bg-white/10 flex items-center justify-center"
@@ -136,7 +136,7 @@ export const PlayerControl = () => {
 
             <button
               type="button"
-              class="js-repeat h-10 w-10 rounded-full hover:bg-white/10 flex items-center justify-center"
+              class="js-repeat  h-10 w-10 rounded-full hover:bg-white/10 flex items-center justify-center"
               aria-label="Repeat"
               title="Repeat"
             >
@@ -145,7 +145,7 @@ export const PlayerControl = () => {
 
             <button
               type="button"
-              class="js-shuffle h-10 w-10 rounded-full hover:bg-white/10 flex items-center justify-center"
+              class="js-shuffle  h-10 w-10 rounded-full hover:bg-white/10 flex items-center justify-center"
               aria-label="Shuffle"
               title="Shuffle"
             >

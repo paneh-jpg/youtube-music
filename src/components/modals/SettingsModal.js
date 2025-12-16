@@ -4,7 +4,7 @@ export const SettingsModal = () => {
       <div class="js-modal-overlay absolute inset-0 bg-black/60"></div>
 
       <div
-        class="absolute left-1/2 top-1/2 w-[65vw] max-w-5xl h-[72vh]
+        class="absolute left-1/2 top-1/2 w-[58vw] max-w-5xl h-[72vh]
                -translate-x-1/2 -translate-y-1/2
                rounded-xl bg-[#2b2b2b] text-white shadow-2xl
                border border-white/10 flex overflow-hidden"
