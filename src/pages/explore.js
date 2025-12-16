@@ -133,7 +133,6 @@ async function loadNewestAlbums() {
     if (!album) return;
 
     const slug = album.dataset.slug;
-    console.log(slug);
 
     router.navigate(`/albums/details/${encodeURIComponent(slug)}`); // add router
   });

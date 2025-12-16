@@ -1,4 +1,5 @@
 @import "tailwindcss";
+
 @tailwind utilities;
 
 /* Xử lý CSS đóng/mở sidebar  */

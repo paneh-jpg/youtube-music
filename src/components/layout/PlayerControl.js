@@ -5,10 +5,12 @@ export const PlayerControl = () => {
         <input
           type="range"
           min="0"
-          max="1000"
+          max="100"
+          step = "1"
           value="0"
           class="js-progress w-full"
           aria-label="progress"
+
         />
       </div>
 
@@ -16,16 +18,14 @@ export const PlayerControl = () => {
       <div class="px-2 py-2">
         <div class="mx-auto w-full flex items-center justify-between gap-4">
           <!-- LEFT: transport + time -->
-          <div class="flex-1 flex items-center gap-3 min-w-[260px]">
+          <div class="w-1/4 flex items-center gap-3 min-w-[260px]">
             <button
               type="button"
               class="js-prev h-10 w-10 rounded-full hover:bg-white/10 flex items-center justify-center"
               aria-label="Previous"
               title="Previous"
             >
-              <span class="material-symbols-outlined text-[26px]"
-                >skip_previous</span
-              >
+              <span class="material-symbols-outlined text-[26px]">skip_previous</span>
             </button>
 
             <button
@@ -34,13 +34,10 @@ export const PlayerControl = () => {
               aria-label="Play/Pause"
               title="Play/Pause"
             >
-              <span class="js-icon-play material-symbols-outlined text-[30px]"
-                >play_arrow</span
+              <span class="js-icon-play material-symbols-outlined text-[30px]" >play_arrow</span
               >
               <span
-                class="js-icon-pause material-symbols-outlined text-[30px] hidden"
-                >pause</span
-              >
+                class="js-icon-pause material-symbols-outlined text-[30px] hidden!" >pause</span>
             </button>
 
             <button
@@ -49,9 +46,7 @@ export const PlayerControl = () => {
               aria-label="Next"
               title="Next"
             >
-              <span class="material-symbols-outlined text-[26px]"
-                >skip_next</span
-              >
+              <span class="material-symbols-outlined text-[26px]" >skip_next</span>
             </button>
 
             <div class="ml-3 text-sm text-white/70 whitespace-nowrap">
@@ -62,7 +57,7 @@ export const PlayerControl = () => {
           </div>
 
           <!-- CENTER: thumbnail + title/meta + actions -->
-          <div class="ml-50 flex-1 flex items-center gap-4 min-w-0">
+          <div class="ml-50 w-2/4 flex items-center gap-4 min-w-0">
             <div
               class="w-12 h-12 rounded-md overflow-hidden bg-white/10 shrink-0"
             >
@@ -75,7 +70,7 @@ export const PlayerControl = () => {
 
             <div class="min-w-0">
               <div class="flex items-center justify-between gap-3 min-w-0">
-                <p class="js-title truncate font-semibold">ANH VUI</p>
+                <p class="js-title truncate font-semibold">Song name</p>
 
                 <div class="flex items-center gap-1 shrink-0">
                   <button
@@ -114,22 +109,20 @@ export const PlayerControl = () => {
               </div>
 
               <p class="js-meta truncate text-sm text-white/60">
-                Phạm Kỳ • 4,6 Tr lượt xem • 22 N lượt thích
+                Singer • Views • Likes
               </p>
             </div>
           </div>
 
           <!-- RIGHT: volume + misc -->
-          <div class="flex-1 min-w-[260px] flex items-center justify-end gap-2">
+          <div class="w-1/4 flex items-center justify-end gap-2">
             <button
               type="button"
               class="js-volume-btn h-10 w-10 rounded-full hover:bg-white/10 flex items-center justify-center"
               aria-label="Volume"
               title="Volume"
             >
-              <span class="js-volume-icon material-symbols-outlined text-[24px]"
-                >volume_up</span
-              >
+              <span class="js-volume-icon material-symbols-outlined text-[24px]" >volume_up</span>
             </button>
 
             <input

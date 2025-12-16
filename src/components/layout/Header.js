@@ -14,14 +14,16 @@ export function Header() {
       </button>
 
       <!-- Logo -->
-      <div class="flex items-center gap-2 select-none">
-        <div class="relative flex h-6 w-6 items-center justify-center rounded-full bg-[#ff0033]" >
-          <div class="flex h-4 w-4 items-center justify-center rounded-full border border-white/80" >
-            <div class="ml-0.5 h-0 w-0 border-l-[7px] border-l-white border-y-4 border-y-transparent"></div>
+      <a href = "/" data-navigo>
+        <div class="flex items-center gap-2 select-none">
+          <div class="relative flex h-6 w-6 items-center justify-center rounded-full bg-[#ff0033]" >
+            <div class="flex h-4 w-4 items-center justify-center rounded-full border border-white/80" >
+              <div class="ml-0.5 h-0 w-0 border-l-[7px] border-l-white border-y-4 border-y-transparent"></div>
+            </div>
           </div>
+          <span class="text-xl font-semibold tracking-tight">Music</span>
         </div>
-        <span class="text-xl font-semibold tracking-tight">Music</span>
-      </div>
+      </a>
 
       <!-- Search Form -->
       <div class="hidden md:flex flex-1 items-center max-w-lg lg:max-w-xl mx-auto" >

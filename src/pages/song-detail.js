@@ -1,9 +1,13 @@
 import { getAlbumBySlug } from "../api/exploreApi";
 import { Header, initHeader } from "../components/layout/Header";
-import { Panel } from "../components/layout/Panel";
+import { Panel, initPanel } from "../components/layout/Panel";
 import { PlayerControl } from "../components/layout/PlayerControl";
 import { Sidebar, initSidebar } from "../components/layout/Sidebar";
 import { VideoArea } from "../components/layout/VideoArea";
+import { formatSecondsToHms } from "../utils/utils";
+import { MusicPlayer } from "../modules/MusicPlayer";
+
+import { router } from "../router/router";
 
 export function SongDetailPage() {
   return `
@@ -11,16 +15,20 @@ export function SongDetailPage() {
       <!-- Overlay -->
       <div id="overlay" class="fixed inset-0 bg-black/50 opacity-0 invisible transition-opacity duration-300 z-30 md:hidden"></div>
 
-      ${Header()}  ${Sidebar()} 
+      ${Header()}  
+      ${Sidebar()} 
       <!--  Main content  -->
-      <div id="mainContentWrapper" class="pt-16 md:ml-64 h-[100vh] ">
+      <div id="mainContentWrapper" class="pt-16 md:ml-64 h-screen ">
         <main id="mainContent" class="mt-6 ml-10 mr-10" >
-         <!--  MAIN LAYOUT  -->
-      <div class="min-h-screen pb-5">
-      <div class="mx-auto max-w-[1400px] px-5 pt-4 grid grid-cols-1 lg:grid-cols-[1fr_420px] gap-6">
-          ${VideoArea()}
-          ${Panel()}
-          ${PlayerControl()}
+          <!--  MAIN LAYOUT  -->
+           <div class="h-[70vh] pb-5">
+           <div class="mx-auto max-w-350 h-full max-h-full min-h-0
+            overflow-y-auto overflow-x-auto custom-scrollbar
+            px-5 pt-4
+            grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_420px] gap-6">
+                ${VideoArea()}
+                ${Panel()}
+                ${PlayerControl()}
         </main>
       </div>
     </div>
@@ -30,14 +38,46 @@ export function SongDetailPage() {
 export async function initSongDetailPage() {
   initHeader();
   initSidebar();
+  initPanel();
 }
 
 export async function initSongDetailContent({ songId, albumSlug }) {
-  const videoEl = document.querySelector("#audio");
+  const audio = document.querySelector("#audio");
+  const currentTrackNameEl = document.querySelector(".js-current-track-name");
+  const currentTrackThumbEl = document.querySelector(".js-thumb");
+  const songImg = document.querySelector(".main-img");
+  const playBtn = document.querySelector(".js-play");
+  const progress = document.querySelector(".js-progress");
+  const nextBtn = document.querySelector(".js-next");
+  const prevBtn = document.querySelector(".js-prev");
+  const currentTime = document.querySelector(".js-current-time");
+  const durationTime = document.querySelector(".js-duration-time");
+  const randomBtn = document.querySelector(".js-shuffle");
+  const queueListContainer = document.querySelector(".js-queue-list");
+  const songTitle = document.querySelector(".js-title");
 
   const response = await getAlbumBySlug(albumSlug);
   const tracks = response.data.tracks;
-  const track = tracks.find((el) => el.id === songId);
 
-  videoEl.src = `${track.audioUrl}`;
+  // Khởi tạo player
+  const player = new MusicPlayer({
+    // Elements
+    audioEl: audio,
+    currentTrackNameEl: currentTrackNameEl,
+    currentTrackThumbEl: currentTrackThumbEl,
+    songImgEl: songImg,
+    playBtn: playBtn,
+    progressEl: progress,
+    nextBtn: nextBtn,
+    prevBtn: prevBtn,
+    durationTimeEl: durationTime,
+    currentTimeEl: currentTime,
+    songTitleEl: songTitle,
+    randomBtn: randomBtn,
+    queueListContainer: queueListContainer,
+
+    // Data
+    tracks: tracks,
+    initialSongId: songId,
+  });
 }
