@@ -1,17 +1,17 @@
-import { router } from "./router/router";
+import { router } from "./router/router.js";
 
 import "./styles/style.css";
 import "./styles/base.css";
 import "./styles/animation.css";
-import { HomePage, initHomePage } from "./pages/home";
-import { AuthPage, initAuthPage } from "./pages/auth";
-import { ExplorePage, initExplorePage } from "./pages/explore";
-import { initLibraryPage, LibraryPage } from "./pages/library";
-import { initProfilePage, ProfilePage } from "./pages/profile";
-import { initUpgrade, Upgrade } from "./pages/upgrade";
-import { ChartsPage, initChartsPage } from "./pages/charts";
-import { MoodsPage, initMoodsPage } from "./pages/moods";
-import { NewsReleasePage, initNewsReleasePage } from "./pages/news-release";
+import { HomePage, initHomePage } from "./pages/home.js";
+import { AuthPage, initAuthPage } from "./pages/auth.js";
+import { ExplorePage, initExplorePage } from "./pages/explore.js";
+import { initLibraryPage, LibraryPage } from "./pages/library.js";
+import { initProfilePage, ProfilePage } from "./pages/profile.js";
+import { initUpgrade, Upgrade } from "./pages/upgrade.js";
+import { ChartsPage, initChartsPage } from "./pages/charts.js";
+import { MoodsPage, initMoodsPage } from "./pages/moods.js";
+import { NewsReleasePage, initNewsReleasePage } from "./pages/news-release.js";
 
 import {
   CategoryPage,

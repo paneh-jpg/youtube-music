@@ -39,7 +39,6 @@ export async function initSongDetailPage() {
 
   const response = await getAlbumBySlug(albumSlug);
   const tracks = response.data.tracks;
-  console.log(tracks);
 }
 
 export async function initSongDetailContent({ songId, albumSlug }) {
@@ -59,8 +58,8 @@ export async function initSongDetailContent({ songId, albumSlug }) {
   const queueListContainer = document.querySelector(".js-queue-list");
   const songTitle = document.querySelector(".js-title");
 
-  // const response = await getAlbumBySlug(albumSlug);
-  // const tracks = response.data.tracks;
+  const response = await getAlbumBySlug(albumSlug);
+  const tracks = response.data.tracks;
 
   // Khởi tạo player
   const player = new MusicPlayer({
