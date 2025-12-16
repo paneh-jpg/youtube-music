@@ -2,7 +2,7 @@ import { handleLogoutAPI } from "../../api/authApi.js";
 import { getProfileApi } from "../../api/userApi.js";
 import { hideLoading, showLoading } from "../../utils/loading.js";
 import { generateAvatar } from "../../utils/utils.js";
-import { toast } from "../common/toast.js";
+import { toast } from "../common/Toast.js";
 import { LoadingOverlay } from "../loading/LoadingOverlay.js";
 
 export function Header() {

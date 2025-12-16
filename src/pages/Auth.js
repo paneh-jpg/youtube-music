@@ -3,7 +3,7 @@ import axiosInstance from "../utils/authorizedAxios.js";
 import { router } from "../router/router.js";
 import { showLoading, hideLoading } from "../utils/loading.js";
 import { LoadingOverlay } from "../components/loading/LoadingOverlay.js";
-import { toast } from "../components/common/toast.js";
+import { toast } from "../components/common/Toast.js";
 
 import { escapeHTML } from "../utils/utils.js";
 

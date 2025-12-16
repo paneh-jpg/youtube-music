@@ -3,7 +3,7 @@ import { Header, initHeader } from "../components/layout/Header.js";
 import { Sidebar, initSidebar } from "../components/layout/Sidebar.js";
 import { SettingsModal } from "../components/modals/SettingsModal.js";
 import { updateProfileApi } from "../api/userApi.js";
-import { toast } from "../components/common/toast.js";
+import { toast } from "../components/common/Toast.js";
 
 import { escapeHTML, generateAvatar } from "../utils/utils.js";
 
