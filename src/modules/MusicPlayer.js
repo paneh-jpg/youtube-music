@@ -35,8 +35,12 @@ export class MusicPlayer {
     this.songTitleEl = songTitleEl;
     this.queueListContainer = queueListContainer;
 
+    this.playerBar = document.querySelector(".player-bar");
+    this.hideBtn = document.getElementById("hide-player-btn");
+
     // Data
     this.tracks = tracks;
+
     this.isPlaying = false;
     this.isSeeking = false;
     this.isRandom = false;
@@ -52,7 +56,35 @@ export class MusicPlayer {
     this.renderQueue();
     this.loadTrack(this.currentTrackIndex);
 
+    this.bindQueueEvents();
+
     this.addEventListeners();
+    this.initVisibilityEvents();
+  }
+
+  initVisibilityEvents() {
+    this.hideBtn = document.getElementById("hide-player-btn");
+    if (this.hideBtn) {
+      // Xử lý ẩn Player Control
+      this.hideBtn.onclick = () => {
+        this.hidePlayer();
+        this.pause();
+      };
+    }
+  }
+
+  showPlayer() {
+    if (this.playerBar) {
+      this.playerBar.classList.remove("player-hidden");
+      this.playerBar.classList.add("player-visible");
+    }
+  }
+
+  hidePlayer() {
+    if (this.playerBar) {
+      this.playerBar.classList.remove("player-visible");
+      this.playerBar.classList.add("player-hidden");
+    }
   }
 
   // Tải thông tin và audio bài hát
@@ -73,6 +105,33 @@ export class MusicPlayer {
     this.scrollToActiveTrack();
     this.audio.load();
     this.play();
+  }
+
+  bindQueueEvents() {
+    if (!this.queueListContainer) return;
+
+    // Xóa sự kiện cũ trước khi gán mới để tránh lặp (Optional nhưng nên làm)
+    this.queueListContainer.onclick = null;
+
+    this.queueListContainer.onclick = (e) => {
+      // Tìm thẻ button hoặc div chứa class js-queue-item
+      const trackItem = e.target.closest(".js-queue-item");
+      if (trackItem) {
+        // Lấy ID từ dataset (dataset.id thay vì dataset.index)
+        const trackId = trackItem.dataset.id;
+        console.log(trackId);
+
+        const index = this.tracks.findIndex(
+          (track) => String(track.id) === String(trackId)
+        );
+
+        if (index !== -1) {
+          console.log("Đang chuyển bài từ hàng chờ:", index);
+          this.loadTrack(index);
+          this.play();
+        }
+      }
+    };
   }
 
   // Hiển thị danh sách chờ
@@ -124,6 +183,7 @@ export class MusicPlayer {
       .join("");
 
     this.queueListContainer.innerHTML = queueHtml;
+    this.bindQueueEvents();
   }
 
   // Cập nhật active cho item đang phát
@@ -144,8 +204,17 @@ export class MusicPlayer {
 
   // Phương thức play/pause
   play() {
-    this.audio.play();
-    this.isPlaying = true;
+    const playPromise = this.audio.play();
+    if (playPromise !== undefined) {
+      playPromise
+        .then(() => {
+          this.isPlaying = true;
+          this.showPlayer();
+        })
+        .catch((error) => {
+          console.error("Playback interrupted:", error);
+        });
+    }
 
     const pause = this.playBtn.querySelector(".js-icon-pause");
     pause.classList.remove("hidden!");

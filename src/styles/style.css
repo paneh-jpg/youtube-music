@@ -174,3 +174,25 @@ button {
   cursor: pointer;
   user-select: none;
 }
+
+/* Player Control */
+#player-root {
+  color: white;
+}
+
+.player-bar {
+  transition: transform 0.4s ease-in-out, opacity 0.3s ease;
+  will-change: transform;
+}
+
+.player-hidden {
+  transform: translateY(100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.player-visible {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}

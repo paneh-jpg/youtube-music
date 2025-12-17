@@ -3,6 +3,7 @@ import { router } from "./router/router.js";
 import "./styles/style.css";
 import "./styles/base.css";
 import "./styles/animation.css";
+import { PlayerControl } from "./components/layout/PlayerControl.js";
 import { HomePage, initHomePage } from "./pages/Home.js";
 import { AuthPage, initAuthPage } from "./pages/Auth.js";
 import { ExplorePage, initExplorePage } from "./pages/explore.js";
@@ -33,8 +34,16 @@ import {
   initSongDetailPage,
   initSongDetailContent,
 } from "./pages/song-detail";
-
+import {
+  PlaylistDetails,
+  initPlaylistDetails,
+  initPlaylistsContent,
+} from "./pages/playlist-detail.js";
 const app = document.querySelector("#app");
+
+// Player control
+const playerRoot = document.querySelector("#player-root");
+if (playerRoot) playerRoot.innerHTML = PlayerControl();
 
 function render(html, init) {
   app.innerHTML = html;
@@ -76,6 +85,12 @@ router
     initAlbumsDetails();
     initAlbumsContent(slug);
   })
+  .on("/playlists/details/:slug", (match) => {
+    const slug = decodeURIComponent(match?.data?.slug || "");
+    render(PlaylistDetails());
+    initPlaylistDetails();
+    initPlaylistsContent(slug);
+  })
   .on("/videos/details/:slug", (match) => {
     const slug = decodeURIComponent(match?.data?.slug || "");
     render(VideosDetails());
@@ -89,12 +104,12 @@ router
     const queryRaw = match?.queryString || "";
     const query = queryRaw.startsWith("?") ? queryRaw.slice(1) : queryRaw;
     const params = new URLSearchParams(query);
-    const albumSlug = params.get("album");
-
+    const contextSlug = params.get("album");
+    const type = params.get("type");
     render(SongDetailPage());
-    initSongDetailPage({ songId, albumSlug });
+    initSongDetailPage({ songId, contextSlug, type });
 
-    initSongDetailContent({ songId, albumSlug });
+    initSongDetailContent({ songId, contextSlug, type });
   })
   .on("/charts", () => {
     render(ChartsPage(), initChartsPage);

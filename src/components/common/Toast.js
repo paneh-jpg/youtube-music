@@ -6,7 +6,7 @@ function ensureToastRoot() {
   toastRoot = document.createElement("div");
   toastRoot.id = "toast-root";
   toastRoot.className = `
-    fixed bottom-6 right-6 z-50
+    fixed top-9 right-6 z-50
     flex flex-col gap-3
     pointer-events-none
   `;

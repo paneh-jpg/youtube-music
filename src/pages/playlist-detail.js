@@ -1,11 +1,11 @@
-import { getAlbumBySlug } from "../api/exploreApi.js";
+import { getPLaylistBySlug } from "../api/homeApi.js";
 import { Header, initHeader } from "../components/layout/Header.js";
 import { Sidebar, initSidebar } from "../components/layout/Sidebar.js";
 import { formatSecondsToHms, formatDateVietnamese } from "../utils/utils.js";
 
 import { router } from "../router/router";
 
-export function AlbumsDetails() {
+export function PlaylistDetails() {
   return `
     <div class="bg-linear-to-b from-[#181818] via-[#0f0f0f] to-[#0f0f0f] text-white font-[Inter]">
       <!-- Overlay -->
@@ -22,12 +22,12 @@ export function AlbumsDetails() {
   `;
 }
 
-export async function initAlbumsDetails() {
+export async function initPlaylistDetails() {
   initHeader();
   initSidebar();
 }
 
-export async function initAlbumsContent(slug) {
+export async function initPlaylistsContent(slug) {
   const contentEl = document.querySelector(".js-album-content");
   if (!contentEl) return;
 
@@ -36,8 +36,9 @@ export async function initAlbumsContent(slug) {
     return;
   }
 
-  const response = await getAlbumBySlug(slug);
+  const response = await getPLaylistBySlug(slug);
   const data = response.data;
+  console.log(data);
 
   const tracksHtml = data.tracks
     .map(
@@ -59,7 +60,7 @@ export async function initAlbumsContent(slug) {
             <h3 class="text-white font-medium  truncate">${
               song.title || ""
             }</h3>
-               <span class="text-gray-400 -mt-2  text-[12px] truncate ">${
+               <span class="text-gray-400   text-[14px] truncate ">${
                  song.singer || "Singer"
                } </span>
            
@@ -101,10 +102,8 @@ export async function initAlbumsContent(slug) {
           <span>${data.songCount} bài</span>
           <span class="text-white/35">•</span>
           <span>${formatSecondsToHms(data.duration)}</span>
-          <span class="text-white/35">•</span>
-          <span>${data.popularity} lượt nghe</span>
+
         </div>
-        <p class="mt-1">Phát hành: ${formatDateVietnamese(data.releaseDate)}</p>
       </div>
 
       <!-- Actions -->
@@ -149,10 +148,11 @@ export async function initAlbumsContent(slug) {
     //     slug
     //   )}`
     // );
+
     router.navigate(
       `/songs/details/${encodeURIComponent(idVideo)}?album=${encodeURIComponent(
         slug
-      )}&type=album`
+      )}&type=playlist`
     );
   });
 
@@ -161,7 +161,7 @@ export async function initAlbumsContent(slug) {
     router.navigate(
       `/songs/details/${encodeURIComponent(idVideo)}?album=${encodeURIComponent(
         slug
-      )}&type=album`
+      )}&type=playlist`
     );
   };
 }

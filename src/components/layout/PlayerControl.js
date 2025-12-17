@@ -1,5 +1,5 @@
 export const PlayerControl = () => {
-  return `  <footer class="fixed left-0 right-0 bottom-0 z-100 bg-[#1f1f1f]">
+  return `  <footer class="fixed player-bar player-hidden left-0 right-0 bottom-0 z-100 bg-[#1f1f1f]">
       <!-- TOP PROGRESS -->
       <div class="-mt-3.5">
         <input
@@ -15,7 +15,7 @@ export const PlayerControl = () => {
       </div>
 
       <!-- MAIN BAR -->
-      <div class="px-2 py-2">
+      <div class="px-2 ">
         <div class="mx-auto w-full flex items-center justify-between gap-4">
           <!-- LEFT: transport + time -->
           <div class="w-1/4 flex items-center gap-3 min-w-65">
@@ -57,7 +57,7 @@ export const PlayerControl = () => {
           </div>
 
           <!-- CENTER: thumbnail + title/meta + actions -->
-          <div class="ml-50 w-2/4 flex items-center gap-4 min-w-0">
+          <div class="ml-50 w-2/4 flex items-center gap-4 min-w-0 pb-2">
             <div
               class="w-12 h-12 rounded-md overflow-hidden bg-white/10 shrink-0"
             >
@@ -99,16 +99,12 @@ export const PlayerControl = () => {
                     type="button"
                     class="js-more h-10 w-10 rounded-full hover:bg-white/10 flex items-center justify-center"
                     aria-label="More"
-                    title="More"
-                  >
-                    <span class="material-symbols-outlined text-[24px]"
-                      >more_vert</span
-                    >
+                    title="More" >
+                    <span class="material-symbols-outlined text-[24px]" >more_vert</span>
                   </button>
                 </div>
               </div>
-
-              <p class="js-meta truncate text-sm text-white/60">
+              <p class="js-meta truncate -mt-2 text-sm text-white/60">
                 Singer • Views • Likes
               </p>
             </div>
@@ -153,7 +149,7 @@ export const PlayerControl = () => {
             </button>
 
             <button
-              type="button"
+              type="button" id="hide-player-btn"
               class="js-menu h-10 w-10 rounded-full hover:bg-white/10 flex items-center justify-center"
               aria-label="Menu"
               title="Menu"
@@ -165,5 +161,9 @@ export const PlayerControl = () => {
           </div>
         </div>
       </div>
+
+      <!-- Persistent media elements (do NOT put these inside routed pages) -->
+      <audio id="audio" class="hidden" preload="metadata" src=""></audio>
+      <video id="video" class="hidden" preload="metadata" playsinline src=""></video>
     </footer>`;
 };

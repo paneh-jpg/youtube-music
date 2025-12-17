@@ -1,10 +1,10 @@
 import { getAlbumBySlug } from "../api/exploreApi.js";
+import { getPLaylistBySlug } from "../api/homeApi.js";
 import { Header, initHeader } from "../components/layout/Header.js";
 import { Panel, initPanel } from "../components/layout/Panel.js";
-import { PlayerControl } from "../components/layout/PlayerControl.js";
 import { Sidebar, initSidebar } from "../components/layout/Sidebar.js";
 import { VideoArea } from "../components/layout/VideoArea.js";
-import { MusicPlayer } from "../modules/MusicPlayer.js";
+import { getOrCreateMusicPlayer } from "../modules/playerSingleton.js";
 
 export function SongDetailPage() {
   return `
@@ -15,7 +15,7 @@ export function SongDetailPage() {
       ${Header()}  
       ${Sidebar()} 
       <!--  Main content  -->
-      <div id="mainContentWrapper" class="pt-16 md:ml-64 h-screen ">
+      <div id="mainContentWrapper" class="pt-20 md:ml-64 h-screen ">
         <main id="mainContent" class="mt-6 ml-10 mr-10" >
           <!--  MAIN LAYOUT  -->
            <div class="h-[70vh] pb-5">
@@ -25,23 +25,20 @@ export function SongDetailPage() {
             grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_420px] gap-6">
                 ${VideoArea()}
                 ${Panel()}
-                ${PlayerControl()}
+                
         </main>
       </div>
     </div>
   `;
 }
 
-export async function initSongDetailPage() {
+export async function initSongDetailPage({ songId, contextSlug } = {}) {
   initHeader();
   initSidebar();
   initPanel();
-
-  const response = await getAlbumBySlug(albumSlug);
-  const tracks = response.data.tracks;
 }
 
-export async function initSongDetailContent({ songId, albumSlug }) {
+export async function initSongDetailContent({ songId, contextSlug, type }) {
   const audio = document.querySelector("#audio");
   const currentTrackNameEl = document.querySelector(".js-current-track-name");
   const currentTrackThumbEl = document.querySelector(".js-thumb");
@@ -58,11 +55,18 @@ export async function initSongDetailContent({ songId, albumSlug }) {
   const queueListContainer = document.querySelector(".js-queue-list");
   const songTitle = document.querySelector(".js-title");
 
-  const response = await getAlbumBySlug(albumSlug);
+  let response;
+  if (type === "album") {
+    response = await getAlbumBySlug(contextSlug);
+  } else {
+    // Mặc định hoặc type === 'playlist'
+    response = await getPLaylistBySlug(contextSlug);
+  }
+
   const tracks = response.data.tracks;
 
   // Khởi tạo player
-  const player = new MusicPlayer({
+  getOrCreateMusicPlayer({
     // Elements
     audioEl: audio,
     currentTrackNameEl: currentTrackNameEl,
