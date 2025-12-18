@@ -106,3 +106,17 @@ export function generateAvatar(name) {
 
   return { char, bg, text };
 }
+
+// utils/trackNormalizer.js
+
+export function mergeSongWithAlbumTracks(songDetail) {
+  const current = normalizeSongToTrack(songDetail);
+
+  const albumTracks = songDetail.album?.tracks || [];
+
+  const filteredAlbumTracks = albumTracks.filter(
+    (t) => String(t.id) !== String(current.id)
+  );
+
+  return [current, ...filteredAlbumTracks];
+}

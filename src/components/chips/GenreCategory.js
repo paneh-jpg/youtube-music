@@ -3,6 +3,7 @@ export function GenreColorCate({
   label = "",
   color = "#ff6d00",
   slug = "",
+  type = "",
 } = {}) {
   return `
     <button
@@ -11,7 +12,8 @@ export function GenreColorCate({
              text-white font-semibold hover:bg-[#333] transition text-center
              border-l-[6px]"
       style="border-left-color:${color};"
-      data-slug="${slug}" 
+      data-slug="${slug}"
+      data-type="${type}" 
     >
       ${label}
     </button>

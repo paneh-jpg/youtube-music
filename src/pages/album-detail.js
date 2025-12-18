@@ -77,7 +77,7 @@ export async function initAlbumsContent(slug) {
   <div class="w-2/5 flex flex-col items-center pt-2">
 
     <!-- Cover -->
-    <div class="w-full max-w-[450px]">
+    <div class="w-full max-w-112.5">
       <div class="w-full h-[clamp(300px,24vw,400px)] rounded-2xl overflow-hidden bg-white/5 border border-white/10 shadow-[0_12px_35px_rgba(0,0,0,0.55)]" >
         <img src="${
           // data.thumbnails ||

@@ -6,7 +6,7 @@ export function initCustomScrolling() {
 
   sections.forEach((section) => {
     const scrollContainer = section.querySelector(
-      ".js-album-list-container, .js-video-list-container, .js-chip-list-container"
+      ".js-album-list-container, .js-video-list-container, .js-chip-list-container, .js-playlist-list-container, .js-song-list-container"
     );
     const prevButton = section.querySelector(".swiper-button-prev");
     const nextButton = section.querySelector(".swiper-button-next");

@@ -14,7 +14,7 @@ import { initCustomScrolling } from "../utils/horizontalScroll.js";
 
 export function HomePage() {
   return `
-    <div class="bg-linear-to-b from-[#181818] via-[#0f0f0f] to-[#0f0f0f] text-white font-[Inter]">
+    <div class="h-full bg-linear-to-b from-[#181818] via-[#0f0f0f] to-[#0f0f0f] text-white font-[Inter]">
       <!-- Overlay -->
       <div id="overlay" class="fixed inset-0 bg-black/50 opacity-0 invisible transition-opacity duration-300 z-30 md:hidden"></div>
 

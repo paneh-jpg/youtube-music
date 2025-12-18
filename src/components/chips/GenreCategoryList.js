@@ -10,6 +10,7 @@ export function GenreCateList({ items = [] } = {}) {
             label: g.name,
             color: g.color,
             slug: g.slug,
+            type: g.type,
           })
         )
         .join("")}

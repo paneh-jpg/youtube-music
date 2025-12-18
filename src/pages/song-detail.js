@@ -1,10 +1,11 @@
-import { getAlbumBySlug } from "../api/exploreApi.js";
+import { getAlbumBySlug, getSongById } from "../api/exploreApi.js";
 import { getPLaylistBySlug } from "../api/homeApi.js";
 import { Header, initHeader } from "../components/layout/Header.js";
 import { Panel, initPanel } from "../components/layout/Panel.js";
 import { Sidebar, initSidebar } from "../components/layout/Sidebar.js";
 import { VideoArea } from "../components/layout/VideoArea.js";
 import { getOrCreateMusicPlayer } from "../modules/playerSingleton.js";
+import { mergeSongWithAlbumTracks } from "../utils/utils.js";
 
 export function SongDetailPage() {
   return `
@@ -56,14 +57,19 @@ export async function initSongDetailContent({ songId, contextSlug, type }) {
   const songTitle = document.querySelector(".js-title");
 
   let response;
-  if (type === "album") {
-    response = await getAlbumBySlug(contextSlug);
+  let tracks = [];
+  if (contextSlug) {
+    if (type === "album") {
+      response = await getAlbumBySlug(contextSlug);
+      tracks = response.data.tracks;
+    } else {
+      response = await getPLaylistBySlug(contextSlug);
+      tracks = response.data.tracks;
+    }
   } else {
-    // Mặc định hoặc type === 'playlist'
-    response = await getPLaylistBySlug(contextSlug);
+    response = await getSongById(songId);
+    tracks = mergeSongWithAlbumTracks(songRes.data);
   }
-
-  const tracks = response.data.tracks;
 
   // Khởi tạo player
   getOrCreateMusicPlayer({

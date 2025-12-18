@@ -12,7 +12,7 @@ export function CategoryPage() {
       <!--  Main content  -->
       <div id="mainContentWrapper" class="pt-16 md:ml-64 pb-20 min-h-screen">
         <main id="mainContent" class="js-category-content mt-10 mx-15  " >
-        <h1 class"text-3xl font-bold py-10 text-[#333]"> Category </h1>
+        <h1 class="text-4xl font-bold mb-6">Đang cập nhật...</h1>
         </main>
       </div>
     </div>
@@ -29,12 +29,11 @@ export const initCategoryContent = async (slug) => {
   if (!contentEl) return;
 
   if (!slug) {
-    contentEl.textContent = "Không có slug (route param bị rỗng).";
+    contentEl.innerHTML = ``;
     return;
   }
   const response = await getCategoryBySlug(slug);
   const data = response.data;
-  console.log(data);
 
   const categoryName = data.name;
 

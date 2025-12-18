@@ -11,7 +11,10 @@ import { initLibraryPage, LibraryPage } from "./pages/library.js";
 import { initProfilePage, ProfilePage } from "./pages/profile.js";
 import { initUpgrade, Upgrade } from "./pages/upgrade.js";
 import { ChartsPage, initChartsPage } from "./pages/charts.js";
-import { MoodsPage, initMoodsPage } from "./pages/moods.js";
+import {
+  MoodsAndGenresPage,
+  initMoodsAndGenresPage,
+} from "./pages/moods-and-genres.js";
 import { NewsReleasePage, initNewsReleasePage } from "./pages/news-release.js";
 
 import {
@@ -39,6 +42,7 @@ import {
   initPlaylistDetails,
   initPlaylistsContent,
 } from "./pages/playlist-detail.js";
+import { initLineContent, initLinePage, LinePage } from "./pages/lines.js";
 const app = document.querySelector("#app");
 
 // Player control
@@ -79,6 +83,13 @@ router
     initCategoryPage();
     initCategoryContent(slug);
   })
+  .on("/lines/:slug", (match) => {
+    const slug = decodeURIComponent(match?.data?.slug || "");
+    render(LinePage());
+    initLinePage();
+    initLineContent(slug);
+    window.scrollTo({ top: 0, behavior: "instant" });
+  })
   .on("/albums/details/:slug", (match) => {
     const slug = decodeURIComponent(match?.data?.slug || "");
     render(AlbumsDetails());
@@ -118,7 +129,7 @@ router
     render(NewsReleasePage(), initNewsReleasePage);
   })
   .on("/moods", () => {
-    render(MoodsPage(), initMoodsPage);
+    render(MoodsAndGenresPage(), initMoodsAndGenresPage);
   })
   .notFound(() => {
     app.innerHTML = "<h1>404</h1>";

@@ -179,7 +179,17 @@ export async function loadGenreChips() {
 
   const res = await getMetaList();
 
-  const genres = res?.data?.categories.concat(res?.data?.lines);
+  const categories = (res?.data?.categories || []).map((item) => ({
+    ...item,
+    type: "category",
+  }));
+
+  const lines = (res?.data?.lines || []).map((item) => ({
+    ...item,
+    type: "line",
+  }));
+
+  const genres = [...categories, ...lines];
 
   const perCol = 4;
   const cols = chunk(genres, perCol);
@@ -188,10 +198,16 @@ export async function loadGenreChips() {
 
   container.addEventListener("click", (e) => {
     const chip = e.target.closest(".js-genre-chip");
-
     if (!chip) return;
-    const slug = chip.dataset.slug;
 
-    router.navigate(`/categories/${encodeURIComponent(slug)}`); // add router
+    const { slug, type } = chip.dataset;
+
+    if (type === "category") {
+      router.navigate(`/categories/${encodeURIComponent(slug)}`);
+    }
+
+    if (type === "line") {
+      router.navigate(`/lines/${encodeURIComponent(slug)}`);
+    }
   });
 }
