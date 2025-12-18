@@ -38,6 +38,7 @@ export async function initAlbumsContent(slug) {
 
   const response = await getAlbumBySlug(slug);
   const data = response.data;
+  console.log(data);
 
   const tracksHtml = data.tracks
     .map(
@@ -59,8 +60,8 @@ export async function initAlbumsContent(slug) {
             <h3 class="text-white font-medium  truncate">${
               song.title || ""
             }</h3>
-               <span class="text-gray-400 -mt-2  text-[12px] truncate ">${
-                 song.singer || "Singer"
+               <span class="text-gray-400 mt-1  text-[12px] truncate ">${
+                 song.type || "Singer"
                } </span>
            
          </div>

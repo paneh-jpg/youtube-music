@@ -31,7 +31,7 @@ export function LinePage() {
             <p class="js-line-desc mt-3 text-[20px]"></p> 
          </div>
 
-         <section class="mb-10">
+         <section class="mb-15">
             ${SectionHeader({
               title: "Bài hát",
               hasBtn: false,
@@ -39,7 +39,7 @@ export function LinePage() {
             })}
            <!-- Nội dung bên dưới (horizontal scroll cards) -->
           <div class="js-song-list-container overflow-x-auto custom-scrollbar pb-2.5">
-             <div class="js-song-list grid grid-flow-col grid-rows-4 gap-x-10 gap-y-4 auto-cols-fr">
+          <div class="js-song-list grid grid-flow-col grid-rows-4 auto-cols-[calc(100%/3-20px)] gap-x-10 gap-y-4" >
                     <!--   Songs -->
                     Danh sách bài hát ở đây
              </div>
@@ -123,6 +123,8 @@ export const initLineContent = async (slug) => {
         getAlbumsByLineSlug(slug),
         getSongsByLineSlug(slug),
       ]);
+
+    console.log(songsRes.data);
 
     renderHeader(lineRes.data.name, lineRes.data.description);
     renderPlaylists(playlistsRes.data.items);
@@ -226,13 +228,13 @@ function renderSongs(items) {
   if (!container) return;
 
   container.innerHTML = items
-    .slice(0, 12)
     .map((item) =>
       SongCard({
         slug: item.slug,
         id: item.id,
         thumbnail: item.thumb,
-        name: item.albumName,
+        name: item.name,
+        albumName: item.albumName,
         views: `${formatNumber(item.views)} `,
       })
     )

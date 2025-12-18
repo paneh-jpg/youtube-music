@@ -109,6 +109,17 @@ export function generateAvatar(name) {
 
 // utils/trackNormalizer.js
 
+export function normalizeSongToTrack(song = {}) {
+  return {
+    id: song.id,
+    title: song.title || song.name || "Unknown",
+    audioUrl: song.audioUrl,
+    thumbnails: song.thumbnails || song.thumb,
+    duration: Number(song.duration || 0),
+    artists: song.artists || [],
+  };
+}
+
 export function mergeSongWithAlbumTracks(songDetail) {
   const current = normalizeSongToTrack(songDetail);
 

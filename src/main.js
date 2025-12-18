@@ -43,7 +43,9 @@ import {
   initPlaylistsContent,
 } from "./pages/playlist-detail.js";
 import { initLineContent, initLinePage, LinePage } from "./pages/lines.js";
+import { initMoodContent, initMoodsPage, MoodsPage } from "./pages/moods.js";
 const app = document.querySelector("#app");
+app.classList.add("bg-black");
 
 // Player control
 const playerRoot = document.querySelector("#player-root");
@@ -130,6 +132,10 @@ router
   })
   .on("/moods", () => {
     render(MoodsAndGenresPage(), initMoodsAndGenresPage);
+  })
+  .on("/moods/:slug", (match) => {
+    const slug = decodeURIComponent(match?.data?.slug || "");
+    render(MoodsPage()), initMoodsPage(), initMoodContent(slug);
   })
   .notFound(() => {
     app.innerHTML = "<h1>404</h1>";

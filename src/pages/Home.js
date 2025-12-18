@@ -6,8 +6,10 @@ import {
   getTodayHits,
   getPlaylistByCountry,
   getMoods,
+  getQuickPick,
 } from "../api/homeApi.js";
 import { AlbumCard } from "../components/cards/AlbumCard.js";
+import { QuickPickCard } from "../components/cards/QuickPickCard.js";
 import { getProfileApi } from "../api/userApi.js";
 import { router } from "../router/router.js";
 import { initCustomScrolling } from "../utils/horizontalScroll.js";
@@ -28,14 +30,32 @@ export function HomePage() {
 
             <!-- Mood List -->
             <div class="js-moods-list flex gap-3 mt-10 py-6 "></div>
-          </div>
+          </div>  
+
+   
+
+          <!--  Quick pick  -->
+          <section class="mt-10">
+              ${SectionHeader({
+                title: "Chọn nhanh đài phát",
+                underline: false,
+                btnContent: "Xem tất cả",
+              })}
+  
+              <!-- content bên dưới (horizontal scroll cards) -->
+          <div class="js-quick-pick-list-container overflow-x-auto custom-scrollbar pb-2.5">
+          <div class="js-quick-pick-list grid grid-flow-col grid-rows-4 auto-cols-[calc(100%/3-20px)] gap-x-10 gap-y-2" >
+                       <!--   ALBUMs -->
+                </div>
+             </div>
+          </section>
 
           <!--  Albums For You  -->
           <section class="mt-10">
               ${SectionHeader({
                 title: "Album dành cho bạn",
                 underline: false,
-                btnContent: "Xem thêm",
+                btnContent: "Xem tất cả",
               })}
   
               <!-- content bên dưới (horizontal scroll cards) -->
@@ -51,7 +71,7 @@ export function HomePage() {
               ${SectionHeader({
                 title: "Today's Hits",
                 underline: false,
-                btnContent: "Xem thêm",
+                btnContent: "Xem tất cả",
               })}
   
               <!-- content bên dưới (horizontal scroll cards) -->
@@ -74,6 +94,7 @@ export function initHomePage() {
   initSidebar();
   initUserName();
   initMoods();
+  loadQuickPick().then(initCustomScrolling());
   loadAlbumsForYou().then(initCustomScrolling());
   loadTodayHits().then(initCustomScrolling());
 }
@@ -94,10 +115,48 @@ const initMoods = async () => {
 
   container.innerHTML = moods
     .map((mood) => {
-      return ` <button data-slug=${mood.slug} class="category-item">${mood.name}</button>`;
+      return ` <button data-slug=${mood.slug} class="js-mood category-item">${mood.name}</button>`;
     })
     .join("");
+  container.addEventListener("click", (e) => {
+    const mood = e.target.closest(".js-mood");
+    if (!mood) return;
+
+    const slug = mood.dataset.slug;
+
+    router.navigate(`/moods/${encodeURIComponent(slug)}`);
+  });
 };
+
+async function loadQuickPick() {
+  const container = document.querySelector(".js-quick-pick-list");
+  if (!container) return;
+  const response = await getQuickPick();
+  const quickPicks = response.data;
+
+  container.innerHTML = quickPicks
+    .map((item) =>
+      QuickPickCard({
+        id: item._id,
+        slug: item.slug,
+        thumbnail: item.thumbnails,
+        title: item.title,
+        type: item.type,
+        artist: item.artists,
+      })
+    )
+    .join("");
+
+  container.addEventListener("click", (e) => {
+    const quickPick = e.target.closest(".js-quick-pick-card");
+
+    if (!quickPick) return;
+
+    const slug = quickPick.dataset.slug;
+
+    router.navigate(`/playlists/details/${encodeURIComponent(slug)}`); // add router
+  });
+}
 
 async function loadAlbumsForYou() {
   const container = document.querySelector(".js-album-for-you");

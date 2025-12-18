@@ -196,3 +196,9 @@ button {
   opacity: 1;
   pointer-events: auto;
 }
+
+.mood-active {
+  background-color: #f1eeee;
+  color: #000;
+  font-weight: 600;
+}

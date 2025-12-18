@@ -1,7 +1,6 @@
 export const VideoArea = (isAudio = true) => {
-  // NOTE:
-  // - Media elements (<audio>/<video>) must be persistent to keep playing across route changes.
-  // - This component only renders the VISUAL area (cover image / a slot for future video).
+  // - Các phần tử media (<audio>/<video>) phải được giữ tồn tại xuyên suốt khi chuyển route để việc phát nhạc/video không bị gián đoạn.
+  // - Component này CHỈ render phần giao diện hiển thị (ảnh cover / vùng chứa để sau này gắn video).
   const mediaHtml = isAudio
     ? `
       <div class="js-media-slot hidden"></div>
@@ -17,12 +16,12 @@ export const VideoArea = (isAudio = true) => {
             ${mediaHtml}
 
             <button class="absolute inset-0 flex items-center justify-center">
-              <div class="h-16 w-16 rounded-full bg-black/50 border border-white/20 flex items-center justify-center" >
-                <svg class="h-7 w-7 translate-x-[1px]" viewBox="0 0 24 24" fill="currentColor">
+             <!-- <div class="h-16 w-16 rounded-full bg-black/50 border border-white/20 flex items-center justify-center" >
+                <svg class="h-7 w-7 translate-x-px" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M8 5v14l11-7z"></path>
-                </svg>
+                </svg> 
               </div>
-            </button>
+            </button>-->
           </div>
         </section>
 `;

@@ -67,8 +67,10 @@ export async function initSongDetailContent({ songId, contextSlug, type }) {
       tracks = response.data.tracks;
     }
   } else {
-    response = await getSongById(songId);
-    tracks = mergeSongWithAlbumTracks(songRes.data);
+    try {
+      response = await getSongById(songId);
+    } catch (error) {}
+    tracks = mergeSongWithAlbumTracks(response.data);
   }
 
   // Khởi tạo player

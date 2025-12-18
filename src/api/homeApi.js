@@ -6,6 +6,10 @@ export const getMoods = async () => {
   return await axiosInstance.get(`${BASE_URL}/moods`);
 };
 
+export const getMoodBySlug = async (slug) => {
+  return await axiosInstance.get(`${BASE_URL}/moods/${slug}`);
+};
+
 export const getAlbumsForYou = async () => {
   return await axiosInstance.get(`${BASE_URL}/home/albums-for-you`);
 };
@@ -18,6 +22,10 @@ export const getPlaylistByCountry = async (country) => {
   return await axiosInstance.get(
     `${BASE_URL}/playlists/by-country?country=${country}`
   );
+};
+
+export const getQuickPick = async () => {
+  return await axiosInstance.get(`${BASE_URL}/quick-picks`);
 };
 
 // Gợi ý cá nhân hóa

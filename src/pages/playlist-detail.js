@@ -61,7 +61,7 @@ export async function initPlaylistsContent(slug) {
               song.title || ""
             }</h3>
                <span class="text-gray-400   text-[14px] truncate ">${
-                 song.singer || "Singer"
+                 song.type || ""
                } </span>
            
          </div>

@@ -43,8 +43,7 @@ export function SongCard({
                  group-hover:opacity-100 group-hover:scale-100
                  transition"
         >
-          <span class=" material-symbols-outlined  text-white text-[26px] lg:text-[30px]"> 
-              play_arrow
+          <span class=" material-symbols-outlined  text-white text-[26px] lg:text-[30px]"> play_arrow
           </span>
         </button>
       </div>

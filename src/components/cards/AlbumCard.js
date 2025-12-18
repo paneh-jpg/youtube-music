@@ -5,6 +5,7 @@ export function AlbumCard({
   slug = "",
   id = "",
   artist = "",
+  desc = "",
 } = {}) {
   const desktopSidebarState = JSON.parse(
     localStorage.getItem("sidebar_state") || "{}"
@@ -56,11 +57,13 @@ export function AlbumCard({
   
       <div class= "flex">  <!-- Type -->
         <p class="text-white/60 text-sm">
-          ${albumType}&nbsp;  • 	&nbsp;  
+          ${albumType}&nbsp;  •	&nbsp;  
         </p>
         <!-- Artist -->
         <p class="text-white/60 text-sm hover:underline cursor-pointer line-clamp-1" > ${artist} </p> 
+      
         </div>
+          <p class="text-white/60 text-sm hover:underline cursor-pointer line-clamp-2" > ${desc} </p> 
       </div>
     </div>
 
