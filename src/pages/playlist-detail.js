@@ -38,7 +38,6 @@ export async function initPlaylistsContent(slug) {
 
   const response = await getPLaylistBySlug(slug);
   const data = response.data;
-  console.log(data);
 
   const tracksHtml = data.tracks
     .map(

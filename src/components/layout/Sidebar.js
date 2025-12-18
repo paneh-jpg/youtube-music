@@ -7,25 +7,25 @@ export function Sidebar() {
           <!-- Trang chủ -->
           <a href="/" data-navigo class=" flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10" >
             <span class="material-symbols-outlined text-[24px]">home</span>
-            <span class="text-[15px] font-medium">Trang chủ</span>
+            <span class="text-[16px] font-semibold">Trang chủ</span>
           </a>
 
           <!-- Khám phá -->
           <a href="/explore" data-navigo class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10" >
             <span class="material-symbols-outlined text-[24px]">travel_explore</span>
-            <span class="text-[15px]">Khám phá</span>
+            <span class="text-[16px] font-semibold">Khám phá</span>
           </a>
 
           <!-- Thư viện -->
           <a href="/library" data-navigo class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10">
             <span class="material-symbols-outlined text-[24px]">bookmark</span>
-            <span class="text-[15px]">Thư viện</span>
+            <span class="text-[16px] font-semibold">Thư viện</span>
           </a>
 
           <!-- Nâng cấp ứng dụng -->
           <a href="/upgrade" data-navigo class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10">
             <span class="material-symbols-outlined text-[24px]">open_in_new</span>
-            <span class="text-[15px]">Nâng cấp</span>
+            <span class="text-[16px] font-semibold">Nâng cấp</span>
           </a>
         </nav>
 

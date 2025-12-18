@@ -119,14 +119,14 @@ export class MusicPlayer {
       if (trackItem) {
         // Lấy ID từ dataset (dataset.id thay vì dataset.index)
         const trackId = trackItem.dataset.id;
-        console.log(trackId);
+        // console.log(trackId);
 
         const index = this.tracks.findIndex(
           (track) => String(track.id) === String(trackId)
         );
 
         if (index !== -1) {
-          console.log("Đang chuyển bài từ hàng chờ:", index);
+          // console.log("Đang chuyển bài từ hàng chờ:", index);
           this.loadTrack(index);
           this.play();
         }

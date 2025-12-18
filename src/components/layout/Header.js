@@ -8,7 +8,7 @@ import { LoadingOverlay } from "../loading/LoadingOverlay.js";
 export function Header() {
   return `
     <!-- Header (Sticky)-->
-    <header class="fixed top-0 left-0 right-0 z-40 flex h-16 items-center border-b border-white/10 bg-[rgba(0,0,,0.1)] backdrop-blur-md px-4">
+    <header class="fixed js-header top-0 left-0 right-0 z-40 flex h-16 items-center border-b border-white/10 bg-[rgba(0,0,0,0.1)] backdrop-blur-md px-4">
       <!-- Toggle sidebar -->
       <button id="headerToggle" class="p-2 mr-3 rounded-full hover:bg-white/10 flex items-center justify-center text-white" >
         <span class="material-symbols-outlined text-3xl">menu</span>
@@ -109,10 +109,10 @@ export function Header() {
 }
 
 export function initHeader() {
+  headerBg();
   initMobileSearch();
   initSearchSuggestions();
   updateHeaderAuthUI();
-
   handleLogout();
 }
 
@@ -305,3 +305,25 @@ const handleLogout = () => {
     handleLogoutAPI();
   };
 };
+
+function headerBg() {
+  const header = document.querySelector(".js-header");
+  if (!header) return;
+
+  const topBg = "bg-[rgba(0,0,0,0.1)]";
+  const scrollBg = "bg-black/90";
+
+  const apply = () => {
+    const scrolled = window.scrollY > 5;
+    header.classList.toggle(scrollBg, scrolled);
+    header.classList.toggle(topBg, !scrolled);
+  };
+
+  apply();
+
+  window.addEventListener("scroll", () => {
+    requestAnimationFrame(() => {
+      apply();
+    });
+  });
+}

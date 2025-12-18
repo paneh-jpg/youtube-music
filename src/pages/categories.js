@@ -34,6 +34,7 @@ export const initCategoryContent = async (slug) => {
   }
   const response = await getCategoryBySlug(slug);
   const data = response.data;
+  console.log(data);
 
   const categoryName = data.name;
 

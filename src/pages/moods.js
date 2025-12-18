@@ -4,6 +4,8 @@ import { Sidebar, initSidebar } from "../components/layout/Sidebar.js";
 import { AlbumCard } from "../components/cards/AlbumCard.js";
 import { SectionHeader } from "../components/section/SectionHeader.js";
 import { router } from "../router/router.js";
+import { initCustomScrolling } from "../utils/horizontalScroll.js";
+import { showLoading, hideLoading } from "../utils/loading.js";
 
 export function MoodsPage() {
   return `
@@ -102,16 +104,24 @@ export const initMoodContent = async (slug) => {
     contentEl.innerHTML = ``;
     return;
   }
+  try {
+    showLoading();
+    const response = await getMoodBySlug(slug);
+    const hero = response.data.hero;
 
-  const response = await getMoodBySlug(slug);
-  const hero = response.data.hero;
+    const sections = response.data.sections;
 
-  const sections = response.data.sections;
-  console.log(sections[0].items);
-
-  renderHeader(hero.title, hero.subtitle);
-  renderFeatures(sections[0].items);
-  renderMorePicks(sections[1].items);
+    renderHeader(hero.title, hero.subtitle);
+    renderFeatures(sections[0].items);
+    renderMorePicks(sections[1].items);
+    initCustomScrolling();
+  } catch (error) {
+    console.log(error.message);
+  } finally {
+    setTimeout(() => {
+      hideLoading();
+    }, 700);
+  }
 };
 
 function renderHeader(name, desc) {
