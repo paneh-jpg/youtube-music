@@ -31,7 +31,7 @@ export function getOrCreateMusicPlayer(config = {}) {
     }
   });
 
-  // 2.  !!Nếu có container queue mới, phải gán lại sự kiện ngay
+  // 2.  Nếu có container queue mới, phải gán lại sự kiện ngay
   if (elements.queueListContainer) {
     playerInstance.queueListContainer = elements.queueListContainer;
     playerInstance.renderQueue(); // Vẽ bài hát ra container mới
