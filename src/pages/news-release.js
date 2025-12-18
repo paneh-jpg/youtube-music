@@ -79,12 +79,10 @@ async function loadNewsReleaseAlbum() {
 
   container.addEventListener("click", (e) => {
     const album = e.target.closest(".js-album");
-    console.log(album);
 
     if (!album) return;
 
     const id = album.dataset.id;
-    console.log(id);
 
     router.navigate(`/albums/details/${encodeURIComponent(id)}`); // add router
   });

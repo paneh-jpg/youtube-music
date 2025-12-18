@@ -38,7 +38,6 @@ export async function initAlbumsContent(slug) {
 
   const response = await getAlbumBySlug(slug);
   const data = response.data;
-  console.log(data);
 
   const tracksHtml = data.tracks
     .map(

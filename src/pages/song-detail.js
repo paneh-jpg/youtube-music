@@ -5,6 +5,7 @@ import { Panel, initPanel } from "../components/layout/Panel.js";
 import { Sidebar, initSidebar } from "../components/layout/Sidebar.js";
 import { VideoArea } from "../components/layout/VideoArea.js";
 import { getOrCreateMusicPlayer } from "../modules/playerSingleton.js";
+import { hideLoading, showLoading } from "../utils/loading.js";
 import { mergeSongWithAlbumTracks } from "../utils/utils.js";
 
 export function SongDetailPage() {
@@ -60,17 +61,41 @@ export async function initSongDetailContent({ songId, contextSlug, type }) {
   let tracks = [];
   if (contextSlug) {
     if (type === "album") {
-      response = await getAlbumBySlug(contextSlug);
-      tracks = response.data.tracks;
+      try {
+        showLoading();
+        response = await getAlbumBySlug(contextSlug);
+        tracks = response.data.tracks;
+      } catch (error) {
+      } finally {
+        setTimeout(() => {
+          hideLoading();
+        }, 700);
+      }
     } else {
-      response = await getPLaylistBySlug(contextSlug);
-      tracks = response.data.tracks;
+      try {
+        showLoading();
+        response = await getPLaylistBySlug(contextSlug);
+        tracks = response.data.tracks;
+      } catch (error) {
+        console.log(error.message);
+      } finally {
+        setTimeout(() => {
+          hideLoading();
+        }, 700);
+      }
     }
   } else {
     try {
+      showLoading();
       response = await getSongById(songId);
-    } catch (error) {}
-    tracks = mergeSongWithAlbumTracks(response.data);
+      tracks = mergeSongWithAlbumTracks(response.data);
+    } catch (error) {
+      console.log(error.message);
+    } finally {
+      setTimeout(() => {
+        hideLoading();
+      }, 800);
+    }
   }
 
   // Khởi tạo player
