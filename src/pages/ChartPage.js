@@ -1,17 +1,10 @@
 import { getCountries, getTopArtists, getTopVideos } from "../api/chartApi.js";
-import { Header, initHeader } from "../components/layout/Header.js";
-import { Sidebar, initSidebar } from "../components/layout/Sidebar.js";
 import { formatNumber } from "../utils/utils.js";
 
 export function ChartsPage() {
   return `
-    <div class="bg-linear-to-b from-[#181818] via-[#0f0f0f] to-[#0f0f0f] text-white font-[Inter] ">
-      <div id="overlay" class="fixed inset-0 bg-black/50 opacity-0 invisible transition-opacity duration-300 z-30 md:hidden"></div>
-      ${Header()} ${Sidebar()} 
-      <div id="mainContentWrapper" class="pt-16 md:ml-64 h-full pb-15">
-        <main id="mainContent" class="mt-10 ml-15 mr-15 pb-20">
+      <div class="h-full">
           <div id="countryDropdownSection"></div>
-          
           <section class="mb-12">
           <div class="flex justify-between">
             <h2 class="text-2xl font-bold mb-6">Bảng xếp hạng video</h2>
@@ -47,15 +40,13 @@ export function ChartsPage() {
              
             </div>
           </section>
-        </main>
+
       </div>
-    </div>
+
   `;
 }
 
 export function initChartsPage() {
-  initHeader();
-  initSidebar();
   renderCountries();
   updateChartsByCountry("GLOBAL");
 }

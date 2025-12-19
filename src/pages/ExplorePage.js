@@ -1,5 +1,3 @@
-import { Header, initHeader } from "../components/layout/Header.js";
-import { Sidebar, initSidebar } from "../components/layout/Sidebar.js";
 import { SectionHeader } from "../components/section/SectionHeader.js";
 import { AlbumCard } from "../components/cards/AlbumCard.js";
 import { VideoCard } from "../components/cards/VideoCard.js";
@@ -14,16 +12,8 @@ import { router } from "../router/router.js";
 
 export function ExplorePage() {
   return `
- <div class="bg-linear-to-b from-[#181818] via-[#0f0f0f] to-[#0f0f0f] text-white font-[Inter]">
-
-  <!-- Overlay -->
-  <div id="overlay" class="fixed inset-0 bg-black/50 opacity-0 invisible transition-opacity duration-300 z-30 md:hidden"></div>
-
-  ${Header()} ${Sidebar()}
   <!--  Main content  -->
-  <div id="mainContentWrapper" class="pt-16 md:ml-64 pb-20 ">
-    <main id="mainContent" class="mt-10 ml-15 mr-15">
-
+  <div class="h-full">
       <!-- Discover -->
       <div class="flex gap-6 mt-16">
         <!-- Item -->
@@ -95,15 +85,12 @@ export function ExplorePage() {
         </div>
      </div>
     </section>
-    </main>
   </div>
-</div>
+
   `;
 }
 
 export function initExplorePage() {
-  initHeader();
-  initSidebar();
   loadNewestAlbums().then(initCustomScrolling);
   loadNewestVideos().then(initCustomScrolling);
   loadGenreChips().then(initCustomScrolling);

@@ -1,5 +1,3 @@
-import { Header, initHeader } from "../components/layout/Header.js";
-import { Sidebar, initSidebar } from "../components/layout/Sidebar.js";
 import {
   getAlbumsByLineSlug,
   getLineBySlug,
@@ -18,14 +16,8 @@ import { hideLoading, showLoading } from "../utils/loading.js";
 
 export function LinePage() {
   return `
-    <div class="bg-linear-to-b from-[#181818] via-[#0f0f0f] to-[#0f0f0f] text-white font-[Inter]">
-      <!-- Overlay -->
-      <div id="overlay" class="fixed inset-0 bg-black/50 opacity-0 invisible transition-opacity duration-300 z-30 md:hidden"></div>
-
-      ${Header()}  ${Sidebar()} 
       <!--  Main content  -->
-      <div id="mainContentWrapper" class="pt-16 md:ml-64 pb-20 min-h-screen">
-        <main id="mainContent" class="js-line-content mt-10 mx-15  " >
+      <div class="h-full"> 
           <div class="pb-15"> 
             <h1 class="js-line-name text-5xl font-bold mb-6"></h1>
             <p class="js-line-desc mt-3 text-[20px]"></p> 
@@ -52,7 +44,7 @@ export function LinePage() {
               hasBtn: false,
               underline: false,
             })}
-           <!-- Nội dung bên dưới (horizontal scroll cards) -->
+          <!-- Nội dung bên dưới (horizontal scroll cards) -->
           <div class="js-playlist-list-container  overflow-x-auto custom-scrollbar pb-2.5">
              <div class="js-playlist-list grid grid-flow-col gap-4 auto-cols-[calc(100%/6-12px)]">
                     <!--   Playlists -->
@@ -67,7 +59,7 @@ export function LinePage() {
               hasBtn: false,
               underline: false,
             })}
-         <!-- Nội dung bên dưới (horizontal scroll cards) -->
+          <!-- Nội dung bên dưới (horizontal scroll cards) -->
           <div class="js-video-list-container overflow-x-auto custom-scrollbar pb-2.5">
              <div class="js-video-list grid grid-flow-col gap-3.75 auto-cols-[calc(100%/4-10px)]">
                     <!--   Videos -->
@@ -82,7 +74,7 @@ export function LinePage() {
               hasBtn: false,
               underline: false,
             })}
-         <!-- Nội dung bên dưới (horizontal scroll cards) -->
+          <!-- Nội dung bên dưới (horizontal scroll cards) -->
           <div class="js-album-list-container overflow-x-auto custom-scrollbar pb-2.5">
              <div class="js-albums-list  grid grid-flow-col gap-4 auto-cols-[calc(100%/6-12px)]">
                     <!--   ALBUMs -->
@@ -91,16 +83,11 @@ export function LinePage() {
           </div>
          </section>
 
-        </main>
       </div>
-    </div>
   `;
 }
 
-export async function initLinePage() {
-  initHeader();
-  initSidebar();
-}
+export async function initLinePage() {}
 
 export const initLineContent = async (slug) => {
   if (!slug) {

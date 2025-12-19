@@ -1,31 +1,22 @@
 import { getPLaylistBySlug } from "../api/homeApi.js";
-import { Header, initHeader } from "../components/layout/Header.js";
-import { Sidebar, initSidebar } from "../components/layout/Sidebar.js";
 import { formatSecondsToHms, formatDateVietnamese } from "../utils/utils.js";
 
 import { router } from "../router/router.js";
+import { hideLoading, showLoading } from "../utils/loading.js";
 
 export function PlaylistDetails() {
   return `
-    <div class="bg-linear-to-b from-[#181818] via-[#0f0f0f] to-[#0f0f0f] text-white font-[Inter]">
-      <!-- Overlay -->
-      <div id="overlay" class="fixed inset-0 bg-black/50 opacity-0 invisible transition-opacity duration-300 z-30 md:hidden"></div>
-
-      ${Header()}  ${Sidebar()} 
       <!--  Main content  -->
-      <div id="mainContentWrapper" class="pt-16 md:ml-64 pb-20 min-h-screen  custom-scrollbar">
-        <main id="mainContent" class="js-album-content mt-5 mx-15  " >
+      <div>
+        <main class="js-album-content h-screen" >
         <h1 class"text-3xl font-bold py-10 text-[#333]"> Album detail </h1>
         </main>
       </div>
-    </div>
+
   `;
 }
 
-export async function initPlaylistDetails() {
-  initHeader();
-  initSidebar();
-}
+export async function initPlaylistDetails() {}
 
 export async function initPlaylistsContent(slug) {
   const contentEl = document.querySelector(".js-album-content");
@@ -36,12 +27,14 @@ export async function initPlaylistsContent(slug) {
     return;
   }
 
-  const response = await getPLaylistBySlug(slug);
-  const data = response.data;
+  try {
+    showLoading();
+    const response = await getPLaylistBySlug(slug);
+    const data = response.data;
 
-  const tracksHtml = data.tracks
-    .map(
-      (song, index) => `
+    const tracksHtml = data.tracks
+      .map(
+        (song, index) => `
       <div data-id =${
         song.id
       } class="js-song cursor-pointer flex items-center p-2 rounded-lg hover:bg-gray-800 transition duration-150">
@@ -70,12 +63,12 @@ export async function initPlaylistsContent(slug) {
         }</p>
       </div>
     `
-    )
-    .join("");
+      )
+      .join("");
 
-  const html = `<div class="w-full flex space-x-12 justify-between">
-  <div class="w-2/5 flex flex-col items-center pt-2">
-
+    const html = `
+  <div class="w-full flex space-x-12 justify-between">
+    <div class="w-2/5 flex flex-col items-center pt-2">
     <!-- Cover -->
     <div class="w-full max-w-112.5">
       <div class="w-full h-[clamp(300px,24vw,400px)] rounded-2xl overflow-hidden bg-white/5 border border-white/10 shadow-[0_12px_35px_rgba(0,0,0,0.55)]" >
@@ -130,37 +123,36 @@ export async function initPlaylistsContent(slug) {
 
     <div class="h-20"></div>
   </div>
-</div>`;
-  contentEl.innerHTML = html;
+        </div>`;
+    contentEl.innerHTML = html;
 
-  const container = document.querySelector(".js-song-list");
-  const playAllBtn = document.querySelector(".js-play-btn");
+    const container = document.querySelector(".js-song-list");
+    const playAllBtn = document.querySelector(".js-play-btn");
 
-  container.addEventListener("click", (e) => {
-    const song = e.target.closest(".js-song");
-    if (!song) return;
+    container.addEventListener("click", (e) => {
+      const song = e.target.closest(".js-song");
+      if (!song) return;
 
-    const idVideo = song.dataset.id;
+      const idVideo = song.dataset.id;
 
-    // router.navigate(
-    //   `/songs/details/${encodeURIComponent(idVideo)}?album=${encodeURIComponent(
-    //     slug
-    //   )}`
-    // );
+      router.navigate(
+        `/songs/details/${encodeURIComponent(
+          idVideo
+        )}?album=${encodeURIComponent(slug)}&type=playlist`
+      );
+    });
 
-    router.navigate(
-      `/songs/details/${encodeURIComponent(idVideo)}?album=${encodeURIComponent(
-        slug
-      )}&type=playlist`
-    );
-  });
-
-  playAllBtn.onclick = () => {
-    const idVideo = data.tracks[0].id;
-    router.navigate(
-      `/songs/details/${encodeURIComponent(idVideo)}?album=${encodeURIComponent(
-        slug
-      )}&type=playlist`
-    );
-  };
+    playAllBtn.onclick = () => {
+      const idVideo = data.tracks[0].id;
+      router.navigate(
+        `/songs/details/${encodeURIComponent(
+          idVideo
+        )}?album=${encodeURIComponent(slug)}&type=playlist`
+      );
+    };
+  } catch (error) {
+    console.log(error.message);
+  } finally {
+    hideLoading();
+  }
 }

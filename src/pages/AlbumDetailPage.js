@@ -1,31 +1,22 @@
 import { getAlbumBySlug } from "../api/exploreApi.js";
-import { Header, initHeader } from "../components/layout/Header.js";
-import { Sidebar, initSidebar } from "../components/layout/Sidebar.js";
 import { formatSecondsToHms, formatDateVietnamese } from "../utils/utils.js";
 
 import { router } from "../router/router.js";
+import { hideLoading, showLoading } from "../utils/loading.js";
 
 export function AlbumsDetails() {
   return `
-    <div class="bg-linear-to-b from-[#181818] via-[#0f0f0f] to-[#0f0f0f] text-white font-[Inter]">
-      <!-- Overlay -->
-      <div id="overlay" class="fixed inset-0 bg-black/50 opacity-0 invisible transition-opacity duration-300 z-30 md:hidden"></div>
-
-      ${Header()}  ${Sidebar()} 
       <!--  Main content  -->
       <div id="mainContentWrapper" class="pt-16 md:ml-64 pb-20 min-h-screen  custom-scrollbar">
         <main id="mainContent" class="js-album-content mt-5 mx-15  " >
         <h1 class"text-3xl font-bold py-10 text-[#333]"> Album detail </h1>
         </main>
       </div>
-    </div>
+
   `;
 }
 
-export async function initAlbumsDetails() {
-  initHeader();
-  initSidebar();
-}
+export async function initAlbumsDetails() {}
 
 export async function initAlbumsContent(slug) {
   const contentEl = document.querySelector(".js-album-content");
@@ -36,12 +27,17 @@ export async function initAlbumsContent(slug) {
     return;
   }
 
-  const response = await getAlbumBySlug(slug);
-  const data = response.data;
+  try {
+    showLoading();
+    const response = await getAlbumBySlug(slug);
+    if (!response.ok) {
+      throw new error("Error:", response.status);
+    }
+    const data = response.data;
 
-  const tracksHtml = data.tracks
-    .map(
-      (song, index) => `
+    const tracksHtml = data.tracks
+      .map(
+        (song, index) => `
       <div data-id =${
         song.id
       } class="js-song cursor-pointer flex items-center p-2 rounded-lg hover:bg-gray-800 transition duration-150">
@@ -70,10 +66,10 @@ export async function initAlbumsContent(slug) {
         }</p>
       </div>
     `
-    )
-    .join("");
+      )
+      .join("");
 
-  const html = `<div class="w-full flex space-x-12 justify-between">
+    const html = `<div class="w-full flex space-x-12 justify-between">
   <div class="w-2/5 flex flex-col items-center pt-2">
 
     <!-- Cover -->
@@ -132,36 +128,36 @@ export async function initAlbumsContent(slug) {
 
     <div class="h-20"></div>
   </div>
-</div>`;
-  contentEl.innerHTML = html;
+     </div>`;
+    contentEl.innerHTML = html;
 
-  const container = document.querySelector(".js-song-list");
-  const playAllBtn = document.querySelector(".js-play-btn");
+    const container = document.querySelector(".js-song-list");
+    const playAllBtn = document.querySelector(".js-play-btn");
 
-  container.addEventListener("click", (e) => {
-    const song = e.target.closest(".js-song");
-    if (!song) return;
+    container.addEventListener("click", (e) => {
+      const song = e.target.closest(".js-song");
+      if (!song) return;
 
-    const idVideo = song.dataset.id;
+      const idVideo = song.dataset.id;
 
-    // router.navigate(
-    //   `/songs/details/${encodeURIComponent(idVideo)}?album=${encodeURIComponent(
-    //     slug
-    //   )}`
-    // );
-    router.navigate(
-      `/songs/details/${encodeURIComponent(idVideo)}?album=${encodeURIComponent(
-        slug
-      )}&type=album`
-    );
-  });
+      router.navigate(
+        `/songs/details/${encodeURIComponent(
+          idVideo
+        )}?album=${encodeURIComponent(slug)}&type=album`
+      );
+    });
 
-  playAllBtn.onclick = () => {
-    const idVideo = data.tracks[0].id;
-    router.navigate(
-      `/songs/details/${encodeURIComponent(idVideo)}?album=${encodeURIComponent(
-        slug
-      )}&type=album`
-    );
-  };
+    playAllBtn.onclick = () => {
+      const idVideo = data.tracks[0].id;
+      router.navigate(
+        `/songs/details/${encodeURIComponent(
+          idVideo
+        )}?album=${encodeURIComponent(slug)}&type=album`
+      );
+    };
+  } catch (error) {
+    console.log(error.message);
+  } finally {
+    hideLoading();
+  }
 }

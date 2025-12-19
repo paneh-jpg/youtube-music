@@ -8,52 +8,46 @@ import { initCustomScrolling } from "../utils/horizontalScroll.js";
 import { router } from "../router/router.js";
 
 export function NewsReleasePage() {
-  return `    <div class="bg-linear-to-b from-[#181818] via-[#0f0f0f] to-[#0f0f0f] text-white font-[Inter]">
-      <!-- Overlay -->
-      <div id="overlay" class="fixed inset-0 bg-black/50 opacity-0 invisible transition-opacity duration-300 z-30 md:hidden"></div>
-
-      ${Header()}  ${Sidebar()} 
+  return `
       <!--  Main content  -->
-      <div id="mainContentWrapper" class="pt-16 md:ml-64 h-full pb-20 ">
-        <main id="mainContent" class="mt-6 ml-15 mr-15" >
-         <section class="mt-15 ">
+    <div class="h-full" >
+        <section class="mt-15 ">
               ${SectionHeader({
                 title: "Khám phá bản phát hành mới",
                 underline: false,
                 hasBtn: false,
               })}
         
-              <!-- content bên dưới (horizontal scroll cards) -->
-             <div class="js-album-list-container overflow-x-auto custom-scrollbar pb-2.5">
-                <div class="js-new-release-albums grid grid-flow-col gap-4 auto-cols-[calc(100%/6-12px)]">
-                       <!--   ALBUMs -->
+          <!-- content bên dưới (horizontal scroll cards) -->
+          <div class="js-album-list-container overflow-x-auto custom-scrollbar pb-2.5">
+              <div class="js-new-release-albums grid grid-flow-col gap-4 auto-cols-[calc(100%/6-12px)]">
+                  <!-- ALBUMs -->
+              </div>
+          </div>
+        </section>
+
+        <section class="my-20 ">
+              ${SectionHeader({
+                title: "Video nhạc mới",
+                underline: false,
+                hasBtn: false,
+              })}
+
+          <!-- content bên dưới (horizontal scroll cards) -->
+          <div class="js-video-list-container overflow-x-auto custom-scrollbar pb-2.5">
+                <div class="js-newest-videos grid grid-flow-col gap-3.75 auto-cols-[calc(100%/4-10px)] ">
+                   <!-- VIDEO -->
                 </div>
-             </div>
-            </section>
+          </div>
+        </section>
 
-              <section class="mt-20">
-      ${SectionHeader({
-        title: "Video nhạc mới",
-        underline: false,
-        hasBtn: false,
-      })}
-
-      <!-- content bên dưới (horizontal scroll cards) -->
-     <div class="js-video-list-container overflow-x-auto custom-scrollbar pb-2.5">
-        <div  class="js-newest-videos grid grid-flow-col gap-3.75 auto-cols-[calc(100%/4-10px)] ">
-                   <!--   VIDEO -->
-        </div>
-     </div>
-    </section>
-        </main>
-      </div>
+        <section class="h-10"></section>
     </div>
+
   `;
 }
 
 export function initNewsReleasePage() {
-  initHeader();
-  initSidebar();
   loadNewsReleaseAlbum().then(initCustomScrolling);
   loadNewestVideos().then(initCustomScrolling);
 }

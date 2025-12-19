@@ -1,28 +1,15 @@
-import { Header, initHeader } from "../components/layout/Header.js";
-import { Sidebar, initSidebar } from "../components/layout/Sidebar.js";
 import { getCategoryBySlug } from "../api/exploreApi.js";
 
 export function CategoryPage() {
   return `
-    <div class="bg-linear-to-b from-[#181818] via-[#0f0f0f] to-[#0f0f0f] text-white font-[Inter]">
-      <!-- Overlay -->
-      <div id="overlay" class="fixed inset-0 bg-black/50 opacity-0 invisible transition-opacity duration-300 z-30 md:hidden"></div>
-
-      ${Header()}  ${Sidebar()} 
       <!--  Main content  -->
-      <div id="mainContentWrapper" class="pt-16 md:ml-64 pb-20 min-h-screen">
-        <main id="mainContent" class="js-category-content mt-10 mx-15  " >
+        <div class="js-category-content h-screen t-0" >
         <h1 class="text-4xl font-bold mb-6">Đang cập nhật...</h1>
-        </main>
-      </div>
-    </div>
+        </div>
   `;
 }
 
-export async function initCategoryPage() {
-  initHeader();
-  initSidebar();
-}
+export async function initCategoryPage() {}
 
 export const initCategoryContent = async (slug) => {
   const contentEl = document.querySelector(".js-category-content");
@@ -34,8 +21,6 @@ export const initCategoryContent = async (slug) => {
   }
   const response = await getCategoryBySlug(slug);
   const data = response.data;
-  console.log(data);
-
   const categoryName = data.name;
 
   const html = ` </div> <h1 class="text-[32px] md:text-[36px] font-extrabold text-white leading-tight">${categoryName}</h1>

@@ -4,8 +4,6 @@ import "./styles/style.css";
 import "./styles/base.css";
 import "./styles/animation.css";
 import { PlayerControl } from "./components/layout/PlayerControl.js";
-import { Panel } from "./components/layout/Panel.js";
-import { VideoArea } from "./components/layout/VideoArea.js";
 import { HomePage, initHomePage } from "./pages/HomePage.js";
 import { AuthPage, initAuthPage } from "./pages/AuthPage.js";
 import { ExplorePage, initExplorePage } from "./pages/ExplorePage.js";
@@ -60,6 +58,9 @@ import {
   initVideoDetailContent,
 } from "./pages/VideoDetailPage.js";
 
+import { Header, initHeader } from "./components/layout/Header.js";
+import { initSidebar, Sidebar } from "./components/layout/Sidebar.js";
+
 const app = document.querySelector("#app");
 app.classList.add("bg-black");
 
@@ -67,12 +68,35 @@ app.classList.add("bg-black");
 const playerRoot = document.querySelector("#player-root");
 if (playerRoot) playerRoot.innerHTML = PlayerControl();
 
+function renderShell() {
+  app.innerHTML = `
+    <div class="bg-linear-to-b from-[#181818] via-[#0f0f0f] to-[#0f0f0f] text-white font-[Inter]">
+      <div id="overlay" class="fixed inset-0 bg-black/50 opacity-0 invisible transition-opacity duration-300 z-30 md:hidden"></div>
+
+      ${Header()} ${Sidebar()}
+
+      <div id="mainContentWrapper" class="pt-16 md:ml-64 h-full pb-20 ">
+        <main id="mainContent" class="mt-10 ml-15 mr-15 " >
+      </div>
+    </div>
+  `;
+
+  initHeader();
+  initSidebar();
+}
+
 function render(html, init) {
-  app.innerHTML = html;
+  const main = document.querySelector("#mainContent");
+  if (!main) return;
+
+  main.innerHTML = html;
   if (init) init();
 
+  window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
   router.updatePageLinks();
 }
+
+renderShell();
 
 // Routers
 router

@@ -1,6 +1,4 @@
 import { getMoodBySlug, getMoods } from "../api/homeApi.js";
-import { Header, initHeader } from "../components/layout/Header.js";
-import { Sidebar, initSidebar } from "../components/layout/Sidebar.js";
 import { AlbumCard } from "../components/cards/AlbumCard.js";
 import { SectionHeader } from "../components/section/SectionHeader.js";
 import { router } from "../router/router.js";
@@ -9,14 +7,8 @@ import { showLoading, hideLoading } from "../utils/loading.js";
 
 export function MoodsPage() {
   return `
-    <div class="bg-linear-to-b from-[#181818] via-[#0f0f0f] to-[#0f0f0f] text-white font-[Inter]">
-      <!-- Overlay -->
-      <div id="overlay" class="fixed inset-0 bg-black/50 opacity-0 invisible transition-opacity duration-300 z-30 md:hidden"></div>
-
-      ${Header()}  ${Sidebar()} 
       <!--  Main content  -->
-      <div id="mainContentWrapper" class="pt-16 md:ml-64 pb-20 min-h-screen">
-        <main id="mainContent" class="js-line-content mt-10 mx-15  " >
+      <div class="h-full">
           <!--  Moods  -->
           <div class="relative">
             <div class="js-moods-list flex gap-3 mt-10 py-6 "></div>
@@ -35,10 +27,10 @@ export function MoodsPage() {
             })}
            <!-- Nội dung bên dưới (horizontal scroll cards) -->
           <div class="js-featured-container overflow-x-auto custom-scrollbar pb-2.5">
-          <div class="js-featured-list grid grid-flow-col  gap-4 auto-cols-[calc(100%/6-12px)]" >
+              <div class="js-featured-list grid grid-flow-col  gap-4 auto-cols-[calc(100%/6-12px)]" >
                     <!--   Songs -->
                     Danh sách featured ở đây
-             </div>
+              </div>
           </div>
          </section>
 
@@ -50,22 +42,18 @@ export function MoodsPage() {
             })}
            <!-- Nội dung bên dưới (horizontal scroll cards) -->
           <div class="js-more-pick-container overflow-x-auto custom-scrollbar pb-2.5">
-          <div class="js-more-pick grid grid-flow-col  gap-4 auto-cols-[calc(100%/6-12px)]" >
+              <div class="js-more-pick grid grid-flow-col  gap-4 auto-cols-[calc(100%/6-12px)]" >
                     <!--   Songs -->
                     Danh sách More picks ở đây
-             </div>
+              </div>
           </div>
          </section>
-                  
-        </main>
+
       </div>
-    </div>
   `;
 }
 
 export function initMoodsPage() {
-  initHeader();
-  initSidebar();
   initMoods();
 }
 

@@ -9,15 +9,9 @@ import { escapeHTML, generateAvatar } from "../utils/utils.js";
 
 export function ProfilePage() {
   return `
-    <div class="bg-linear-to-b from-[#181818] via-[#0f0f0f] to-[#0f0f0f] text-white font-[Inter]">
-      <!-- Overlay -->
-      <div id="overlay" class="fixed inset-0 bg-black/50 opacity-0 invisible transition-opacity duration-300 z-30 md:hidden"></div>
-
-      ${Header()}  ${Sidebar()} 
 
       <!--  Main content  -->
-      <div id="mainContentWrapper" class="pt-16 md:ml-64 pb-20 min-h-screen">
-        <main id="mainContent" class="mt-10 ml-15 mr-15">
+      <div class="h-screen">
         <div class="flex flex-col md:flex-row md:items-center gap-6 md:gap-8">
           <!-- Avatar -->
           <div class="profile-avatar w-28 h-28 md:w-36 md:h-36 shrink-0 rounded-full bg-gray-600 text-white text-9xl md:text-5xl font-bold flex items-center justify-center mx-auto md:mx-0">A</div>
@@ -63,17 +57,14 @@ export function ProfilePage() {
             <a href="/" data-navigo>Khám phá nhạc</a>
           </button>
         </div>
-        </main>
 
         ${SettingsModal()}
       </div>
-    </div>
+
   `;
 }
 
 export function initProfilePage() {
-  initHeader();
-  initSidebar();
   initSettingsModal();
   renderProfile();
 }

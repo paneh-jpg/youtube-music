@@ -1,5 +1,3 @@
-import { Header, initHeader } from "../components/layout/Header.js";
-import { Sidebar, initSidebar } from "../components/layout/Sidebar.js";
 import { SectionHeader } from "../components/section/SectionHeader.js";
 import {
   getAlbumsForYou,
@@ -16,23 +14,16 @@ import { initCustomScrolling } from "../utils/horizontalScroll.js";
 
 export function HomePage() {
   return `
-    <div class="h-full bg-linear-to-b from-[#181818] via-[#0f0f0f] to-[#0f0f0f] text-white font-[Inter]">
-      <!-- Overlay -->
-      <div id="overlay" class="fixed inset-0 bg-black/50 opacity-0 invisible transition-opacity duration-300 z-30 md:hidden"></div>
-
-       ${Header()}  ${Sidebar()}  
       <!--  Main content  -->
-      <div id="mainContentWrapper" class="pt-16 md:ml-64 h-full pb-50 ">
-        <main id="mainContent" class="mt-10 ml-15 mr-15" >
-        <div> <h1 class=" text-5xl font-bold js-username">  </h1>
+      <div class="h-full">
+
+        <h1 class=" text-5xl font-bold js-username"> </h1>
           <!--  Moods  -->
           <div class="relative">
 
             <!-- Mood List -->
             <div class="js-moods-list flex gap-3 mt-10 py-6 "></div>
           </div>  
-
-   
 
           <!--  Quick pick  -->
           <section class="mt-10">
@@ -42,9 +33,9 @@ export function HomePage() {
                 btnContent: "Xem tất cả",
               })}
   
-              <!-- content bên dưới (horizontal scroll cards) -->
+          <!-- content bên dưới (horizontal scroll cards) -->
           <div class="js-quick-pick-list-container overflow-x-auto custom-scrollbar pb-2.5">
-          <div class="js-quick-pick-list grid grid-flow-col grid-rows-4 auto-cols-[calc(100%/3-20px)] gap-x-10 gap-y-2" >
+                <div class="js-quick-pick-list grid grid-flow-col grid-rows-4 auto-cols-[calc(100%/3-20px)] gap-x-10 gap-y-2" >
                        <!--   ALBUMs -->
                 </div>
              </div>
@@ -58,9 +49,9 @@ export function HomePage() {
                 btnContent: "Xem tất cả",
               })}
   
-              <!-- content bên dưới (horizontal scroll cards) -->
-             <div class="js-album-list-container overflow-x-auto custom-scrollbar pb-2.5">
-                <div class="js-album-for-you grid grid-flow-col gap-4 auto-cols-[calc(100%/6-12px)]">
+          <!-- content bên dưới (horizontal scroll cards) -->
+          <div class="js-album-list-container overflow-x-auto custom-scrollbar pb-2.5">
+              <div class="js-album-for-you grid grid-flow-col gap-4 auto-cols-[calc(100%/6-12px)]">
                        <!--   ALBUMs -->
                 </div>
              </div>
@@ -74,24 +65,19 @@ export function HomePage() {
                 btnContent: "Xem tất cả",
               })}
   
-              <!-- content bên dưới (horizontal scroll cards) -->
-             <div class="js-album-list-container overflow-x-auto custom-scrollbar pb-2.5">
-                <div class="js-today-hits grid grid-flow-col gap-4 auto-cols-[calc(100%/6-12px)]">
+          <!-- content bên dưới (horizontal scroll cards) -->
+          <div class="js-album-list-container overflow-x-auto custom-scrollbar pb-2.5">
+              <div class="js-today-hits grid grid-flow-col gap-4 auto-cols-[calc(100%/6-12px)]">
                        <!--   ALBUMs -->
-                </div>
+              </div>
              </div>
           </section>
 
-
-        </main>
       </div>
-</div>
   `;
 }
 
 export function initHomePage() {
-  initHeader();
-  initSidebar();
   initUserName();
   initMoods();
   loadQuickPick().then(initCustomScrolling());
