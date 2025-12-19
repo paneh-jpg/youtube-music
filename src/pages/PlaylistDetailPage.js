@@ -16,7 +16,7 @@ export function PlaylistDetails() {
   `;
 }
 
-export async function initPlaylistDetails() {}
+export function initPlaylistDetails() {}
 
 export async function initPlaylistsContent(slug) {
   const contentEl = document.querySelector(".js-album-content");

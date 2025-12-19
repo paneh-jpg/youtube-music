@@ -7,7 +7,7 @@ export const VideoArea = (isAudio = true) => {
       <img src="" class="main-img w-full h-full object-cover" />
     `
     : `
-      <iframe id="videoIframe" class="w-full aspect-video" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+      <iframe id="videoIframe" class="w-full h-full aspect-video" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
     `;
 
   return ` <!--  LEFT: VIDEO AREA  -->

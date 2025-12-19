@@ -11,16 +11,16 @@ import { QuickPickCard } from "../components/cards/QuickPickCard.js";
 import { getProfileApi } from "../api/userApi.js";
 import { router } from "../router/router.js";
 import { initCustomScrolling } from "../utils/horizontalScroll.js";
+import { hideLoading, showLoading } from "../utils/loading.js";
 
 export function HomePage() {
   return `
       <!--  Main content  -->
-      <div class="h-full">
+      <div class="h-full ">
 
         <h1 class=" text-5xl font-bold js-username"> </h1>
           <!--  Moods  -->
           <div class="relative">
-
             <!-- Mood List -->
             <div class="js-moods-list flex gap-3 mt-10 py-6 "></div>
           </div>  
@@ -58,7 +58,7 @@ export function HomePage() {
           </section>
 
           <!--  Today's Hits  -->
-          <section class="mt-20">
+          <section class="mt-20 mb-30">
               ${SectionHeader({
                 title: "Today's Hits",
                 underline: false,
@@ -74,6 +74,7 @@ export function HomePage() {
           </section>
 
       </div>
+    </div>
   `;
 }
 
@@ -95,23 +96,29 @@ const initUserName = async () => {
 
 const initMoods = async () => {
   const container = document.querySelector(".js-moods-list");
-  const response = await getMoods();
+  try {
+    showLoading();
+    const response = await getMoods();
+    const moods = response.data.items;
 
-  const moods = response.data.items;
+    container.innerHTML = moods
+      .map((mood) => {
+        return ` <button data-slug=${mood.slug} class="js-mood category-item">${mood.name}</button>`;
+      })
+      .join("");
+    container.addEventListener("click", (e) => {
+      const mood = e.target.closest(".js-mood");
+      if (!mood) return;
 
-  container.innerHTML = moods
-    .map((mood) => {
-      return ` <button data-slug=${mood.slug} class="js-mood category-item">${mood.name}</button>`;
-    })
-    .join("");
-  container.addEventListener("click", (e) => {
-    const mood = e.target.closest(".js-mood");
-    if (!mood) return;
+      const slug = mood.dataset.slug;
 
-    const slug = mood.dataset.slug;
-
-    router.navigate(`/moods/${encodeURIComponent(slug)}`);
-  });
+      router.navigate(`/moods/${encodeURIComponent(slug)}`);
+    });
+  } catch (error) {
+    console.log(error);
+  } finally {
+    hideLoading();
+  }
 };
 
 async function loadQuickPick() {

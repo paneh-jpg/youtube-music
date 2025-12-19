@@ -1,4 +1,5 @@
 import { getCategoryBySlug } from "../api/exploreApi.js";
+import { hideLoading, showLoading } from "../utils/loading.js";
 
 export function CategoryPage() {
   return `
@@ -14,22 +15,27 @@ export async function initCategoryPage() {}
 export const initCategoryContent = async (slug) => {
   const contentEl = document.querySelector(".js-category-content");
   if (!contentEl) return;
+  try {
+    showLoading();
+    if (!slug) {
+      contentEl.innerHTML = ``;
+      return;
+    }
+    const response = await getCategoryBySlug(slug);
+    const data = response.data;
+    const categoryName = data.name;
 
-  if (!slug) {
-    contentEl.innerHTML = ``;
-    return;
-  }
-  const response = await getCategoryBySlug(slug);
-  const data = response.data;
-  const categoryName = data.name;
-
-  const html = ` </div> <h1 class="text-[32px] md:text-[36px] font-extrabold text-white leading-tight">${categoryName}</h1>
+    const html = ` </div> <h1 class="text-[32px] md:text-[36px] font-extrabold text-white leading-tight">${categoryName}</h1>
   <p class="mt-3 text-[20px]">${data.description}</p> 
   
     <p class="mt-10">Đang cập nhật.....</p> 
 
   </div>
   `;
-
-  contentEl.innerHTML = html;
+    contentEl.innerHTML = html;
+  } catch (error) {
+    console.log(error);
+  } finally {
+    hideLoading();
+  }
 };

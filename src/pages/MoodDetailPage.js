@@ -123,54 +123,66 @@ const renderFeatures = (items) => {
   const container = document.querySelector(".js-featured-list");
   if (!container) return;
 
-  container.innerHTML = items
-    .map((item) =>
-      AlbumCard({
-        thumbnail: item.thumbnails,
-        name: item.title,
-        // desc: item.description,
-        slug: item.slug,
-        id: item.id,
-        artist: item.artists.length > 0 ? item.artists : "Unknown",
-      })
-    )
-    .join("");
+  try {
+    showLoading();
+    container.innerHTML = items
+      .map((item) =>
+        AlbumCard({
+          thumbnail: item.thumbnails,
+          name: item.title,
+          // desc: item.description,
+          slug: item.slug,
+          id: item.id,
+          artist: item.artists.length > 0 ? item.artists : "Unknown",
+        })
+      )
+      .join("");
 
-  container.addEventListener("click", (e) => {
-    const album = e.target.closest(".js-album");
+    container.addEventListener("click", (e) => {
+      const album = e.target.closest(".js-album");
+      if (!album) return;
 
-    if (!album) return;
-
-    const slug = album.dataset.slug;
-
-    router.navigate(`/playlists/details/${encodeURIComponent(slug)}`); // add router
-  });
+      const slug = album.dataset.slug;
+      router.navigate(`/playlists/details/${encodeURIComponent(slug)}`); // add router
+    });
+  } catch (error) {
+    console.log(error.message);
+  } finally {
+    hideLoading();
+  }
 };
 
 const renderMorePicks = (items) => {
   const container = document.querySelector(".js-more-pick");
   if (!container) return;
 
-  container.innerHTML = items
-    .map((item) =>
-      AlbumCard({
-        thumbnail: item.thumbnails,
-        name: item.title,
-        // desc: item.description,
-        slug: item.slug,
-        id: item.id,
-        artist: item.artists.length > 0 ? item.artists : "Unknown",
-      })
-    )
-    .join("");
+  try {
+    showLoading();
+    container.innerHTML = items
+      .map((item) =>
+        AlbumCard({
+          thumbnail: item.thumbnails,
+          name: item.title,
+          // desc: item.description,
+          slug: item.slug,
+          id: item.id,
+          artist: item.artists.length > 0 ? item.artists : "Unknown",
+        })
+      )
+      .join("");
 
-  container.addEventListener("click", (e) => {
-    const album = e.target.closest(".js-album");
+    container.addEventListener("click", (e) => {
+      const album = e.target.closest(".js-album");
 
-    if (!album) return;
+      if (!album) return;
 
-    const slug = album.dataset.slug;
+      const slug = album.dataset.slug;
 
-    router.navigate(`/playlists/details/${encodeURIComponent(slug)}`); // add router
-  });
+      router.navigate(`/playlists/details/${encodeURIComponent(slug)}`); // add router
+    });
+  } catch (error) {
+    console.log(error.message);
+  } finally {
+    hideLoading();
+  }
 };

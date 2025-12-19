@@ -111,8 +111,6 @@ export const initLineContent = async (slug) => {
         getSongsByLineSlug(slug),
       ]);
 
-    console.log(songsRes.data);
-
     renderHeader(lineRes.data.name, lineRes.data.description);
     renderPlaylists(playlistsRes.data.items);
     renderVideos(videosRes.data.items);
@@ -157,9 +155,7 @@ function renderAlbums(items) {
     const album = e.target.closest(".js-album");
 
     if (!album) return;
-
     const slug = album.dataset.slug;
-
     router.navigate(`/albums/details/${encodeURIComponent(slug)}`); // add router
   });
 }
@@ -179,6 +175,16 @@ function renderVideos(items) {
       })
     )
     .join("");
+
+  container.addEventListener("click", (e) => {
+    const video = e.target.closest(".js-video");
+
+    if (!video) return;
+
+    const slug = video.dataset.slug;
+
+    router.navigate(`/videos/lists/${encodeURIComponent(slug)}`); // add router
+  });
 }
 
 function renderPlaylists(items) {

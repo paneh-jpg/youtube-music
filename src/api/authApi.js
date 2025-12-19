@@ -4,7 +4,6 @@ const BASE_URL = import.meta.env.VITE_API_URL;
 export const handleLogoutAPI = async () => {
   try {
     showLoading();
-
     const access_token = localStorage.getItem("access_token");
     if (access_token) {
       await axios.delete(`${BASE_URL}/auth/logout`, {
@@ -19,7 +18,7 @@ export const handleLogoutAPI = async () => {
 
     setTimeout(() => {
       hideLoading();
-      location.href = "/";
+      window.location.reload();
     }, 500);
   }
 };

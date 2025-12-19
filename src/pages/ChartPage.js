@@ -1,9 +1,10 @@
 import { getCountries, getTopArtists, getTopVideos } from "../api/chartApi.js";
+import { hideLoading, showLoading } from "../utils/loading.js";
 import { formatNumber } from "../utils/utils.js";
 
 export function ChartsPage() {
   return `
-      <div class="h-full">
+      <div class="h-screen">
           <div id="countryDropdownSection"></div>
           <section class="mb-12">
           <div class="flex justify-between">
@@ -105,36 +106,43 @@ async function updateChartsByCountry(countryCode) {
   const videoContainer = document.querySelector("#videoChartsContainer");
 
   // Render Artists
-  const resArtists = await getTopArtists(countryCode);
-  const artists = resArtists.data.items;
+  try {
+    showLoading();
+    const resArtists = await getTopArtists(countryCode);
+    const artists = resArtists.data.items;
 
-  console.log(artists[0].trend);
-
-  if (artistContainer) {
-    artistContainer.innerHTML = artists
-      .map((artist) =>
-        renderArtistItem(
-          artist.rank,
-          artist.name,
-          `${formatNumber(artist.totalViews)} lượt xem`,
-          artist.trend
+    if (artistContainer) {
+      artistContainer.innerHTML = artists
+        .map((artist) =>
+          renderArtistItem(
+            artist.rank,
+            artist.name,
+            `${formatNumber(artist.totalViews)} lượt xem`,
+            artist.trend
+          )
         )
-      )
-      .join("");
+        .join("");
+    }
+  } catch (error) {
+    console.log(error.message);
+  } finally {
+    hideLoading();
   }
 
   // Render Videos
-  const resVideos = await getTopVideos(countryCode);
-  const videos = resVideos.data.items || [];
-  if (videoContainer) {
-    videoContainer.innerHTML = videos
-      .map(
-        (video) => `
+  try {
+    showLoading();
+    const resVideos = await getTopVideos(countryCode);
+    const videos = resVideos.data.items || [];
+    if (videoContainer) {
+      videoContainer.innerHTML = videos
+        .map(
+          (video) => `
       <div class="min-w-55 w-55 group cursor-pointer">
         <div class="aspect-square rounded-lg overflow-hidden relative mb-3">
           <img src="${video.thumb}" class="w-full h-full object-cover" alt="${
-          video.title
-        }">
+            video.title
+          }">
         </div>
    
          <div class="flex">
@@ -146,8 +154,13 @@ async function updateChartsByCountry(countryCode) {
     
       </div>
     `
-      )
-      .join("");
+        )
+        .join("");
+    }
+  } catch (error) {
+    console.log(error.message);
+  } finally {
+    setTimeout(() => hideLoading(), 500);
   }
 }
 

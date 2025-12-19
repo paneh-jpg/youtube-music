@@ -101,6 +101,7 @@ renderShell();
 // Routers
 router
   .on("/", () => {
+    renderShell();
     render(HomePage(), initHomePage);
     initProfilePage;
   })

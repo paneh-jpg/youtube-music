@@ -3,6 +3,7 @@ import { getMetaList } from "../api/exploreApi.js";
 import { GenreCateList } from "../components/chips/GenreCategoryList.js";
 import { initCustomScrolling } from "../utils/horizontalScroll.js";
 import { router } from "../router/router.js";
+import { hideLoading, showLoading } from "../utils/loading.js";
 
 export function MoodsAndGenresPage() {
   return `
@@ -59,37 +60,55 @@ function chunk(arr, size) {
 const renderMoods = async () => {
   const container = document.querySelector(".js-moods-and-genres");
   if (!container) return;
-  const response = await getMetaList();
 
-  const metaList = response.data.categories;
-  const cols = chunk(metaList, 4);
+  try {
+    showLoading();
+    const response = await getMetaList();
+    const metaList = response.data.categories;
+    const cols = chunk(metaList, 4);
 
-  container.innerHTML = cols.map((items) => GenreCateList({ items })).join("");
+    container.innerHTML = cols
+      .map((items) => GenreCateList({ items }))
+      .join("");
 
-  container.addEventListener("click", (e) => {
-    const chip = e.target.closest(".js-genre-chip");
-    const slug = chip.dataset.slug;
-    if (!chip) return;
+    container.addEventListener("click", (e) => {
+      const chip = e.target.closest(".js-genre-chip");
+      const slug = chip.dataset.slug;
+      if (!chip) return;
 
-    router.navigate(`/categories/${encodeURIComponent(slug)}`);
-  });
+      router.navigate(`/categories/${encodeURIComponent(slug)}`);
+    });
+  } catch (error) {
+    console.log(error.message);
+  } finally {
+    hideLoading();
+  }
 };
 
 const renderLines = async () => {
   const container = document.querySelector(".js-lines");
   if (!container) return;
-  const response = await getMetaList();
 
-  const metaList = response.data.lines;
-  const cols = chunk(metaList, 4);
+  try {
+    showLoading();
+    const response = await getMetaList();
+    const metaList = response.data.lines;
+    const cols = chunk(metaList, 4);
 
-  container.innerHTML = cols.map((items) => GenreCateList({ items })).join("");
+    container.innerHTML = cols
+      .map((items) => GenreCateList({ items }))
+      .join("");
 
-  container.addEventListener("click", (e) => {
-    const chip = e.target.closest(".js-genre-chip");
-    const slug = chip.dataset.slug;
-    if (!chip) return;
+    container.addEventListener("click", (e) => {
+      const chip = e.target.closest(".js-genre-chip");
+      const slug = chip.dataset.slug;
+      if (!chip) return;
 
-    router.navigate(`/lines/${encodeURIComponent(slug)}`);
-  });
+      router.navigate(`/lines/${encodeURIComponent(slug)}`);
+    });
+  } catch (error) {
+    console.log(error.message);
+  } finally {
+    hideLoading();
+  }
 };

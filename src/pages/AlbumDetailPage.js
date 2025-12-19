@@ -7,10 +7,9 @@ import { hideLoading, showLoading } from "../utils/loading.js";
 export function AlbumsDetails() {
   return `
       <!--  Main content  -->
-      <div id="mainContentWrapper" class="pt-16 md:ml-64 pb-20 min-h-screen  custom-scrollbar">
-        <main id="mainContent" class="js-album-content mt-5 mx-15  " >
+        <div class="js-album-content h-screen" >
         <h1 class"text-3xl font-bold py-10 text-[#333]"> Album detail </h1>
-        </main>
+        </div>
       </div>
 
   `;
@@ -30,9 +29,7 @@ export async function initAlbumsContent(slug) {
   try {
     showLoading();
     const response = await getAlbumBySlug(slug);
-    if (!response.ok) {
-      throw new error("Error:", response.status);
-    }
+
     const data = response.data;
 
     const tracksHtml = data.tracks

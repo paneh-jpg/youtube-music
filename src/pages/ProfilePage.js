@@ -1,15 +1,13 @@
 import { getProfileApi, changePasswordApi } from "../api/userApi.js";
-import { Header, initHeader } from "../components/layout/Header.js";
-import { Sidebar, initSidebar } from "../components/layout/Sidebar.js";
 import { SettingsModal } from "../components/modals/SettingsModal.js";
 import { updateProfileApi } from "../api/userApi.js";
 import { toast } from "../components/common/Toast.js";
 
 import { escapeHTML, generateAvatar } from "../utils/utils.js";
+import { hideLoading, showLoading } from "../utils/loading.js";
 
 export function ProfilePage() {
   return `
-
       <!--  Main content  -->
       <div class="h-screen">
         <div class="flex flex-col md:flex-row md:items-center gap-6 md:gap-8">
@@ -74,8 +72,8 @@ const renderProfile = async () => {
   const userAvt = document.querySelector(".profile-avatar");
 
   try {
+    showLoading();
     const response = await getProfileApi();
-
     const user = response.data;
 
     const avt = generateAvatar(user.name);
@@ -85,6 +83,8 @@ const renderProfile = async () => {
     userAvt.style.backgroundColor = avt.bg;
   } catch (error) {
     toast.error(error.data.message || "Có lỗi xảy ra");
+  } finally {
+    hideLoading();
   }
 };
 

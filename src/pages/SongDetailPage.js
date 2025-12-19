@@ -9,13 +9,13 @@ import { mergeSongWithAlbumTracks } from "../utils/utils.js";
 
 export function SongDetailPage() {
   return `
-      <!-- Main content -->
-      <div class="h-[80vh] pb-5">
+     <!-- Main content -->
+     <div class="h-[80vh] pb-5">
         <div class="mx-auto max-w-350 h-full max-h-full min-h-0 overflow-y-auto overflow-x-auto custom-scrollbar pt-4 grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_420px] gap-6">
           ${VideoArea()}
           ${Panel()}  
         </div>
-      </div>
+     </div>
   `;
 }
 

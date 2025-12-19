@@ -21,40 +21,10 @@ export function AuthPage() {
       <div class="absolute -top-40 -left-20 h-72 w-72 rounded-full bg-[#ff0033]/20 blur-3xl"></div>
       <div class="absolute -bottom-40 right-0 h-72 w-72 rounded-full bg-[#2563eb]/20 blur-3xl"></div>
     </div>
-
     <!-- Main container -->
-    <div class="relative min-h-screen flex flex-col">
-      <!-- Top mini-header -->
-      <header class="flex items-center justify-between px-4 sm:px-8 pt-4 sm:pt-6">
-        <div class="flex items-center gap-2">
-        <!-- Logo icon -->
-          <div class="relative flex h-9 w-9 items-center justify-center rounded-full bg-[#ff0033]">
-            <div class="flex h-6 w-6 items-center justify-center rounded-full border border-white/90">
-              <div class="ml-0.5 h-0 w-0 border-l-[9px] border-l-white border-y-[5px] border-y-transparent"></div>
-            </div>
-          </div>
-          <div>
-            <div class="flex items-center gap-1">
-              <span class="text-[20px] text-white font-semibold tracking-tight">
-                Youtube Music
-              </span>
-              <span class="ml-1 rounded-full border border-white/15 px-2 py-px text-[10px] uppercase tracking-wide text-white/60">
-                F8-Project
-              </span>
-            </div>
-            <p class="text-xs text-white/50 hidden sm:block">
-              Đăng nhập để đồng bộ danh sách phát, bài hát bạn thích.
-            </p>
-          </div>
-        </div>
-
-        <a href="/"  data-navigo class="hidden sm:inline-flex items-center gap-1 text-sm text-white/70 hover:text-white">
-          <span class="material-symbols-outlined text-[18px]"> arrow_back </span> Về trang chủ
-        </a>
-      </header>
-
+    <div class="flex flex-col">
       <!-- Auth card -->
-      <main class="flex-1 flex items-center justify-center px-4 py-10">
+      <main class="flex-1 flex items-center justify-center  py-10">
         <div
           class="w-full max-w-md rounded-3xl border border-white/10 bg-[#05070b]/90 shadow-[0_18px_45px_rgba(0,0,0,0.7)] backdrop-blur-xl p-5 sm:p-6"
         >
@@ -277,7 +247,6 @@ export function initAuthPage() {
 
     try {
       showLoading();
-
       const response = await axiosInstance.post(`${BASE_URL}/auth/register`, {
         name,
         email,
@@ -294,6 +263,7 @@ export function initAuthPage() {
 
       setTimeout(() => {
         window.location.reload();
+        // location.href = "/";
       }, 1500);
     } catch (error) {
       console.log(error);

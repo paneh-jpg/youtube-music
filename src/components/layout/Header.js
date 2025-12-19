@@ -254,9 +254,7 @@ async function updateHeaderAuthUI() {
     showLoading();
     const response = await getProfileApi();
     const user = response.data;
-
     const avt = generateAvatar(user.name);
-
     username.textContent = user.name;
     userEmail.textContent = user.email;
     userAvatar.textContent = avt.char;

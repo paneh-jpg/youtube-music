@@ -2,11 +2,12 @@ import { getVideoBySlug } from "../api/exploreApi.js";
 import { formatSecondsToHms, formatDateVietnamese } from "../utils/utils.js";
 
 import { router } from "../router/router.js";
+import { hideLoading, showLoading } from "../utils/loading.js";
 
 export function VideosLists() {
   return `
       <!--  Main content  -->
-      <div>
+      <div class="h-screen">
         <main class="js-album-content  " >
             <h1 class"text-3xl font-bold py-10 text-[#333]"> Album detail </h1>
         </main>
@@ -25,13 +26,13 @@ export async function initVideosContent(slug) {
     return;
   }
 
-  const response = await getVideoBySlug(slug);
-
-  const data = response?.data;
-
-  const tracksHtml = data.related
-    .map(
-      (video, index) => `
+  try {
+    showLoading();
+    const response = await getVideoBySlug(slug);
+    const data = response?.data;
+    const tracksHtml = data.related
+      .map(
+        (video, index) => `
       <div data-id =${
         video.id
       } class="js-video cursor-pointer flex items-center p-2 rounded-lg hover:bg-gray-800 transition duration-150">
@@ -61,10 +62,10 @@ export async function initVideosContent(slug) {
         }</p>
       </div>
     `
-    )
-    .join("");
+      )
+      .join("");
 
-  const html = `<div class="w-full flex space-x-12 justify-between">
+    const html = `<div class="w-full flex space-x-12 justify-between">
     <div class="w-2/5 flex flex-col items-center pt-2">
 
       <!-- Cover -->
@@ -124,23 +125,28 @@ export async function initVideosContent(slug) {
       <div class="h-20"></div>
     </div>
   </div>`;
-  contentEl.innerHTML = html;
+    contentEl.innerHTML = html;
 
-  const container = document.querySelector(".js-video-list");
-  const playAllBtn = document.querySelector(".js-play-btn");
+    const container = document.querySelector(".js-video-list");
+    const playAllBtn = document.querySelector(".js-play-btn");
 
-  container.addEventListener("click", (e) => {
-    const video = e.target.closest(".js-video");
-    if (!video) return;
+    container.addEventListener("click", (e) => {
+      const video = e.target.closest(".js-video");
+      if (!video) return;
 
-    const idVideo = video.dataset.id;
-    console.log(idVideo);
+      const idVideo = video.dataset.id;
+      console.log(idVideo);
 
-    router.navigate(`/videos/details/${encodeURIComponent(idVideo)}`);
-  });
+      router.navigate(`/videos/details/${encodeURIComponent(idVideo)}`);
+    });
 
-  playAllBtn.onclick = () => {
-    const idVideo = data.related[0].id;
-    router.navigate(`/videos/details/${encodeURIComponent(idVideo)}`);
-  };
+    playAllBtn.onclick = () => {
+      const idVideo = data.related[0].id;
+      router.navigate(`/videos/details/${encodeURIComponent(idVideo)}`);
+    };
+  } catch (error) {
+    console.log(error.message);
+  } finally {
+    hideLoading();
+  }
 }

@@ -9,6 +9,7 @@ import { getMetaList } from "../api/exploreApi.js";
 import { initCustomScrolling } from "../utils/horizontalScroll.js";
 
 import { router } from "../router/router.js";
+import { hideLoading, showLoading } from "../utils/loading.js";
 
 export function ExplorePage() {
   return `
@@ -100,58 +101,74 @@ async function loadNewestAlbums() {
   const container = document.querySelector(".js-newest-albums");
   if (!container) return;
 
-  const res = await getNewestAlbumList(10);
-  const items = res?.data?.items ?? [];
-  container.innerHTML = items
-    .map((item) =>
-      AlbumCard({
-        thumbnail: item.thumb,
-        name: item.name,
-        albumType: item.albumType || "Đĩa đơn",
-        artist: item.artistName || item.artist?.name || "Unknown",
-        slug: item.slug,
-      })
-    )
-    .join("");
+  try {
+    showLoading();
+    const res = await getNewestAlbumList(10);
+    const items = res?.data?.items ?? [];
+    container.innerHTML = items
+      .map((item) =>
+        AlbumCard({
+          thumbnail: item.thumb,
+          name: item.name,
+          albumType: item.albumType || "Đĩa đơn",
+          artist: item.artistName || item.artist?.name || "Unknown",
+          slug: item.slug,
+        })
+      )
+      .join("");
 
-  container.addEventListener("click", (e) => {
-    const album = e.target.closest(".js-album");
+    container.addEventListener("click", (e) => {
+      const album = e.target.closest(".js-album");
 
-    if (!album) return;
+      if (!album) return;
 
-    const slug = album.dataset.slug;
+      const slug = album.dataset.slug;
 
-    router.navigate(`/albums/details/${encodeURIComponent(slug)}`); // add router
-  });
+      router.navigate(`/albums/details/${encodeURIComponent(slug)}`); // add router
+    });
+  } catch (error) {
+    console.log(error);
+  } finally {
+    setTimeout(() => {
+      hideLoading();
+    }, 500);
+  }
 }
 
 async function loadNewestVideos() {
   const container = document.querySelector(".js-newest-videos");
   if (!container) return;
 
-  const res = await getNewestVideoList(10);
-  const items = res?.data?.items ?? [];
-  container.innerHTML = items
-    .map((item) =>
-      VideoCard({
-        thumbnail: item.thumb,
-        name: item.name,
-        albumType: item.albumType || "Đĩa đơn",
-        views: item.views,
-        slug: item.slug,
-      })
-    )
-    .join("");
+  try {
+    showLoading();
+    const res = await getNewestVideoList(10);
+    const items = res?.data?.items ?? [];
+    container.innerHTML = items
+      .map((item) =>
+        VideoCard({
+          thumbnail: item.thumb,
+          name: item.name,
+          albumType: item.albumType || "Đĩa đơn",
+          views: item.views,
+          slug: item.slug,
+        })
+      )
+      .join("");
 
-  container.addEventListener("click", (e) => {
-    const video = e.target.closest(".js-video");
+    container.addEventListener("click", (e) => {
+      const video = e.target.closest(".js-video");
 
-    if (!video) return;
+      if (!video) return;
 
-    const slug = video.dataset.slug;
+      const slug = video.dataset.slug;
 
-    router.navigate(`/videos/lists/${encodeURIComponent(slug)}`); // add router
-  });
+      router.navigate(`/videos/lists/${encodeURIComponent(slug)}`); // add router
+    });
+  } catch (error) {
+    console.log(error);
+  } finally {
+    hideLoading();
+  }
 }
 
 function chunk(arr, size) {
@@ -164,37 +181,46 @@ export async function loadGenreChips() {
   const container = document.querySelector(".js-genre-chips");
   if (!container) return;
 
-  const res = await getMetaList();
+  try {
+    showLoading();
+    const res = await getMetaList();
 
-  const categories = (res?.data?.categories || []).map((item) => ({
-    ...item,
-    type: "category",
-  }));
+    const categories = (res?.data?.categories || []).map((item) => ({
+      ...item,
+      type: "category",
+    }));
 
-  const lines = (res?.data?.lines || []).map((item) => ({
-    ...item,
-    type: "line",
-  }));
+    const lines = (res?.data?.lines || []).map((item) => ({
+      ...item,
+      type: "line",
+    }));
 
-  const genres = [...categories, ...lines];
+    const genres = [...categories, ...lines];
 
-  const perCol = 4;
-  const cols = chunk(genres, perCol);
+    const perCol = 4;
+    const cols = chunk(genres, perCol);
 
-  container.innerHTML = cols.map((items) => GenreCateList({ items })).join("");
+    container.innerHTML = cols
+      .map((items) => GenreCateList({ items }))
+      .join("");
 
-  container.addEventListener("click", (e) => {
-    const chip = e.target.closest(".js-genre-chip");
-    if (!chip) return;
+    container.addEventListener("click", (e) => {
+      const chip = e.target.closest(".js-genre-chip");
+      if (!chip) return;
 
-    const { slug, type } = chip.dataset;
+      const { slug, type } = chip.dataset;
 
-    if (type === "category") {
-      router.navigate(`/categories/${encodeURIComponent(slug)}`);
-    }
+      if (type === "category") {
+        router.navigate(`/categories/${encodeURIComponent(slug)}`);
+      }
 
-    if (type === "line") {
-      router.navigate(`/lines/${encodeURIComponent(slug)}`);
-    }
-  });
+      if (type === "line") {
+        router.navigate(`/lines/${encodeURIComponent(slug)}`);
+      }
+    });
+  } catch (error) {
+    console.log(error.message);
+  } finally {
+    hideLoading();
+  }
 }

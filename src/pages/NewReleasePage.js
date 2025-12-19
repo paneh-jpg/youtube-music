@@ -1,11 +1,10 @@
-import { Header, initHeader } from "../components/layout/Header.js";
-import { Sidebar, initSidebar } from "../components/layout/Sidebar.js";
 import { SectionHeader } from "../components/section/SectionHeader.js";
 import { AlbumCard } from "../components/cards/AlbumCard.js";
 import { VideoCard } from "../components/cards/VideoCard.js";
 import { getNewsRelease, getNewestVideoList } from "../api/exploreApi.js";
 import { initCustomScrolling } from "../utils/horizontalScroll.js";
 import { router } from "../router/router.js";
+import { hideLoading, showLoading } from "../utils/loading.js";
 
 export function NewsReleasePage() {
   return `
@@ -56,57 +55,73 @@ async function loadNewsReleaseAlbum() {
   const container = document.querySelector(".js-new-release-albums");
   if (!container) return;
 
-  const response = await getNewsRelease();
-  const items = response?.data?.items;
+  try {
+    showLoading();
+    const response = await getNewsRelease();
+    const items = response?.data?.items;
 
-  container.innerHTML = items
-    .map((item) => {
-      return AlbumCard({
-        thumbnail: item.thumb,
-        name: item.name,
-        albumType: item.albumType || "Đĩa đơn",
-        artist: item.artistName || item.artist?.name || "Unknown",
-        id: item.id,
-      });
-    })
-    .join("");
+    container.innerHTML = items
+      .map((item) => {
+        return AlbumCard({
+          thumbnail: item.thumb,
+          name: item.name,
+          albumType: item.albumType || "Đĩa đơn",
+          artist: item.artistName || item.artist?.name || "Unknown",
+          id: item.id,
+        });
+      })
+      .join("");
 
-  container.addEventListener("click", (e) => {
-    const album = e.target.closest(".js-album");
+    container.addEventListener("click", (e) => {
+      const album = e.target.closest(".js-album");
 
-    if (!album) return;
+      if (!album) return;
 
-    const id = album.dataset.id;
+      const id = album.dataset.id;
 
-    router.navigate(`/albums/details/${encodeURIComponent(id)}`); // add router
-  });
+      router.navigate(`/albums/details/${encodeURIComponent(id)}`); // add router
+    });
+  } catch (error) {
+    console.log(error.message);
+  } finally {
+    hideLoading();
+  }
 }
 
 async function loadNewestVideos() {
   const container = document.querySelector(".js-newest-videos");
   if (!container) return;
 
-  const res = await getNewestVideoList(10);
-  const items = res?.data?.items ?? [];
-  container.innerHTML = items
-    .map((item) =>
-      VideoCard({
-        thumbnail: item.thumb,
-        name: item.name,
-        albumType: item.albumType || "Đĩa đơn",
-        views: item.views,
-        slug: item.slug,
-      })
-    )
-    .join("");
+  try {
+    showLoading();
+    const res = await getNewestVideoList(10);
+    const items = res?.data?.items ?? [];
+    container.innerHTML = items
+      .map((item) =>
+        VideoCard({
+          thumbnail: item.thumb,
+          name: item.name,
+          albumType: item.albumType || "Đĩa đơn",
+          views: item.views,
+          slug: item.slug,
+        })
+      )
+      .join("");
 
-  container.addEventListener("click", (e) => {
-    const video = e.target.closest(".js-video");
+    container.addEventListener("click", (e) => {
+      const video = e.target.closest(".js-video");
 
-    if (!video) return;
+      if (!video) return;
 
-    const slug = video.dataset.slug;
+      const slug = video.dataset.slug;
 
-    router.navigate(`/videos/details/${encodeURIComponent(slug)}`); // add router
-  });
+      router.navigate(`/videos/details/${encodeURIComponent(slug)}`); // add router
+    });
+  } catch (error) {
+    console.log(error.message);
+  } finally {
+    setTimeout(() => {
+      hideLoading();
+    }, 1000);
+  }
 }
