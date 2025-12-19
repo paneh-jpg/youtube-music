@@ -5,7 +5,7 @@ import { formatSecondsToHms, formatDateVietnamese } from "../utils/utils.js";
 
 import { router } from "../router/router.js";
 
-export function VideosDetails() {
+export function VideosLists() {
   return `
     <div class="bg-linear-to-b from-[#181818] via-[#0f0f0f] to-[#0f0f0f] text-white font-[Inter]">
       <!-- Overlay -->
@@ -22,7 +22,7 @@ export function VideosDetails() {
   `;
 }
 
-export async function initVideosDetails() {
+export async function initVideosLists() {
   initHeader();
   initSidebar();
 }
@@ -37,36 +37,38 @@ export async function initVideosContent(slug) {
   }
 
   const response = await getVideoBySlug(slug);
+
   const data = response?.data;
-  console.log(response.data);
 
   const tracksHtml = data.related
     .map(
-      (song, index) => `
+      (video, index) => `
       <div data-id =${
-        song.id
-      } class="js-song cursor-pointer flex items-center p-2 rounded-lg hover:bg-gray-800 transition duration-150">
+        video.id
+      } class="js-video cursor-pointer flex items-center p-2 rounded-lg hover:bg-gray-800 transition duration-150">
         <div class="w-1/12 text-lg font-medium text-gray-400">${index + 1}</div>
         <div class="w-9/12 flex items-center space-x-4">
           <img
             src="${
-              song.thumbnails ||
+              video.thumbnails ||
               "https://cdn.saleminteractivemedia.com/shared/images/default-cover-art.png"
             }"
-            alt="${song.title || ""}"
+            alt="${video.title || ""}"
             class="w-10 h-10 rounded object-cover"
           />
          <div class="flex flex-col">
-            <h3 class="text-white font-medium truncate">${song.title || ""}</h3>
+            <h3 class="text-white font-medium truncate">${
+              video.title || ""
+            }</h3>
 
                <span class="text-gray-400  text-[12px] truncate ">${
-                 song.singer || "Tên ca sĩ"
+                 video.singer || "Tên ca sĩ"
                } </span>
 
          </div>
         </div>
         <p class="w-2/12 text-right text-[14px] text-gray-400">${
-          formatSecondsToHms(song.duration) || ""
+          formatSecondsToHms(video.duration) || ""
         }</p>
       </div>
     `
@@ -121,7 +123,7 @@ export async function initVideosContent(slug) {
     </div>
 
     <!-- Tracks list-->
-    <div class="js-song-list w-3/5 max-h-[82vh] overflow-y-auto ml-10 overscroll-y-contain hide-scrollbar pr-4 space-y-2" >
+    <div class="js-video-list w-3/5 max-h-[82vh] overflow-y-auto ml-10 overscroll-y-contain hide-scrollbar pr-4 space-y-2" >
       <div class="md:flex text-gray-500 text-xs uppercase tracking-wider mb-2 sticky top-0 bg-[#0d1117] pt-2 pb-1 z-10" >
         <div class="w-1/12">#</div>
         <div class="w-9/12">Tên bài hát</div>
@@ -135,28 +137,21 @@ export async function initVideosContent(slug) {
   </div>`;
   contentEl.innerHTML = html;
 
-  const container = document.querySelector(".js-song-list");
+  const container = document.querySelector(".js-video-list");
   const playAllBtn = document.querySelector(".js-play-btn");
 
-  // container.addEventListener("click", (e) => {
-  //   const song = e.target.closest(".js-song");
-  //   if (!song) return;
+  container.addEventListener("click", (e) => {
+    const video = e.target.closest(".js-video");
+    if (!video) return;
 
-  //   const idVideo = song.dataset.id;
+    const idVideo = video.dataset.id;
+    console.log(idVideo);
 
-  //   router.navigate(
-  //     `/songs/details/${encodeURIComponent(idVideo)}?album=${encodeURIComponent(
-  //       slug
-  //     )}`
-  //   );
-  // });
+    router.navigate(`/videos/details/${encodeURIComponent(idVideo)}`);
+  });
 
-  // playAllBtn.onclick = () => {
-  //   const idVideo = data.tracks[0].id;
-  //   router.navigate(
-  //     `/songs/details/${encodeURIComponent(idVideo)}?album=${encodeURIComponent(
-  //       slug
-  //     )}`
-  //   );
-  // };
+  playAllBtn.onclick = () => {
+    const idVideo = data.related[0].id;
+    router.navigate(`/videos/details/${encodeURIComponent(idVideo)}`);
+  };
 }

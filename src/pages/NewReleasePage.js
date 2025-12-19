@@ -5,7 +5,7 @@ import { AlbumCard } from "../components/cards/AlbumCard.js";
 import { VideoCard } from "../components/cards/VideoCard.js";
 import { getNewsRelease, getNewestVideoList } from "../api/exploreApi.js";
 import { initCustomScrolling } from "../utils/horizontalScroll.js";
-import { router } from "../router/router";
+import { router } from "../router/router.js";
 
 export function NewsReleasePage() {
   return `    <div class="bg-linear-to-b from-[#181818] via-[#0f0f0f] to-[#0f0f0f] text-white font-[Inter]">

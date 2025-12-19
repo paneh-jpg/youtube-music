@@ -4,46 +4,62 @@ import "./styles/style.css";
 import "./styles/base.css";
 import "./styles/animation.css";
 import { PlayerControl } from "./components/layout/PlayerControl.js";
-import { HomePage, initHomePage } from "./pages/Home.js";
-import { AuthPage, initAuthPage } from "./pages/Auth.js";
-import { ExplorePage, initExplorePage } from "./pages/explore.js";
-import { initLibraryPage, LibraryPage } from "./pages/library.js";
-import { initProfilePage, ProfilePage } from "./pages/profile.js";
-import { initUpgrade, Upgrade } from "./pages/upgrade.js";
-import { ChartsPage, initChartsPage } from "./pages/charts.js";
+import { Panel } from "./components/layout/Panel.js";
+import { VideoArea } from "./components/layout/VideoArea.js";
+import { HomePage, initHomePage } from "./pages/HomePage.js";
+import { AuthPage, initAuthPage } from "./pages/AuthPage.js";
+import { ExplorePage, initExplorePage } from "./pages/ExplorePage.js";
+import { initLibraryPage, LibraryPage } from "./pages/LibraryPage.js";
+import { initProfilePage, ProfilePage } from "./pages/ProfilePage.js";
+import { initUpgrade, Upgrade } from "./pages/UpgradePage.js";
+import { ChartsPage, initChartsPage } from "./pages/ChartPage.js";
 import {
   MoodsAndGenresPage,
   initMoodsAndGenresPage,
-} from "./pages/moods-and-genres.js";
-import { NewsReleasePage, initNewsReleasePage } from "./pages/news-release.js";
+} from "./pages/MoodAndGenrePage.js";
+import {
+  NewsReleasePage,
+  initNewsReleasePage,
+} from "./pages/NewReleasePage.js";
 
 import {
   CategoryPage,
   initCategoryPage,
   initCategoryContent,
-} from "./pages/categories";
+} from "./pages/CategoryPage.js";
 import {
   AlbumsDetails,
   initAlbumsDetails,
   initAlbumsContent,
-} from "./pages/album-detail";
+} from "./pages/AlbumDetailPage.js";
 import {
-  VideosDetails,
-  initVideosDetails,
+  VideosLists,
+  initVideosLists,
   initVideosContent,
-} from "./pages/video-detail";
+} from "./pages/VideoListPage.js";
 import {
   SongDetailPage,
   initSongDetailPage,
   initSongDetailContent,
-} from "./pages/song-detail";
+} from "./pages/SongDetailPage.js";
 import {
   PlaylistDetails,
   initPlaylistDetails,
   initPlaylistsContent,
-} from "./pages/playlist-detail.js";
-import { initLineContent, initLinePage, LinePage } from "./pages/lines.js";
-import { initMoodContent, initMoodsPage, MoodsPage } from "./pages/moods.js";
+} from "./pages/PlaylistDetailPage.js";
+
+import { initLineContent, initLinePage, LinePage } from "./pages/LinePage.js";
+import {
+  initMoodContent,
+  initMoodsPage,
+  MoodsPage,
+} from "./pages/MoodDetailPage.js";
+import {
+  initVideoDetailPage,
+  VideoDetailPage,
+  initVideoDetailContent,
+} from "./pages/VideoDetailPage.js";
+
 const app = document.querySelector("#app");
 app.classList.add("bg-black");
 
@@ -104,11 +120,17 @@ router
     initPlaylistDetails();
     initPlaylistsContent(slug);
   })
-  .on("/videos/details/:slug", (match) => {
+  .on("/videos/lists/:slug", (match) => {
     const slug = decodeURIComponent(match?.data?.slug || "");
-    render(VideosDetails());
-    initVideosDetails();
+    render(VideosLists());
+    initVideosLists();
     initVideosContent(slug);
+  })
+  .on("/videos/details/:id", (match) => {
+    const videoId = decodeURIComponent(match?.data?.id || "");
+    render(VideoDetailPage());
+    initVideoDetailPage({ videoId });
+    initVideoDetailContent({ videoId });
   })
   .on("/songs/details/:id", (match) => {
     const songId = decodeURIComponent(match?.data?.id || "");

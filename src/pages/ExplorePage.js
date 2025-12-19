@@ -163,7 +163,7 @@ async function loadNewestVideos() {
 
     const slug = video.dataset.slug;
 
-    router.navigate(`/videos/details/${encodeURIComponent(slug)}`); // add router
+    router.navigate(`/videos/lists/${encodeURIComponent(slug)}`); // add router
   });
 }
 

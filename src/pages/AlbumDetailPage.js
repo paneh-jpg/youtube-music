@@ -1,11 +1,11 @@
-import { getPLaylistBySlug } from "../api/homeApi.js";
+import { getAlbumBySlug } from "../api/exploreApi.js";
 import { Header, initHeader } from "../components/layout/Header.js";
 import { Sidebar, initSidebar } from "../components/layout/Sidebar.js";
 import { formatSecondsToHms, formatDateVietnamese } from "../utils/utils.js";
 
-import { router } from "../router/router";
+import { router } from "../router/router.js";
 
-export function PlaylistDetails() {
+export function AlbumsDetails() {
   return `
     <div class="bg-linear-to-b from-[#181818] via-[#0f0f0f] to-[#0f0f0f] text-white font-[Inter]">
       <!-- Overlay -->
@@ -22,12 +22,12 @@ export function PlaylistDetails() {
   `;
 }
 
-export async function initPlaylistDetails() {
+export async function initAlbumsDetails() {
   initHeader();
   initSidebar();
 }
 
-export async function initPlaylistsContent(slug) {
+export async function initAlbumsContent(slug) {
   const contentEl = document.querySelector(".js-album-content");
   if (!contentEl) return;
 
@@ -36,7 +36,7 @@ export async function initPlaylistsContent(slug) {
     return;
   }
 
-  const response = await getPLaylistBySlug(slug);
+  const response = await getAlbumBySlug(slug);
   const data = response.data;
 
   const tracksHtml = data.tracks
@@ -59,8 +59,8 @@ export async function initPlaylistsContent(slug) {
             <h3 class="text-white font-medium  truncate">${
               song.title || ""
             }</h3>
-               <span class="text-gray-400   text-[14px] truncate ">${
-                 song.type || ""
+               <span class="text-gray-400 mt-1  text-[12px] truncate ">${
+                 song.type || "Singer"
                } </span>
            
          </div>
@@ -101,8 +101,10 @@ export async function initPlaylistsContent(slug) {
           <span>${data.songCount} bài</span>
           <span class="text-white/35">•</span>
           <span>${formatSecondsToHms(data.duration)}</span>
-
+          <span class="text-white/35">•</span>
+          <span>${data.popularity} lượt nghe</span>
         </div>
+        <p class="mt-1">Phát hành: ${formatDateVietnamese(data.releaseDate)}</p>
       </div>
 
       <!-- Actions -->
@@ -147,11 +149,10 @@ export async function initPlaylistsContent(slug) {
     //     slug
     //   )}`
     // );
-
     router.navigate(
       `/songs/details/${encodeURIComponent(idVideo)}?album=${encodeURIComponent(
         slug
-      )}&type=playlist`
+      )}&type=album`
     );
   });
 
@@ -160,7 +161,7 @@ export async function initPlaylistsContent(slug) {
     router.navigate(
       `/songs/details/${encodeURIComponent(idVideo)}?album=${encodeURIComponent(
         slug
-      )}&type=playlist`
+      )}&type=album`
     );
   };
 }

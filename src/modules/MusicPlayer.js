@@ -1,3 +1,4 @@
+// MusicPlayer.js
 import { formatSecondsToHms } from "../utils/utils.js";
 
 export class MusicPlayer {
@@ -16,6 +17,12 @@ export class MusicPlayer {
     durationTimeEl,
     songTitleEl,
     queueListContainer,
+
+    // (Optional)
+    volumeEl,
+    volumeBtn,
+    volumeIconEl,
+
     tracks,
     initialSongId,
   }) {
@@ -38,6 +45,11 @@ export class MusicPlayer {
     this.playerBar = document.querySelector(".player-bar");
     this.hideBtn = document.getElementById("hide-player-btn");
 
+    // Volume elements
+    this.volumeEl = volumeEl;
+    this.volumeBtn = volumeBtn;
+    this.volumeIconEl = volumeIconEl;
+
     // Data
     this.tracks = tracks;
 
@@ -52,16 +64,24 @@ export class MusicPlayer {
       (item) => item.id === initialSongId
     );
 
+    // Volume state
+    this.lastVolume = 0.8; // dùng để restore khi unmute
+    this.volumeStorage = "player_volume";
+
     // Gọi phương thức khởi tạo
     this.renderQueue();
     this.loadTrack(this.currentTrackIndex);
 
     this.bindQueueEvents();
 
+    // Init volume trước khi add listeners để slider/volume sync ngay từ đầu
+    this.initVolume();
+
     this.addEventListeners();
     this.initVisibilityEvents();
   }
 
+  // Visibility
   initVisibilityEvents() {
     this.hideBtn = document.getElementById("hide-player-btn");
     if (this.hideBtn) {
@@ -87,14 +107,105 @@ export class MusicPlayer {
     }
   }
 
-  // Tải thông tin và audio bài hát
+  // Tránh trường hợp chuỗi rỗng, NaN,... dữ liệu không hợp lệ
+  clamp01(n) {
+    const x = Number(n);
+    if (Number.isNaN(x)) return 0;
+    return Math.min(1, Math.max(0, x));
+  }
+
+  setVolume(vol01, { save = true, updateUI = true } = {}) {
+    if (!this.audio) return;
+
+    const v = this.clamp01(vol01);
+    this.audio.volume = v;
+
+    // Nếu kéo về 0 thì coi như mute
+    this.audio.muted = v === 0;
+
+    if (v > 0) this.lastVolume = v;
+
+    if (save) {
+      try {
+        localStorage.setItem(this.volumeStorage, String(v));
+      } catch (_) {}
+    }
+
+    if (updateUI) {
+      if (this.volumeEl) {
+        const v100 = Math.round(v * 100);
+        this.volumeEl.value = String(v100);
+        this.volumeEl.style?.setProperty("--p", `${v100}%`);
+      }
+      this.updateVolumeIcon();
+    }
+  }
+
+  //Cập nhật icon
+  updateVolumeIcon() {
+    if (!this.volumeIconEl || !this.audio) return;
+
+    const v = this.audio.muted ? 0 : this.audio.volume;
+
+    if (v === 0) this.volumeIconEl.textContent = "volume_off";
+    else if (v < 0.5) this.volumeIconEl.textContent = "volume_down";
+    else this.volumeIconEl.textContent = "volume_up";
+  }
+
+  toggleMute() {
+    if (!this.audio) return;
+
+    // Nếu đang mute hoặc volume=0 -> unmute về lastVolume
+    const isMuted = this.audio.muted || this.audio.volume === 0;
+    if (isMuted) {
+      const restore = this.lastVolume > 0 ? this.lastVolume : 0.8;
+      this.audio.muted = false;
+      this.setVolume(restore, { save: true, updateUI: true });
+      return;
+    }
+
+    // Nếu đang có tiếng -> lưu lại rồi mute (set volume 0)
+    this.lastVolume =
+      this.audio.volume > 0 ? this.audio.volume : this.lastVolume;
+    this.setVolume(0, { save: true, updateUI: true });
+  }
+
+  initVolume() {
+    if (!this.audio) return;
+
+    let initial = null;
+
+    // 1) ưu tiên localStorage
+    try {
+      const saved = localStorage.getItem(this.volumeStorage);
+      if (saved !== null && saved !== undefined && saved !== "") {
+        initial = this.clamp01(parseFloat(saved));
+      }
+    } catch (_) {}
+
+    // 2 lấy từ input range hiện tại
+    if (initial === null) {
+      if (this.volumeEl && this.volumeEl.value !== undefined) {
+        const v100 = Number(this.volumeEl.value);
+        if (!Number.isNaN(v100)) initial = this.clamp01(v100 / 100);
+      }
+    }
+
+    // 3)  0.8
+    if (initial === null) initial = 0.8;
+
+    this.setVolume(initial, { save: false, updateUI: true });
+  }
+
+  // ==========================
+  // Track
+  // ==========================
   loadTrack(index) {
     if (index < 0 || index >= this.tracks.length) return;
 
     const track = this.tracks[index];
     this.currentTrackIndex = index;
 
-    //this.songImgEl.src = track.thumbnails
     this.songImgEl.src = `https://picsum.photos/1920/1080?random=${Date.now()}`;
     this.currentTrackThumbEl.src = track.thumbnails;
     this.audio.src = track.audioUrl;
@@ -104,29 +215,28 @@ export class MusicPlayer {
     this.updateQueueActive(track.id);
     this.scrollToActiveTrack();
     this.audio.load();
+
+    // giữ volume theo state hiện tại sau khi load src mới
+    this.updateVolumeIcon();
+
     this.play();
   }
 
   bindQueueEvents() {
     if (!this.queueListContainer) return;
 
-    // Xóa sự kiện cũ trước khi gán mới để tránh lặp (Optional nhưng nên làm)
     this.queueListContainer.onclick = null;
 
     this.queueListContainer.onclick = (e) => {
-      // Tìm thẻ button hoặc div chứa class js-queue-item
       const trackItem = e.target.closest(".js-queue-item");
       if (trackItem) {
-        // Lấy ID từ dataset (dataset.id thay vì dataset.index)
         const trackId = trackItem.dataset.id;
-        // console.log(trackId);
 
         const index = this.tracks.findIndex(
           (track) => String(track.id) === String(trackId)
         );
 
         if (index !== -1) {
-          // console.log("Đang chuyển bài từ hàng chờ:", index);
           this.loadTrack(index);
           this.play();
         }
@@ -134,7 +244,6 @@ export class MusicPlayer {
     };
   }
 
-  // Hiển thị danh sách chờ
   renderQueue() {
     const currentTrackId = this.tracks[this.currentTrackIndex].id;
     const queueHtml = this.tracks
@@ -157,7 +266,7 @@ export class MusicPlayer {
         return `
           <button data-id=${id}
             class="cursor-pointer js-queue-item w-full text-left px-5 py-3 hover:bg-white/5 ${
-              id === currentTrackId ? "bg-white/5" : "" // So sánh với ID để highlight
+              id === currentTrackId ? "bg-white/5" : ""
             } transition flex items-center gap-3"
           >
             <div class="w-12 h-12 rounded-md overflow-hidden bg-white/10 relative">
@@ -186,9 +295,7 @@ export class MusicPlayer {
     this.bindQueueEvents();
   }
 
-  // Cập nhật active cho item đang phát
   updateQueueActive(trackId) {
-    // Bỏ active cũ
     this.queueListContainer
       .querySelectorAll(".js-queue-item")
       .forEach((item) => {
@@ -202,7 +309,6 @@ export class MusicPlayer {
     }
   }
 
-  // Phương thức play/pause
   play() {
     const playPromise = this.audio.play();
     if (playPromise !== undefined) {
@@ -239,10 +345,7 @@ export class MusicPlayer {
       this.playShuffleTrack();
     } else {
       let nextIndex = this.currentTrackIndex + 1;
-      if (nextIndex >= this.tracks.length) {
-        nextIndex = 0; // Quay lại bài đầu tiên
-      }
-
+      if (nextIndex >= this.tracks.length) nextIndex = 0;
       this.loadTrack(nextIndex);
     }
   }
@@ -252,10 +355,7 @@ export class MusicPlayer {
       this.playShuffleTrack();
     } else {
       let prevIndex = this.currentTrackIndex - 1;
-      if (prevIndex < 0) {
-        prevIndex = this.tracks.length - 1;
-      }
-
+      if (prevIndex < 0) prevIndex = this.tracks.length - 1;
       this.loadTrack(prevIndex);
     }
   }
@@ -280,9 +380,7 @@ export class MusicPlayer {
 
   updateTimeDisplay(currentTime, durationTime) {
     const formattedCurrentTime = formatSecondsToHms(currentTime);
-
     const formattedDuration = formatSecondsToHms(durationTime);
-
     this.currentTimeEl.textContent = formattedCurrentTime;
     this.durationTimeEl.textContent = formattedDuration;
   }
@@ -300,16 +398,14 @@ export class MusicPlayer {
     }
   }
 
-  // Xử lý sự kiện
   addEventListeners() {
     // Play/Pause
     this.playBtn.addEventListener("click", () => {
       this.isPlaying ? this.pause() : this.play();
     });
 
-    // Next
+    // Next/Prev
     this.nextBtn.addEventListener("click", () => this.next());
-
     this.prevBtn.addEventListener("click", () => this.prev());
 
     // Click vào item trong hàng đợi
@@ -325,6 +421,7 @@ export class MusicPlayer {
       }
     });
 
+    // Time update -> progress
     this.audio.addEventListener("timeupdate", () => {
       if (this.isSeeking) return;
       if (this.audio.duration > 0) {
@@ -332,14 +429,13 @@ export class MusicPlayer {
         const progressPercent = ratio * 100;
 
         this.progressEl.value = progressPercent;
-
         this.progressEl.style.setProperty("--p", `${progressPercent}%`);
 
         this.updateTimeDisplay(this.audio.currentTime, this.audio.duration);
       }
     });
 
-    // Xử lý khi tua bài
+    // Seek
     this.progressEl.addEventListener("pointerdown", () => {
       this.isSeeking = true;
     });
@@ -366,19 +462,37 @@ export class MusicPlayer {
       this.isSeeking = false;
     });
 
+    // Ended
     this.audio.addEventListener("ended", () => {
       if (this.isRepeat) {
-        // Nếu đang bật Repeat: Quay về đầu bài và phát tiếp
         this.audio.currentTime = 0;
         this.audio.play();
       } else {
-        // Nếu không: Tự động chuyển bài
         this.next();
       }
     });
 
-    // Chế độ phát ngẫu nhiên và lặp lại 1 bài hát
+    // Shuffle/Repeat
     this.shuffleBtn.onclick = () => this.toggleShuffle();
     this.repeatBtn.onclick = () => this.toggleRepeat();
+
+    // Volume events
+    if (this.volumeEl) {
+      this.volumeEl.addEventListener("input", (e) => {
+        const v100 = Number(e.target.value);
+        const v = this.clamp01(v100 / 100);
+        this.setVolume(v, { save: true, updateUI: true });
+      });
+
+      this.volumeEl.addEventListener("change", (e) => {
+        const v100 = Number(e.target.value);
+        const v = this.clamp01(v100 / 100);
+        this.setVolume(v, { save: true, updateUI: true });
+      });
+    }
+
+    if (this.volumeBtn) {
+      this.volumeBtn.addEventListener("click", () => this.toggleMute());
+    }
   }
 }

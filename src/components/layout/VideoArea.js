@@ -7,7 +7,7 @@ export const VideoArea = (isAudio = true) => {
       <img src="" class="main-img w-full h-full object-cover" />
     `
     : `
-      <div class="js-media-slot h-full w-full bg-black"></div>
+      <iframe id="videoIframe" class="w-full aspect-video" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
     `;
 
   return ` <!--  LEFT: VIDEO AREA  -->
@@ -15,8 +15,8 @@ export const VideoArea = (isAudio = true) => {
           <div class="relative h-full bg-black">
             ${mediaHtml}
 
-            <button class="absolute inset-0 flex items-center justify-center">
-             <!-- <div class="h-16 w-16 rounded-full bg-black/50 border border-white/20 flex items-center justify-center" >
+          <!--  <button class="absolute inset-0 flex items-center justify-center">
+              <div class="h-16 w-16 rounded-full bg-black/50 border border-white/20 flex items-center justify-center" >
                 <svg class="h-7 w-7 translate-x-px" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M8 5v14l11-7z"></path>
                 </svg> 

@@ -1,5 +1,5 @@
 export const PlayerControl = () => {
-  return `  <footer class="fixed player-bar player-hidden left-0 right-0 bottom-0 z-100 bg-[#1f1f1f]">
+  return `  <footer class="fixed player-bar player-hidden  left-0 right-0 bottom-0 z-100 bg-[#1f1f1f]">
       <!-- TOP PROGRESS -->
       <div class="-mt-3.5">
         <input
@@ -125,6 +125,7 @@ export const PlayerControl = () => {
               type="range"
               min="0"
               max="100"
+              step="1"
               value="80"
               class="js-volume w-28"
               aria-label="volume"

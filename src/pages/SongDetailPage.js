@@ -19,7 +19,7 @@ export function SongDetailPage() {
       <!--  Main content  -->
       <div id="mainContentWrapper" class="pt-20 md:ml-64 h-screen ">
         <main id="mainContent" class="mt-6 ml-10 mr-10" >
-          <!--  MAIN LAYOUT  -->
+          <!--  MAIN LAYOUT   -->
            <div class="h-[70vh] pb-5">
            <div class="mx-auto max-w-350 h-full max-h-full min-h-0
             overflow-y-auto overflow-x-auto custom-scrollbar
@@ -27,7 +27,7 @@ export function SongDetailPage() {
             grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_420px] gap-6">
                 ${VideoArea()}
                 ${Panel()}
-                
+               
         </main>
       </div>
     </div>

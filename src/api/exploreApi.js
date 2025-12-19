@@ -69,3 +69,8 @@ export const getNewsRelease = async () => {
 export const getSongById = async (id) => {
   return await axiosInstance.get(`${BASE_URL}/songs/details/${id}`);
 };
+
+// Lấy video theo Id
+export const getVideoById = async (id) => {
+  return await axiosInstance.get(`${BASE_URL}/videos/details/${id}`);
+};

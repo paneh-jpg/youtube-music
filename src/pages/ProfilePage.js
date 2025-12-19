@@ -88,8 +88,6 @@ const renderProfile = async () => {
     const user = response.data;
 
     const avt = generateAvatar(user.name);
-    console.log(avt);
-
     username.textContent = user.name;
     userAvt.textContent = avt.char;
     userAvt.style.color = avt.text;
