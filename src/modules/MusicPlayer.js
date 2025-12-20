@@ -480,6 +480,7 @@ export class MusicPlayer {
     if (this.volumeEl) {
       this.volumeEl.addEventListener("input", (e) => {
         const v100 = Number(e.target.value);
+
         const v = this.clamp01(v100 / 100);
         this.setVolume(v, { save: true, updateUI: true });
       });

@@ -13,7 +13,7 @@ export function AlbumCard({
   return `
 
     <div class="desktopSidebarState === "expanded" ? "180px" : "206px"; shrink-0 ">
-      <!-- ===== THUMBNAIL ===== -->
+      <!--  THUMBNAIL  -->
       <div data-slug="${slug}" data-id="${id}" class="js-album  relative aspect-square rounded-xl overflow-hidden group cursor-pointer" >
         <img src="${thumbnail}" class="w-full h-full object-cover" />
   
@@ -48,7 +48,7 @@ export function AlbumCard({
         </button>
       </div>
   
-      <!-- ===== INFO ===== -->
+      <!--  INFO  -->
       <div class="mt-3 space-y-1">
         <!-- Title -->
         <h3 class="text-white text-md font-semibold leading-snug line-clamp-2" >
@@ -66,6 +66,5 @@ export function AlbumCard({
           <p class="text-white/60 text-sm hover:underline cursor-pointer line-clamp-2" > ${desc} </p> 
       </div>
     </div>
-
   `;
 }

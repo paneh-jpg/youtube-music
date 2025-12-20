@@ -37,3 +37,13 @@ export const getPersonalized = async () => {
 export const getPLaylistBySlug = async (slug) => {
   return await axiosInstance.get(`${BASE_URL}/playlists/details/${slug}`);
 };
+
+// Gợi ý tìm kiếm
+export const getSuggestion = async (q) => {
+  return await axiosInstance.get(`${BASE_URL}/search/suggestions?q=${q}`);
+};
+
+// Kết quả tìm kiếm
+export const searchResult = async () => {
+  return await axiosInstance.get(`${BASE_URL}/search`);
+};

@@ -126,7 +126,7 @@ export const PlayerControl = () => {
               min="0"
               max="100"
               step="1"
-              value="80"
+              value="50"
               class="js-volume w-28"
               aria-label="volume"
             />
@@ -155,9 +155,9 @@ export const PlayerControl = () => {
               aria-label="Menu"
               title="Menu"
             >
-              <span class="material-symbols-outlined text-[26px]"
-                >arrow_drop_down</span
-              >
+              <span class="material-symbols-outlined text-[26px]">
+                   arrow_drop_down
+              </span>
             </button>
           </div>
         </div>

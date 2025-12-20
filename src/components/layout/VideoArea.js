@@ -1,6 +1,4 @@
 export const VideoArea = (isAudio = true) => {
-  // - Các phần tử media (<audio>/<video>) phải được giữ tồn tại xuyên suốt khi chuyển route để việc phát nhạc/video không bị gián đoạn.
-  // - Component này CHỈ render phần giao diện hiển thị (ảnh cover / vùng chứa để sau này gắn video).
   const mediaHtml = isAudio
     ? `
       <div class="js-media-slot hidden"></div>

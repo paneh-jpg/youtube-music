@@ -7,6 +7,8 @@ import { toast } from "../components/common/Toast.js";
 
 import { escapeHTML } from "../utils/utils.js";
 
+import { renderShell } from "../main.js";
+
 const BASE_URL = import.meta.env.VITE_API_URL;
 
 export function AuthPage() {
@@ -263,7 +265,6 @@ export function initAuthPage() {
 
       setTimeout(() => {
         window.location.reload();
-        // location.href = "/";
       }, 1500);
     } catch (error) {
       console.log(error);

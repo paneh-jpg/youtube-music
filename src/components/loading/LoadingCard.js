@@ -2,11 +2,9 @@ import { LoadingSpinner } from "./LoadingSpinner.js";
 
 export function LoadingCard() {
   return `
-    <div class="relative block max-w-sm p-6 bg-neutral-primary-soft
-                border border-default rounded-base shadow-xs">
+    <div class="relative block max-w-sm p-6 bg-neutral-primary-soft border border-default rounded-base shadow-xs">
 
-      <h5 class="mb-2 text-xl font-semibold tracking-tight
-                 text-heading opacity-20">
+      <h5 class="mb-2 text-xl font-semibold tracking-tight text-heading opacity-20">
         Noteworthy technology acquisitions 2021
       </h5>
 

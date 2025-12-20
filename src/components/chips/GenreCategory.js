@@ -12,8 +12,7 @@ export function GenreColorCate({
              border-l-[6px]"
       style="border-left-color:${color};"
       data-slug="${slug}"
-      data-type="${type}" 
-    >
+      data-type="${type}">
       ${label}
     </button>
   `;

@@ -40,6 +40,10 @@ export async function initSongDetailContent({ songId, contextSlug, type }) {
   const queueListContainer = document.querySelector(".js-queue-list");
   const songTitle = document.querySelector(".js-title");
 
+  const volumeEl = document.querySelector(".js-volume");
+  const volumeBtn = document.querySelector(".js-volume-btn");
+  const volumeIconEl = document.querySelector(".js-volume-icon");
+
   let response;
   let tracks = [];
   if (contextSlug) {
@@ -99,6 +103,9 @@ export async function initSongDetailContent({ songId, contextSlug, type }) {
     songTitleEl: songTitle,
     randomBtn: randomBtn,
     queueListContainer: queueListContainer,
+    volumeBtn: volumeBtn,
+    volumeEl: volumeEl,
+    volumeIconEl: volumeIconEl,
 
     // Data
     tracks: tracks,

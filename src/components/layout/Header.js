@@ -29,6 +29,7 @@ export function Header() {
       <!-- Search Form -->
       <div class="hidden md:flex flex-1 items-center max-w-lg lg:max-w-xl mx-auto" >
         <div class="relative w-[90%] ml-5 xl:w-full js-search-wrapper">
+
           <!-- Search input box -->
           <div class="js-search-box flex items-center rounded-xl  focus:border-b-0 bg-[rgba(255,255,255,0.12)] border border-[rgba(255,255,255,0.15)] px-6 py-2.5 transition-all duration-150 focus-within:bg-[rgba(255,255,255,0.18)] focus-within:border-[rgba(255,255,255,0.25)]" >
             <i class="fa-solid fa-magnifying-glass text-white/70 mr-4 text-xl" ></i>
@@ -59,15 +60,13 @@ export function Header() {
         </button>
 
         <!-- Button Login -->
-        <a href="/auth" data-navigo
-          class="js-logged login-btn cursor-pointer rounded-full bg-white text-black px-4 py-1.5 text-sm font-semibold">
-        Đăng nhập
+        <a href="/auth" data-navigo class="js-logged login-btn cursor-pointer rounded-full bg-white text-black px-4 py-1.5 text-sm font-semibold">
+           Đăng nhập
         </a>
 
         <!-- Avatar -->
         <div id="userAvatar" class=" relative cursor-pointer select-none">
-          <div id="avatarBox" class="h-7 w-7  cursor-pointer select-none rounded-full bg-gray-500 text-white hidden items-center justify-center font-semibold text-sm" >
-            
+          <div id="avatarBox" class="h-7 w-7  cursor-pointer select-none rounded-full bg-gray-500 text-white hidden items-center justify-center font-semibold text-sm">
           </div>
 
           <div id="userMenu" class="absolute right-0 mt-3 w-70 rounded-2xl bg-[#1f1f1f] text-white shadow-xl border border-white/10 hidden" >
