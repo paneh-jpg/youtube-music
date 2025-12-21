@@ -10,6 +10,7 @@ import { initCustomScrolling } from "../utils/horizontalScroll.js";
 
 import { router } from "../router/router.js";
 import { hideLoading, showLoading } from "../utils/loading.js";
+import { saveListenHistory } from "../api/authApi.js";
 
 export function ExplorePage() {
   return `
@@ -105,6 +106,7 @@ async function loadNewestAlbums() {
     showLoading();
     const res = await getNewestAlbumList(10);
     const items = res?.data?.items ?? [];
+
     container.innerHTML = items
       .map((item) =>
         AlbumCard({
@@ -113,17 +115,20 @@ async function loadNewestAlbums() {
           albumType: item.albumType || "Đĩa đơn",
           artist: item.artistName || item.artist?.name || "Unknown",
           slug: item.slug,
+          id: item.id,
         })
       )
       .join("");
 
-    container.addEventListener("click", (e) => {
+    container.addEventListener("click", async (e) => {
       const album = e.target.closest(".js-album");
 
       if (!album) return;
 
       const slug = album.dataset.slug;
+      const id = album.dataset.id;
 
+      const response = await saveListenHistory(id);
       router.navigate(`/albums/details/${encodeURIComponent(slug)}`); // add router
     });
   } catch (error) {

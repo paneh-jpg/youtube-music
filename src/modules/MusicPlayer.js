@@ -1,5 +1,6 @@
 // MusicPlayer.js
 import { formatSecondsToHms } from "../utils/utils.js";
+import { saveListenHistory } from "../api/authApi.js";
 
 export class MusicPlayer {
   constructor({
@@ -206,7 +207,7 @@ export class MusicPlayer {
     const track = this.tracks[index];
     this.currentTrackIndex = index;
 
-    this.songImgEl.src = `https://picsum.photos/1920/1080?random=${Date.now()}`;
+    this.songImgEl.src = track.thumbnails;
     this.currentTrackThumbEl.src = track.thumbnails;
     this.audio.src = track.audioUrl;
     this.currentTrackNameEl.textContent = track.title;
@@ -227,11 +228,12 @@ export class MusicPlayer {
 
     this.queueListContainer.onclick = null;
 
-    this.queueListContainer.onclick = (e) => {
+    this.queueListContainer.onclick = async (e) => {
       const trackItem = e.target.closest(".js-queue-item");
       if (trackItem) {
         const trackId = trackItem.dataset.id;
 
+        const response = await saveListenHistory(trackId);
         const index = this.tracks.findIndex(
           (track) => String(track.id) === String(trackId)
         );

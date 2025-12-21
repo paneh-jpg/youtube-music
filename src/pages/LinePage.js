@@ -13,6 +13,7 @@ import { SongCard } from "../components/cards/SongCard.js";
 import { formatNumber } from "../utils/utils.js";
 import { router } from "../router/router.js";
 import { hideLoading, showLoading } from "../utils/loading.js";
+import { saveListenHistory } from "../api/authApi.js";
 
 export function LinePage() {
   return `
@@ -151,11 +152,14 @@ function renderAlbums(items) {
     )
     .join("");
 
-  container.addEventListener("click", (e) => {
+  container.addEventListener("click", async (e) => {
     const album = e.target.closest(".js-album");
 
     if (!album) return;
     const slug = album.dataset.slug;
+    const id = album.dataset.id;
+
+    const response = await saveListenHistory(id);
     router.navigate(`/albums/details/${encodeURIComponent(slug)}`); // add router
   });
 }
@@ -205,13 +209,16 @@ function renderPlaylists(items) {
     )
     .join("");
 
-  container.addEventListener("click", (e) => {
+  container.addEventListener("click", async (e) => {
     const album = e.target.closest(".js-album");
 
     if (!album) return;
 
     const slug = album.dataset.slug;
 
+    const id = album.dataset.id;
+
+    const response = await saveListenHistory(id);
     router.navigate(`/playlists/details/${encodeURIComponent(slug)}`); // add router
   });
 }
@@ -233,11 +240,14 @@ function renderSongs(items) {
     )
     .join("");
 
-  container.addEventListener("click", (e) => {
+  container.addEventListener("click", async (e) => {
     const song = e.target.closest(".js-song");
     if (!song) return;
 
     const idVideo = song.dataset.id;
+
+    const response = await saveListenHistory(idVideo);
+    console.log(response);
 
     router.navigate(`/songs/details/${encodeURIComponent(idVideo)}`);
   });

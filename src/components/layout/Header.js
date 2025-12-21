@@ -5,6 +5,10 @@ import { generateAvatar } from "../../utils/utils.js";
 import { toast } from "../common/Toast.js";
 import { LoadingOverlay } from "../loading/LoadingOverlay.js";
 
+import { searchResult, getSuggestion } from "../../api/homeApi.js";
+
+import { router } from "../../router/router.js";
+
 export function Header() {
   return `
     <!-- Header (Sticky)-->
@@ -143,16 +147,8 @@ function initSearchSuggestions() {
 
   if (!input || !clearBtn || !dropdown || !list) return;
 
-  const suggestions = [
-    "test loa",
-    "test bass",
-    "test loa bass",
-    "test loa treble bass hay",
-    "test drive",
-    "test loa sự kiện",
-    "Bass Test",
-    "Nhạc Test Loa Sự Kiện 1 || Bass Gọn",
-  ];
+  let suggestions = [];
+  let completed = [];
 
   function openDropdown() {
     dropdown.classList.remove("hidden");
@@ -166,13 +162,22 @@ function initSearchSuggestions() {
     box?.classList.replace("rounded-t-xl", "rounded-xl");
   }
 
-  function renderSuggestions(keyword) {
+  async function renderSuggestions(keyword) {
     const q = keyword.trim().toLowerCase();
     if (!q) {
       list.innerHTML = "";
       closeDropdown();
       return;
     }
+
+    list.innerHTML =
+      "<li class='px-4 py-2 text-sm text-white/60'>Đang tìm...</li>";
+    openDropdown();
+
+    const response = await getSuggestion(q);
+
+    suggestions = response.data.suggestions;
+    completed = response.data.completed;
 
     const filtered = suggestions.filter((item) =>
       item.toLowerCase().includes(q)
@@ -196,9 +201,29 @@ function initSearchSuggestions() {
 
     list.querySelectorAll("li").forEach((li) => {
       li.addEventListener("click", () => {
-        input.value = li.textContent || "";
+        const text = li.textContent || "";
+        input.value = text;
         clearBtn.classList.remove("hidden");
         closeDropdown();
+
+        const matched = completed.find((item) => item.title === text);
+
+        if (matched) {
+          if (matched.type === "album") {
+            router.navigate(`albums/details/${matched.slug}`);
+          }
+          if (matched.type === "video") {
+            router.navigate(`videos/details/${matched.slug}`);
+          }
+          if (matched.type === "playlist") {
+            router.navigate(`playlists/details/${matched.slug}`);
+          }
+          if (matched.type === "song") {
+            router.navigate(`songs/details/${matched.id}`);
+          }
+        } else {
+          router.navigate("/");
+        }
       });
     });
   }

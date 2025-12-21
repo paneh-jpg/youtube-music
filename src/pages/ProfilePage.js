@@ -5,6 +5,7 @@ import { toast } from "../components/common/Toast.js";
 
 import { escapeHTML, generateAvatar } from "../utils/utils.js";
 import { hideLoading, showLoading } from "../utils/loading.js";
+import { getListenHistory } from "../api/authApi.js";
 
 export function ProfilePage() {
   return `
@@ -81,6 +82,9 @@ const renderProfile = async () => {
     userAvt.textContent = avt.char;
     userAvt.style.color = avt.text;
     userAvt.style.backgroundColor = avt.bg;
+
+    const response2 = await getListenHistory();
+    console.log(response2);
   } catch (error) {
     toast.error(error.data.message || "Có lỗi xảy ra");
   } finally {

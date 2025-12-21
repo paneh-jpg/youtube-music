@@ -3,6 +3,7 @@ import { formatSecondsToHms, formatDateVietnamese } from "../utils/utils.js";
 
 import { router } from "../router/router.js";
 import { hideLoading, showLoading } from "../utils/loading.js";
+import { saveListenHistory } from "../api/authApi.js";
 
 export function AlbumsDetails() {
   return `
@@ -131,11 +132,13 @@ export async function initAlbumsContent(slug) {
     const container = document.querySelector(".js-song-list");
     const playAllBtn = document.querySelector(".js-play-btn");
 
-    container.addEventListener("click", (e) => {
+    container.addEventListener("click", async (e) => {
       const song = e.target.closest(".js-song");
       if (!song) return;
 
       const idVideo = song.dataset.id;
+
+      const response = await saveListenHistory(data.id);
 
       router.navigate(
         `/songs/details/${encodeURIComponent(
@@ -144,8 +147,10 @@ export async function initAlbumsContent(slug) {
       );
     });
 
-    playAllBtn.onclick = () => {
+    playAllBtn.onclick = async () => {
       const idVideo = data.tracks[0].id;
+
+      const response = await saveListenHistory(data.id);
       router.navigate(
         `/songs/details/${encodeURIComponent(
           idVideo

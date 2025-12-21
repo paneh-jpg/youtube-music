@@ -12,6 +12,7 @@ import { getProfileApi } from "../api/userApi.js";
 import { router } from "../router/router.js";
 import { initCustomScrolling } from "../utils/horizontalScroll.js";
 import { hideLoading, showLoading } from "../utils/loading.js";
+import { saveListenHistory } from "../api/authApi.js";
 
 export function HomePage() {
   return `
@@ -140,12 +141,15 @@ async function loadQuickPick() {
     )
     .join("");
 
-  container.addEventListener("click", (e) => {
+  container.addEventListener("click", async (e) => {
     const quickPick = e.target.closest(".js-quick-pick-card");
 
     if (!quickPick) return;
 
     const slug = quickPick.dataset.slug;
+    const id = quickPick.dataset.id;
+
+    const response = await saveListenHistory(id);
 
     router.navigate(`/playlists/details/${encodeURIComponent(slug)}`); // add router
   });
@@ -166,17 +170,20 @@ async function loadAlbumsForYou() {
         albumType: item.type || "Đĩa đơn",
         artist: item.artists || item.artist?.name || "Unknown",
         slug: item.slug,
+        id: item.id,
       })
     )
     .join("");
 
-  container.addEventListener("click", (e) => {
+  container.addEventListener("click", async (e) => {
     const album = e.target.closest(".js-album");
 
     if (!album) return;
 
     const slug = album.dataset.slug;
+    const id = album.dataset.id;
 
+    const response = await saveListenHistory(id);
     router.navigate(`/albums/details/${encodeURIComponent(slug)}`); // add router
   });
 }
@@ -196,17 +203,23 @@ async function loadTodayHits() {
         albumType: item.type || "Đĩa đơn",
         artist: item.artists || item.artist?.name || "Unknown",
         slug: item.slug,
+        id: item.id,
       })
     )
     .join("");
 
-  container.addEventListener("click", (e) => {
+  container.addEventListener("click", async (e) => {
     const album = e.target.closest(".js-album");
 
     if (!album) return;
 
     const slug = album.dataset.slug;
+    const id = album.dataset.id;
 
-    router.navigate(`/playlists/details/${encodeURIComponent(slug)}`); // add router
+    const response = await saveListenHistory(id);
+
+    console.log(response);
+
+    // router.navigate(`/playlists/details/${encodeURIComponent(slug)}`); // add router
   });
 }

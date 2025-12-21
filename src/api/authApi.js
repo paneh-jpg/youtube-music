@@ -1,5 +1,6 @@
 import { showLoading, hideLoading } from "../utils/loading.js";
 const BASE_URL = import.meta.env.VITE_API_URL;
+import axiosInstance from "../utils/authorizedAxios.js";
 
 export const handleLogoutAPI = async () => {
   try {
@@ -40,4 +41,17 @@ export const refreshTokenAPI = async (refreshToken) => {
 
   // data nên là { access_token, refresh_token } (hoặc tuỳ backend)
   return data;
+};
+
+// Ghi lại lịch sử nghe
+export const saveListenHistory = async (albumId) => {
+  return await axiosInstance.post(`${BASE_URL}/events/play`, {
+    albumId: albumId,
+    playedAt: new Date().toISOString(),
+  });
+};
+
+// Danh sách gợi ý theo lịch sử
+export const getListenHistory = async () => {
+  return await axiosInstance.get(`${BASE_URL}/home/personalized`);
 };
