@@ -8,7 +8,7 @@ import { showLoading, hideLoading } from "../utils/loading.js";
 export function MoodsPage() {
   return `
       <!--  Main content  -->
-      <div class="h-full">
+      <div class="relative z-1 h-full">
           <!--  Moods  -->
           <div class="relative">
             <div class="js-moods-list flex gap-3 mt-10 py-6 "></div>

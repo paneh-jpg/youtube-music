@@ -218,8 +218,6 @@ async function loadTodayHits() {
 
     const response = await saveListenHistory(id);
 
-    console.log(response);
-
-    // router.navigate(`/playlists/details/${encodeURIComponent(slug)}`); // add router
+    router.navigate(`/playlists/details/${encodeURIComponent(slug)}`); // add router
   });
 }

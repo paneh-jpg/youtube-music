@@ -62,7 +62,7 @@ export class MusicPlayer {
     this.originalTracks = [...tracks];
 
     this.currentTrackIndex = this.tracks.findIndex(
-      (item) => item.id === initialSongId
+      (item) => item.id == initialSongId
     );
 
     // Volume state
@@ -247,8 +247,18 @@ export class MusicPlayer {
   }
 
   renderQueue() {
+    if (
+      !Array.isArray(this.tracks) ||
+      this.tracks.length === 0 ||
+      !this.tracks[this.currentTrackIndex]
+    ) {
+      console.warn("Invalid queue state", this.tracks, this.currentTrackIndex);
+      return;
+    }
+
     const currentTrackId = this.tracks[this.currentTrackIndex].id;
     const queueHtml = this.tracks
+      .filter(Boolean)
       .map((track) => {
         const artistsArr = Array.isArray(track.artists) ? track.artists : [];
         const id = track.id;
@@ -410,18 +420,7 @@ export class MusicPlayer {
     this.nextBtn.addEventListener("click", () => this.next());
     this.prevBtn.addEventListener("click", () => this.prev());
 
-    // Click vào item trong hàng đợi
-    this.queueListContainer.addEventListener("click", (e) => {
-      const queueItem = e.target.closest(".js-queue-item");
-      if (queueItem) {
-        const id = queueItem.dataset.id;
-        const newIndex = this.tracks.findIndex((track) => track.id === id);
-        if (newIndex !== -1 && newIndex !== this.currentTrackIndex) {
-          this.loadTrack(newIndex);
-          this.play();
-        }
-      }
-    });
+    // Click vào item trong hàng đợi(Xóa ở đây vì bindQueueEvents() đã xử lí phần đó)
 
     // Time update -> progress
     this.audio.addEventListener("timeupdate", () => {

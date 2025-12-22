@@ -200,6 +200,7 @@ export async function loadGenreChips() {
       type: "line",
     }));
 
+    // const genres = [...lines, ...categories];
     const genres = [...categories, ...lines];
 
     const perCol = 4;

@@ -120,14 +120,17 @@ export function normalizeSongToTrack(song = {}) {
   };
 }
 
-export function mergeSongWithAlbumTracks(songDetail) {
-  const current = normalizeSongToTrack(songDetail);
+export function mergeSongWithAlbumTracks(song, tracks = []) {
+  if (!song || !Array.isArray(tracks)) return tracks;
 
-  const albumTracks = songDetail.album?.tracks || [];
+  const index = tracks.findIndex((t) => String(t.id) === String(song.id));
 
-  const filteredAlbumTracks = albumTracks.filter(
-    (t) => String(t.id) !== String(current.id)
-  );
+  if (index === -1) {
+    return [song, ...tracks]; // hoặc push cuối
+  }
 
-  return [current, ...filteredAlbumTracks];
+  const newTracks = [...tracks];
+  newTracks[index] = { ...tracks[index], ...song };
+
+  return newTracks;
 }

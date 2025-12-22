@@ -16,39 +16,62 @@ function findTrackIndexById(tracks, id) {
 export function getOrCreateMusicPlayer(config = {}) {
   const { tracks = [], initialSongId, ...elements } = config;
 
+  // 1. Chưa có instance → tạo mới
   if (!playerInstance) {
-    playerInstance = new MusicPlayer({ ...elements, tracks, initialSongId });
+    playerInstance = new MusicPlayer({
+      ...elements,
+      tracks,
+      initialSongId,
+    });
     return playerInstance;
   }
 
-  // 1. Cập nhật các element DOM mới từ trang vừa chuyển sang
-  Object.keys(elements).forEach((key) => {
-    if (elements[key]) {
-      const instanceKey = key.replace("El", "");
-      playerInstance[key] === undefined
-        ? (playerInstance[instanceKey] = elements[key])
-        : (playerInstance[key] = elements[key]);
+  // 2. Cập nhật DOM elements mới
+  Object.entries(elements).forEach(([key, value]) => {
+    if (value && key in playerInstance) {
+      playerInstance[key] = value;
     }
   });
 
-  // 2.  Nếu có container queue mới, phải gán lại sự kiện ngay
+  // 3. Rebind queue nếu container mới
   if (elements.queueListContainer) {
     playerInstance.queueListContainer = elements.queueListContainer;
-    playerInstance.renderQueue(); // Vẽ bài hát ra container mới
-    playerInstance.bindQueueEvents(); // Dán "keo" sự kiện vào container mới
+
+    if (Array.isArray(tracks) && tracks.length) {
+      playerInstance.tracks = tracks;
+
+      playerInstance.currentTrackIndex = findTrackIndexById(
+        tracks,
+        initialSongId
+      );
+
+      if (playerInstance.currentTrackIndex === -1) {
+        playerInstance.currentTrackIndex = 0;
+      }
+
+      playerInstance.renderQueue();
+    }
+
+    playerInstance.bindQueueEvents();
   }
 
-  // 3. Cập nhật danh sách nhạc nếu có sự thay đổi (Album khác)
+  // 4. Cập nhật track list nếu khác
   const isNewList =
+    tracks.length &&
     JSON.stringify(playerInstance.tracks) !== JSON.stringify(tracks);
-  if (tracks.length && isNewList) {
+
+  if (isNewList) {
     playerInstance.tracks = [...tracks];
     playerInstance.originalTracks = [...tracks];
-    playerInstance.renderQueue();
+    if (Array.isArray(tracks) && tracks.length) {
+      playerInstance.tracks = tracks;
+      playerInstance.renderQueue();
+    }
   }
 
-  // 4. Phát bài được chọn
+  // 5. Load bài được chọn (nếu có)
   const nextIndex = findTrackIndexById(playerInstance.tracks, initialSongId);
+
   if (nextIndex !== -1) {
     playerInstance.loadTrack(nextIndex);
   }

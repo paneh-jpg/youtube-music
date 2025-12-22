@@ -76,7 +76,8 @@ export function renderShell() {
       ${Header()} ${Sidebar()}
 
       <div id="mainContentWrapper" class="pt-16 md:ml-64 h-full pb-20 ">
-        <main id="mainContent" class="mt-10 ml-15 mr-15 " >
+
+        <main id="mainContent" class="z-1 mt-10 ml-15 mr-15 " >
       </div>
     </div>
   `;

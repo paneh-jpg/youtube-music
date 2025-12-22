@@ -247,7 +247,6 @@ function renderSongs(items) {
     const idVideo = song.dataset.id;
 
     const response = await saveListenHistory(idVideo);
-    console.log(response);
 
     router.navigate(`/songs/details/${encodeURIComponent(idVideo)}`);
   });

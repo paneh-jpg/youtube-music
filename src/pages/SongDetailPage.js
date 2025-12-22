@@ -75,7 +75,7 @@ export async function initSongDetailContent({ songId, contextSlug, type }) {
     try {
       showLoading();
       response = await getSongById(songId);
-      tracks = mergeSongWithAlbumTracks(response.data);
+      tracks = mergeSongWithAlbumTracks(response.data, response.data.related);
     } catch (error) {
       console.log(error.message);
     } finally {
