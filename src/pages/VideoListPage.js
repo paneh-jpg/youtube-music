@@ -1,8 +1,8 @@
 import { getVideoBySlug } from "../api/exploreApi.js";
-import { formatSecondsToHms, formatDateVietnamese } from "../utils/utils.js";
+import { formatSecondsToHms } from "../utils/utils.js";
 
-import { router } from "../router/router.js";
 import { hideLoading, showLoading } from "../utils/loading.js";
+import { openVideoDetail } from "../modules/VideoDetailManager.js";
 
 export function VideosLists() {
   return `
@@ -30,6 +30,7 @@ export async function initVideosContent(slug) {
     showLoading();
     const response = await getVideoBySlug(slug);
     const data = response?.data;
+
     const tracksHtml = data.related
       .map(
         (video, index) => `
@@ -52,7 +53,7 @@ export async function initVideosContent(slug) {
             }</h3>
 
                <span class="text-gray-400  text-[12px] truncate ">${
-                 video.singer || "Tên ca sĩ"
+                 video.artists || "Không rõ nghệ sĩ"
                } </span>
 
          </div>
@@ -134,15 +135,14 @@ export async function initVideosContent(slug) {
       const video = e.target.closest(".js-video");
       if (!video) return;
 
-      const idVideo = video.dataset.id;
-      console.log(idVideo);
+      const videoId = video.dataset.id;
 
-      router.navigate(`/videos/details/${encodeURIComponent(idVideo)}`);
+      openVideoDetail({ videoId });
     });
 
     playAllBtn.onclick = () => {
       const idVideo = data.related[0].id;
-      router.navigate(`/videos/details/${encodeURIComponent(idVideo)}`);
+      openVideoDetail({ videoId: idVideo });
     };
   } catch (error) {
     console.log(error.message);

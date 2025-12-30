@@ -35,11 +35,7 @@ import {
   initVideosLists,
   initVideosContent,
 } from "./pages/VideoListPage.js";
-import {
-  SongDetailPage,
-  initSongDetailPage,
-  initSongDetailContent,
-} from "./pages/SongDetailPage.js";
+
 import {
   PlaylistDetails,
   initPlaylistDetails,
@@ -52,14 +48,13 @@ import {
   initMoodsPage,
   MoodsPage,
 } from "./pages/MoodDetailPage.js";
-import {
-  initVideoDetailPage,
-  VideoDetailPage,
-  initVideoDetailContent,
-} from "./pages/VideoDetailPage.js";
 
 import { Header, initHeader } from "./components/layout/Header.js";
 import { initSidebar, Sidebar } from "./components/layout/Sidebar.js";
+
+import { initSongDetailManager } from "./modules/SongDetailManager.js";
+import { initPanel } from "./components/layout/Panel.js";
+import { initVideoDetailManager } from "./modules/VideoDetailManager.js";
 
 const app = document.querySelector("#app");
 app.classList.add("bg-black");
@@ -67,16 +62,17 @@ app.classList.add("bg-black");
 // Player control
 const playerRoot = document.querySelector("#player-root");
 if (playerRoot) playerRoot.innerHTML = `${PlayerControl()}`;
+initSongDetailManager();
+initVideoDetailManager();
 
 export function renderShell() {
   app.innerHTML = `
-    <div class="bg-linear-to-b from-[#181818] via-[#0f0f0f] to-[#0f0f0f] text-white font-[Inter]">
+    <div class="main bg-[radial-gradient(900px_500px_at_20%_-10%,rgba(255,255,255,0.10),transparent_60%),linear-gradient(to_bottom,#1b1b1b,#0e0e0e)]
+ text-white font-[Inter]">
       <div id="overlay" class="fixed inset-0 bg-black/50 opacity-0 invisible transition-opacity duration-300 z-30 md:hidden"></div>
-
-      ${Header()} ${Sidebar()}
-
+           ${Header()} 
+           ${Sidebar()}
       <div id="mainContentWrapper" class="pt-16 md:ml-64 h-full pb-20 ">
-
         <main id="mainContent" class="z-1 mt-10 ml-15 mr-15 " >
       </div>
     </div>
@@ -84,6 +80,7 @@ export function renderShell() {
 
   initHeader();
   initSidebar();
+  initPanel();
 }
 
 function render(html, init) {
@@ -154,9 +151,9 @@ router
   })
   .on("/videos/details/:id", (match) => {
     const videoId = decodeURIComponent(match?.data?.id || "");
-    render(VideoDetailPage());
-    initVideoDetailPage({ videoId });
-    initVideoDetailContent({ videoId });
+    // render(VideoDetailPage());
+    // initVideoDetailPage({ videoId });
+    // initVideoDetailContent({ videoId });
   })
   .on("/songs/details/:id", (match) => {
     const songId = decodeURIComponent(match?.data?.id || "");
@@ -167,10 +164,10 @@ router
     const params = new URLSearchParams(query);
     const contextSlug = params.get("album");
     const type = params.get("type");
-    render(SongDetailPage());
-    initSongDetailPage({ songId, contextSlug, type });
+    // render(SongDetailPage());
+    // initSongDetailPage({ songId, contextSlug, type });
 
-    initSongDetailContent({ songId, contextSlug, type });
+    // initSongDetailContent({ songId, contextSlug, type });
   })
   .on("/charts", () => {
     render(ChartsPage(), initChartsPage);

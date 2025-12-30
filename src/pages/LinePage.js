@@ -14,6 +14,7 @@ import { formatNumber } from "../utils/utils.js";
 import { router } from "../router/router.js";
 import { hideLoading, showLoading } from "../utils/loading.js";
 import { saveListenHistory } from "../api/authApi.js";
+import { openSongDetail } from "../modules/SongDetailManager.js";
 
 export function LinePage() {
   return `
@@ -123,7 +124,7 @@ export const initLineContent = async (slug) => {
   } finally {
     setTimeout(() => {
       hideLoading();
-    }, 700);
+    }, 100);
   }
 };
 
@@ -248,6 +249,10 @@ function renderSongs(items) {
 
     const response = await saveListenHistory(idVideo);
 
-    router.navigate(`/songs/details/${encodeURIComponent(idVideo)}`);
+    openSongDetail({
+      songId: idVideo,
+      contextSlug: "",
+      type: "",
+    });
   });
 }

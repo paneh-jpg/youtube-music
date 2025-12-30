@@ -1,29 +1,30 @@
 export function Sidebar() {
   return `
-   <!--  Sidebar (Left, Under header)  -->
-    <aside id="sidebar" class="fixed top-16 bottom-0 left-0 bg-[#0f0f0f] border-r border-white/10 z-100 w-64 md:w-64 md:translate-x-0 -translate-x-full transform " >
+<!--  Sidebar (Left, Under header)  -->
+<aside id="sidebar"
+  class="fixed top-16 bottom-0 left-0 border-b border-white/10 bg-[rgba(0,0,0,0.05)] backdrop-blur-md z-100 w-64 md:w-64 md:translate-x-0 -translate-x-full transform">
       <div class="overflow-y-auto h-full no-scrollbar px-2 py-4">
         <nav class="flex flex-col mt-2">
           <!-- Trang chủ -->
-          <a href="/" data-navigo class=" flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10" >
+          <a href="/" data-navigo class="js-nav js-home flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10" >
             <span class="material-symbols-outlined text-[24px]">home</span>
             <span class="text-[16px] font-semibold">Trang chủ</span>
           </a>
 
           <!-- Khám phá -->
-          <a href="/explore" data-navigo class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10" >
+          <a href="/explore" data-navigo class="js-nav js-explore flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10" >
             <span class="material-symbols-outlined text-[24px]">travel_explore</span>
             <span class="text-[16px] font-semibold">Khám phá</span>
           </a>
 
           <!-- Thư viện -->
-          <a href="/library" data-navigo class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10">
+          <a href="/library" data-navigo class="js-nav js-library flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10">
             <span class="material-symbols-outlined text-[24px]">bookmark</span>
             <span class="text-[16px] font-semibold">Thư viện</span>
           </a>
 
           <!-- Nâng cấp ứng dụng -->
-          <a href="/upgrade" data-navigo class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10">
+          <a href="/upgrade" data-navigo class="js-nav js-upgrade flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10">
             <span class="material-symbols-outlined text-[24px]">open_in_new</span>
             <span class="text-[16px] font-semibold">Nâng cấp</span>
           </a>
@@ -82,6 +83,8 @@ export function initSidebar() {
   const loginFull = document.getElementById("loginFull");
   const loginCompact = document.getElementById("loginCompact");
   const loginDesc = document.getElementById("loginDesc");
+
+  sidebarBg();
 
   function updateLoginButtonUI() {
     if (!loginFull || !loginCompact || !loginDesc) return;
@@ -194,4 +197,67 @@ export function initSidebar() {
   // Khởi tạo trạng thái đúng ngay từ đầu
   updateLoginButtonUI();
   updateSidebarAuthUI();
+
+  sidebarActive();
+}
+
+function sidebarBg() {
+  const sidebar = document.getElementById("sidebar");
+  if (!sidebar) return;
+
+  const topBg = "bg-[rgba(0,0,0,0.1)]";
+  const scrollBg = "bg-black/95";
+
+  const apply = () => {
+    const scrolled = window.scrollY > 5;
+
+    if (scrolled) {
+      sidebar.classList.add(scrollBg);
+      sidebar.classList.remove(topBg);
+    } else {
+      // Khi lăn lên top -> nền nhạt lại
+      sidebar.classList.add(topBg);
+      sidebar.classList.remove(scrollBg);
+    }
+  };
+
+  apply();
+
+  window.addEventListener("scroll", () => requestAnimationFrame(apply), {
+    passive: true,
+  });
+}
+
+function sidebarActive() {
+  const sidebar = document.getElementById("sidebar");
+  if (!sidebar || sidebar.dataset.activeInit) return;
+  sidebar.dataset.activeInit = "1";
+
+  const links = sidebar.querySelectorAll("a.js-nav");
+
+  const sync = () => {
+    const path = location.pathname || "/";
+    links.forEach((link) => {
+      const href = link.getAttribute("href") || "/";
+      link.classList.toggle("bg-white/10", href === path);
+    });
+  };
+
+  const notify = () => window.dispatchEvent(new Event("routeChange"));
+  if (!window.routePatched) {
+    window.routePatched = true;
+    ["pushState", "replaceState"].forEach((k) => {
+      const fn = history[k];
+      history[k] = function (...args) {
+        fn.apply(this, args);
+        notify();
+      };
+    });
+    window.addEventListener("popstate", notify);
+  }
+
+  sync();
+  window.addEventListener("routeChange", sync);
+
+  sidebar.addEventListener("click", () => setTimeout(sync, 0));
 }

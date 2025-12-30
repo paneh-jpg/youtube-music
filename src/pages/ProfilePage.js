@@ -6,11 +6,13 @@ import { toast } from "../components/common/Toast.js";
 import { escapeHTML, generateAvatar } from "../utils/utils.js";
 import { hideLoading, showLoading } from "../utils/loading.js";
 import { getListenHistory } from "../api/authApi.js";
+import { QuickPickCard } from "../components/cards/QuickPickCard.js";
+import { router } from "../router/router.js";
 
 export function ProfilePage() {
   return `
       <!--  Main content  -->
-      <div class="h-screen">
+      <div class="h-full pb-40">
         <div class="flex flex-col md:flex-row md:items-center gap-6 md:gap-8">
           <!-- Avatar -->
           <div class="profile-avatar w-28 h-28 md:w-36 md:h-36 shrink-0 rounded-full bg-gray-600 text-white text-9xl md:text-5xl font-bold flex items-center justify-center mx-auto md:mx-0">A</div>
@@ -44,6 +46,15 @@ export function ProfilePage() {
           Đài phát của bạn
         </h2>
 
+        <section class="mt-5">
+              <!-- content bên dưới (horizontal scroll cards) -->
+             <div class="js-history-listen-container overflow-x-auto custom-scrollbar pb-2.5">
+                <div class="js-history-listen grid grid-flow-col grid-rows-4 auto-cols-[calc(100%/4-20px)] gap-x-3 gap-y-2">
+                       <!--   ALBUMs -->
+                </div>
+             </div>
+            </section>
+
         <!-- Empty state -->
         <div class="text-center mt-8 px-4">
           <p class="text-white/50 text-base md:text-lg mb-6 leading-relaxed">
@@ -66,9 +77,12 @@ export function ProfilePage() {
 export function initProfilePage() {
   initSettingsModal();
   renderProfile();
+  renderHistoryListen();
 }
 
 const renderProfile = async () => {
+  const access_token = localStorage.getItem("access_token");
+  if (!access_token) return;
   const username = document.querySelector(".user-name");
   const userAvt = document.querySelector(".profile-avatar");
 
@@ -82,13 +96,12 @@ const renderProfile = async () => {
     userAvt.textContent = avt.char;
     userAvt.style.color = avt.text;
     userAvt.style.backgroundColor = avt.bg;
-
-    const response2 = await getListenHistory();
-    console.log(response2);
   } catch (error) {
     toast.error(error.data.message || "Có lỗi xảy ra");
   } finally {
-    hideLoading();
+    setTimeout(() => {
+      hideLoading();
+    }, 500);
   }
 };
 
@@ -199,4 +212,47 @@ const initSettingsModal = async () => {
     } finally {
     }
   });
+};
+
+const renderHistoryListen = async () => {
+  const container = document.querySelector(".js-history-listen");
+  const access_token = localStorage.getItem("access_token");
+  if (!access_token || !container) return;
+
+  try {
+    showLoading();
+    const response = await getListenHistory();
+    container.innerHTML = response.data
+      .map((item) =>
+        QuickPickCard({
+          id: item._id,
+          slug: item.slug,
+          thumbnail:
+            item.thumbnails.length > 0
+              ? item.thumbnails
+              : "https://picsum.photos/120/120?random=1",
+          title: item.title,
+          type: item.type,
+          artist: item.artists,
+        })
+      )
+      .join("");
+
+    container.addEventListener("click", async (e) => {
+      const quickPick = e.target.closest(".js-quick-pick-card");
+
+      if (!quickPick) return;
+
+      const slug = quickPick.dataset.slug;
+      const id = quickPick.dataset.id;
+
+      router.navigate(`/albums/details/${encodeURIComponent(slug)}`);
+    });
+  } catch (error) {
+    console.log(error);
+  } finally {
+    setTimeout(() => {
+      hideLoading();
+    }, 500);
+  }
 };

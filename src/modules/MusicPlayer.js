@@ -1,11 +1,11 @@
 // MusicPlayer.js
 import { formatSecondsToHms } from "../utils/utils.js";
 import { saveListenHistory } from "../api/authApi.js";
+import { toast } from "../components/common/Toast.js";
 
 export class MusicPlayer {
   constructor({
     audioEl,
-    currentTrackNameEl,
     currentTrackThumbEl,
     songImgEl,
     playBtn,
@@ -28,8 +28,6 @@ export class MusicPlayer {
     initialSongId,
   }) {
     // Elements
-    this.audio = audioEl;
-    this.currentTrackNameEl = currentTrackNameEl;
     this.currentTrackThumbEl = currentTrackThumbEl;
     this.songImgEl = songImgEl;
     this.playBtn = playBtn;
@@ -43,8 +41,16 @@ export class MusicPlayer {
     this.songTitleEl = songTitleEl;
     this.queueListContainer = queueListContainer;
 
-    this.playerBar = document.querySelector(".player-bar");
     this.hideBtn = document.getElementById("hide-player-btn");
+    this.playerBar = document.querySelector(".player-bar");
+
+    this.audio = document.createElement("audio");
+    this.audio.preload = "metadata";
+    this.audio.playsInline = true;
+    this.audio.className = "hidden";
+    this.audio.id = "audio-player";
+
+    this.playerBar.appendChild(this.audio);
 
     // Volume elements
     this.volumeEl = volumeEl;
@@ -197,10 +203,7 @@ export class MusicPlayer {
 
     this.setVolume(initial, { save: false, updateUI: true });
   }
-
-  // ==========================
-  // Track
-  // ==========================
+  // Trac
   loadTrack(index) {
     if (index < 0 || index >= this.tracks.length) return;
 
@@ -210,7 +213,6 @@ export class MusicPlayer {
     this.songImgEl.src = track.thumbnails;
     this.currentTrackThumbEl.src = track.thumbnails;
     this.audio.src = track.audioUrl;
-    this.currentTrackNameEl.textContent = track.title;
     this.songTitleEl.textContent = track.title;
 
     this.updateQueueActive(track.id);
@@ -322,6 +324,7 @@ export class MusicPlayer {
   }
 
   play() {
+    if (!this.audio) return;
     const playPromise = this.audio.play();
     if (playPromise !== undefined) {
       playPromise
@@ -330,7 +333,7 @@ export class MusicPlayer {
           this.showPlayer();
         })
         .catch((error) => {
-          console.error("Playback interrupted:", error);
+          toast.error(`Lỗi: ${error.message}`);
         });
     }
 
@@ -342,6 +345,7 @@ export class MusicPlayer {
   }
 
   pause() {
+    if (!this.audio) return;
     this.audio.pause();
     this.isPlaying = false;
 
@@ -411,26 +415,36 @@ export class MusicPlayer {
   }
 
   addEventListeners() {
-    // Play/Pause
+    // ❌ KHÔNG return sớm ở đây
+    // if (!this.audio) return;
+
+    // Play / Pause
     this.playBtn.addEventListener("click", () => {
+      if (!this.audio) return;
       this.isPlaying ? this.pause() : this.play();
     });
 
-    // Next/Prev
-    this.nextBtn.addEventListener("click", () => this.next());
-    this.prevBtn.addEventListener("click", () => this.prev());
+    // Next / Prev
+    this.nextBtn.addEventListener("click", () => {
+      if (!this.audio) return;
+      this.next();
+    });
 
-    // Click vào item trong hàng đợi(Xóa ở đây vì bindQueueEvents() đã xử lí phần đó)
+    this.prevBtn.addEventListener("click", () => {
+      if (!this.audio) return;
+      this.prev();
+    });
 
     // Time update -> progress
     this.audio.addEventListener("timeupdate", () => {
+      if (!this.audio) return;
       if (this.isSeeking) return;
       if (this.audio.duration > 0) {
         const ratio = this.audio.currentTime / this.audio.duration;
         const progressPercent = ratio * 100;
 
         this.progressEl.value = progressPercent;
-        this.progressEl.style.setProperty("--p", `${progressPercent}%`);
+        this.progressEl.style.setProperty("--p", `${progressPercent + 0.45}%`);
 
         this.updateTimeDisplay(this.audio.currentTime, this.audio.duration);
       }
@@ -438,10 +452,13 @@ export class MusicPlayer {
 
     // Seek
     this.progressEl.addEventListener("pointerdown", () => {
+      if (!this.audio) return;
       this.isSeeking = true;
     });
 
     this.progressEl.addEventListener("input", (e) => {
+      if (!this.audio) return;
+
       const val = Number(e.target.value);
       this.progressEl.style.setProperty("--p", `${val}%`);
 
@@ -452,6 +469,8 @@ export class MusicPlayer {
     });
 
     this.progressEl.addEventListener("change", (e) => {
+      if (!this.audio) return;
+
       if (this.audio.duration > 0) {
         const val = Number(e.target.value);
         this.audio.currentTime = (this.audio.duration * val) / 100;
@@ -460,11 +479,14 @@ export class MusicPlayer {
     });
 
     this.progressEl.addEventListener("pointerup", () => {
+      if (!this.audio) return;
       this.isSeeking = false;
     });
 
     // Ended
     this.audio.addEventListener("ended", () => {
+      if (!this.audio) return;
+
       if (this.isRepeat) {
         this.audio.currentTime = 0;
         this.audio.play();
@@ -473,20 +495,30 @@ export class MusicPlayer {
       }
     });
 
-    // Shuffle/Repeat
-    this.shuffleBtn.onclick = () => this.toggleShuffle();
-    this.repeatBtn.onclick = () => this.toggleRepeat();
+    // Shuffle / Repeat
+    this.shuffleBtn.onclick = () => {
+      if (!this.audio) return;
+      this.toggleShuffle();
+    };
 
-    // Volume events
+    this.repeatBtn.onclick = () => {
+      if (!this.audio) return;
+      this.toggleRepeat();
+    };
+
+    // Volume
     if (this.volumeEl) {
       this.volumeEl.addEventListener("input", (e) => {
-        const v100 = Number(e.target.value);
+        if (!this.audio) return;
 
+        const v100 = Number(e.target.value);
         const v = this.clamp01(v100 / 100);
         this.setVolume(v, { save: true, updateUI: true });
       });
 
       this.volumeEl.addEventListener("change", (e) => {
+        if (!this.audio) return;
+
         const v100 = Number(e.target.value);
         const v = this.clamp01(v100 / 100);
         this.setVolume(v, { save: true, updateUI: true });
@@ -494,7 +526,27 @@ export class MusicPlayer {
     }
 
     if (this.volumeBtn) {
-      this.volumeBtn.addEventListener("click", () => this.toggleMute());
+      this.volumeBtn.addEventListener("click", () => {
+        if (!this.audio) return;
+        this.toggleMute();
+      });
     }
+  }
+
+  destroy() {
+    if (!this.audio) return;
+
+    this.audio.pause();
+    this.audio.currentTime = 0;
+    this.audio.src = "";
+
+    this.audio.replaceWith(this.audio.cloneNode(false));
+
+    this.audio.remove();
+
+    this.audio = null;
+
+    this.isPlaying = false;
+    this.hidePlayer();
   }
 }

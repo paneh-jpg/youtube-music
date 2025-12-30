@@ -79,9 +79,9 @@ export const PlayerControl = () => {
                     aria-label="Like"
                     title="Like"
                   >
-                    <span class="material-symbols-outlined text-[22px]"
-                      >thumb_up</span
-                    >
+                    <span class="material-symbols-outlined text-[22px]">
+                        thumb_up
+                    </span>
                   </button>
 
                   <button
@@ -90,9 +90,8 @@ export const PlayerControl = () => {
                     aria-label="Dislike"
                     title="Dislike"
                   >
-                    <span class="material-symbols-outlined text-[22px]"
-                      >thumb_down</span
-                    >
+                    <span class="material-symbols-outlined text-[22px]">
+                        thumb_down</span>
                   </button>
 
                   <button
@@ -162,9 +161,5 @@ export const PlayerControl = () => {
           </div>
         </div>
       </div>
-
-      <!-- Persistent media elements (do NOT put these inside routed pages) -->
-      <audio id="audio" class="hidden" preload="metadata" src=""></audio>
-      <video id="video" class="hidden" preload="metadata" playsinline src=""></video>
     </footer>`;
 };

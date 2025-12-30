@@ -10,7 +10,7 @@ import { escapeHTML } from "../utils/utils.js";
 const BASE_URL = import.meta.env.VITE_API_URL;
 
 export function AuthPage() {
-  return `  <div class="bg-black text-white font-[Inter]">
+  return `  <div class="bg-black -ml-40  text-white font-[Inter]">
     <!-- Background gradient -->
     <div
       class="fixed inset-0 bg-linear-to-b from-[#05070b] via-black to-black"
@@ -24,7 +24,7 @@ export function AuthPage() {
     <!-- Main container -->
     <div class="flex flex-col">
       <!-- Auth card -->
-      <main class="flex-1 flex items-center justify-center  py-10">
+      <main class="flex-1 flex items-center justify-center mt-3">
         <div
           class="w-full max-w-md rounded-3xl border border-white/10 bg-[#05070b]/90 shadow-[0_18px_45px_rgba(0,0,0,0.7)] backdrop-blur-xl p-5 sm:p-6"
         >

@@ -45,6 +45,9 @@ export const refreshTokenAPI = async (refreshToken) => {
 
 // Ghi lại lịch sử nghe
 export const saveListenHistory = async (albumId) => {
+  const access_token = localStorage.getItem("access_token");
+  if (!access_token) return;
+
   return await axiosInstance.post(`${BASE_URL}/events/play`, {
     albumId: albumId,
     playedAt: new Date().toISOString(),

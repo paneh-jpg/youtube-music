@@ -200,8 +200,7 @@ export async function loadGenreChips() {
       type: "line",
     }));
 
-    // const genres = [...lines, ...categories];
-    const genres = [...categories, ...lines];
+    const genres = [...lines, ...categories];
 
     const perCol = 4;
     const cols = chunk(genres, perCol);

@@ -1,5 +1,4 @@
 @import "tailwindcss";
-
 @tailwind utilities;
 
 /* Xử lý CSS đóng/mở sidebar  */
@@ -146,7 +145,7 @@
   width: 12px;
   height: 12px;
   border-radius: 999px;
-  background: #ff0033;
+  background: transparent;
   margin-top: -4px; /* căn giữa track */
   cursor: pointer;
 }
@@ -201,4 +200,108 @@ button {
   background-color: #f1eeee;
   color: #000;
   font-weight: 600;
+}
+
+/* SONG DETAIL MINI MODE   */
+
+.js-song-detail .js-song-detail-video {
+  transition: transform 220ms ease, opacity 220ms ease;
+  transform-origin: right bottom;
+  transition-duration: 0.5s;
+}
+
+.js-song-detail.is-mini > .overlay {
+  display: none;
+}
+
+.js-song-detail.is-mini {
+  pointer-events: none;
+}
+
+.js-song-detail.is-mini .js-song-detail-video {
+  pointer-events: auto;
+}
+
+.js-song-detail.is-mini .js-song-detail-panel {
+  display: none;
+}
+
+.js-song-detail.is-mini .js-song-detail-video {
+  position: fixed;
+  right: 6px;
+  bottom: 75px;
+  width: 320px;
+  aspect-ratio: 16 / 9;
+  height: auto;
+  z-index: 300;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+
+  transform: scale(0.98);
+  opacity: 1;
+}
+
+.js-song-detail.is-mini iframe,
+.js-song-detail.is-mini video,
+.js-song-detail.is-mini img {
+  width: 100%;
+  height: 100%;
+  object-position: center;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+/* VIDEO DETAIL MINI MODE */
+
+.js-video-detail .js-video-detail-video {
+  transition: transform 220ms ease, opacity 220ms ease;
+  transform-origin: right bottom;
+  transition-duration: 0.5s;
+}
+
+.js-video-detail.is-mini > .overlay {
+  display: none;
+}
+
+.js-video-detail.is-mini {
+  pointer-events: none;
+}
+
+.js-video-detail.is-mini .js-video-detail-video {
+  pointer-events: auto;
+}
+
+.js-video-detail.is-mini .js-video-detail-panel {
+  display: none;
+}
+
+.js-video-detail.is-mini .js-video-detail-video {
+  position: fixed;
+  right: 6px;
+  bottom: 75px;
+  width: 320px;
+  height: 180px;
+  z-index: 300;
+  object-fit: cover;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+
+  transform: scale(0.98);
+  opacity: 1;
+}
+
+.js-video-detail.is-mini iframe,
+.js-video-detail.is-mini video,
+.js-video-detail.is-mini img {
+  width: 100%;
+  height: 100%;
+  object-position: center;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.js-video-detail.is-mini .html5-video-container {
+  top: 0 !important;
 }

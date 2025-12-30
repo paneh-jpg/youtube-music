@@ -1,18 +1,20 @@
 import { handleLogoutAPI } from "../../api/authApi.js";
 import { getProfileApi } from "../../api/userApi.js";
 import { hideLoading, showLoading } from "../../utils/loading.js";
-import { generateAvatar } from "../../utils/utils.js";
+import { generateAvatar, debounce } from "../../utils/utils.js";
 import { toast } from "../common/Toast.js";
 import { LoadingOverlay } from "../loading/LoadingOverlay.js";
 
-import { searchResult, getSuggestion } from "../../api/homeApi.js";
+import { getSuggestion } from "../../api/homeApi.js";
 
 import { router } from "../../router/router.js";
+import { openSongDetail } from "../../modules/SongDetailManager.js";
+import { openVideoDetail } from "../../modules/VideoDetailManager.js";
 
 export function Header() {
   return `
     <!-- Header (Sticky)-->
-    <header class="fixed js-header top-0 left-0 right-0 z-40 flex h-16 items-center border-b border-white/10 bg-[rgba(0,0,0,0.1)] backdrop-blur-md px-4">
+    <header class="fixed js-header top-0 left-0 right-0 z-40 flex h-16 items-center border-b border-white/10 bg-[rgba(0,0,0,0.05)] backdrop-blur-md px-4">
       <!-- Toggle sidebar -->
       <button id="headerToggle" class="p-2 mr-3 rounded-full hover:bg-white/10 flex items-center justify-center text-white" >
         <span class="material-symbols-outlined text-3xl">menu</span>
@@ -213,13 +215,17 @@ function initSearchSuggestions() {
             router.navigate(`albums/details/${matched.slug}`);
           }
           if (matched.type === "video") {
-            router.navigate(`videos/details/${matched.slug}`);
+            openVideoDetail({ videoId: matched.id });
           }
           if (matched.type === "playlist") {
             router.navigate(`playlists/details/${matched.slug}`);
           }
           if (matched.type === "song") {
-            router.navigate(`songs/details/${matched.id}`);
+            openSongDetail({
+              songId: matched.id,
+              contextSlug: "",
+              type: "",
+            });
           }
         } else {
           router.navigate("/");
@@ -227,11 +233,12 @@ function initSearchSuggestions() {
       });
     });
   }
+  const debouncedRender = debounce(renderSuggestions, 500);
 
   input.addEventListener("input", () => {
     const hasValue = input.value.trim().length > 0;
     clearBtn.classList.toggle("hidden", !hasValue);
-    renderSuggestions(input.value);
+    debouncedRender(input.value);
   });
 
   input.addEventListener("focus", () => {
@@ -333,7 +340,7 @@ function headerBg() {
   if (!header) return;
 
   const topBg = "bg-[rgba(0,0,0,0.1)]";
-  const scrollBg = "bg-black/90";
+  const scrollBg = "bg-black/95";
 
   const apply = () => {
     const scrolled = window.scrollY > 5;

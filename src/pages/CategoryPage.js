@@ -65,7 +65,7 @@ export const initCategoryContent = async (slug) => {
         <div class="js-newest-albums grid grid-flow-col gap-4 auto-cols-[calc(100%/6-12px)]">
            ${
              subCate.playlists.length <= 0
-               ? '<p class="mt-10 text-gray-400 w-[200px]">Chưa có Alums/Playlists </p>'
+               ? '<p class="mt-10 text-gray-400 w-50">Chưa có Alums/Playlists </p>'
                : subCate.playlists
                    .map(
                      (item) =>

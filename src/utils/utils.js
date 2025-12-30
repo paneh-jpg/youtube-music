@@ -107,8 +107,6 @@ export function generateAvatar(name) {
   return { char, bg, text };
 }
 
-// utils/trackNormalizer.js
-
 export function normalizeSongToTrack(song = {}) {
   return {
     id: song.id,
@@ -126,11 +124,22 @@ export function mergeSongWithAlbumTracks(song, tracks = []) {
   const index = tracks.findIndex((t) => String(t.id) === String(song.id));
 
   if (index === -1) {
-    return [song, ...tracks]; // hoặc push cuối
+    return [song, ...tracks];
   }
 
   const newTracks = [...tracks];
   newTracks[index] = { ...tracks[index], ...song };
 
   return newTracks;
+}
+
+export function debounce(callback, timeout = 500) {
+  let id;
+  return (...args) => {
+    clearTimeout(id);
+
+    id = setTimeout(() => {
+      callback.apply(null, args);
+    }, timeout);
+  };
 }

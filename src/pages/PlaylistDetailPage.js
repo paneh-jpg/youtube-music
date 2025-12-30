@@ -1,9 +1,9 @@
 import { getPLaylistBySlug } from "../api/homeApi.js";
-import { formatSecondsToHms, formatDateVietnamese } from "../utils/utils.js";
+import { formatSecondsToHms } from "../utils/utils.js";
 
-import { router } from "../router/router.js";
 import { hideLoading, showLoading } from "../utils/loading.js";
 import { saveListenHistory } from "../api/authApi.js";
+import { openSongDetail } from "../modules/SongDetailManager.js";
 
 export function PlaylistDetails() {
   return `
@@ -138,20 +138,21 @@ export async function initPlaylistsContent(slug) {
 
       const response = await saveListenHistory(idVideo);
 
-      router.navigate(
-        `/songs/details/${encodeURIComponent(
-          idVideo
-        )}?album=${encodeURIComponent(slug)}&type=playlist`
-      );
+      openSongDetail({
+        songId: idVideo,
+        contextSlug: slug,
+        type: "playlist",
+      });
     });
 
     playAllBtn.onclick = () => {
       const idVideo = data.tracks[0].id;
-      router.navigate(
-        `/songs/details/${encodeURIComponent(
-          idVideo
-        )}?album=${encodeURIComponent(slug)}&type=playlist`
-      );
+
+      openSongDetail({
+        songId: idVideo,
+        contextSlug: slug,
+        type: "playlist",
+      });
     };
   } catch (error) {
     console.log(error.message);

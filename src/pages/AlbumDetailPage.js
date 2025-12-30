@@ -1,14 +1,14 @@
 import { getAlbumBySlug } from "../api/exploreApi.js";
 import { formatSecondsToHms, formatDateVietnamese } from "../utils/utils.js";
 
-import { router } from "../router/router.js";
 import { hideLoading, showLoading } from "../utils/loading.js";
 import { saveListenHistory } from "../api/authApi.js";
+import { openSongDetail } from "../modules/SongDetailManager.js";
 
 export function AlbumsDetails() {
   return `
       <!--  Main content  -->
-        <div class="js-album-content h-screen" >
+        <div class="js-album-content h-screen " >
         <h1 class"text-3xl font-bold py-10 text-[#333]"> Album detail </h1>
         </div>
       </div>
@@ -20,6 +20,7 @@ export async function initAlbumsDetails() {}
 
 export async function initAlbumsContent(slug) {
   const contentEl = document.querySelector(".js-album-content");
+
   if (!contentEl) return;
 
   if (!slug) {
@@ -140,22 +141,23 @@ export async function initAlbumsContent(slug) {
 
       const response = await saveListenHistory(data.id);
 
-      router.navigate(
-        `/songs/details/${encodeURIComponent(
-          idVideo
-        )}?album=${encodeURIComponent(slug)}&type=album`
-      );
+      openSongDetail({
+        songId: idVideo,
+        contextSlug: slug,
+        type: "album",
+      });
     });
 
     playAllBtn.onclick = async () => {
       const idVideo = data.tracks[0].id;
 
       const response = await saveListenHistory(data.id);
-      router.navigate(
-        `/songs/details/${encodeURIComponent(
-          idVideo
-        )}?album=${encodeURIComponent(slug)}&type=album`
-      );
+
+      openSongDetail({
+        songId: idVideo,
+        contextSlug: slug,
+        type: "album",
+      });
     };
   } catch (error) {
     console.log(error.message);

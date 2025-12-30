@@ -3,9 +3,11 @@ import { getPLaylistBySlug } from "../api/homeApi.js";
 import { Panel, initPanel } from "../components/layout/Panel.js";
 
 import { VideoArea } from "../components/layout/VideoArea.js";
-import { getOrCreateMusicPlayer } from "../modules/playerSingleton.js";
+import { getOrCreateUnifiedPlayer } from "../modules/playerSingleton.js";
 import { hideLoading, showLoading } from "../utils/loading.js";
 import { mergeSongWithAlbumTracks } from "../utils/utils.js";
+
+import { closeVideoDetail } from "../modules/VideoDetailManager.js";
 
 export function SongDetailPage() {
   return `
@@ -19,30 +21,32 @@ export function SongDetailPage() {
   `;
 }
 
-export async function initSongDetailPage({ songId, contextSlug } = {}) {
-  initPanel();
-}
-
 export async function initSongDetailContent({ songId, contextSlug, type }) {
-  const audio = document.querySelector("#audio");
-  const currentTrackNameEl = document.querySelector(".js-current-track-name");
-  const currentTrackThumbEl = document.querySelector(".js-thumb");
-  const songImg = document.querySelector(".main-img");
-  const playBtn = document.querySelector(".js-play");
-  const progress = document.querySelector(".js-progress");
-  const nextBtn = document.querySelector(".js-next");
-  const prevBtn = document.querySelector(".js-prev");
-  const repeatBtn = document.querySelector(".js-repeat");
-  const shuffleBtn = document.querySelector(".js-shuffle");
-  const currentTime = document.querySelector(".js-current-time");
-  const durationTime = document.querySelector(".js-duration-time");
-  const randomBtn = document.querySelector(".js-shuffle");
-  const queueListContainer = document.querySelector(".js-queue-list");
-  const songTitle = document.querySelector(".js-title");
+  const videoPlayer = document.querySelector("#video-detail-root");
+  if (videoPlayer) {
+    closeVideoDetail({ remove: true });
+  }
 
+  // Lấy đúng elements trước khi querySelector (tránh null khi page chưa mount)
+  const playerBarEl = document.querySelector(".player-bar");
+  const playBtnEl = document.querySelector(".js-play");
+  const nextBtnEl = document.querySelector(".js-next");
+  const prevBtnEl = document.querySelector(".js-prev");
+  const progressEl = document.querySelector(".js-progress");
+  const repeatBtnEl = document.querySelector(".js-repeat");
+  const shuffleBtnEl = document.querySelector(".js-shuffle");
+  const currentTimeEl = document.querySelector(".js-current-time");
+  const durationTimeEl = document.querySelector(".js-duration-time");
+  const queueListEl = document.querySelector(".js-queue-list");
+  const titleEl = document.querySelector(".js-title");
+  const metaEl = document.querySelector(".js-meta");
+  const thumbEl = document.querySelector(".js-thumb");
   const volumeEl = document.querySelector(".js-volume");
-  const volumeBtn = document.querySelector(".js-volume-btn");
+  const volumeBtnEl = document.querySelector(".js-volume-btn");
   const volumeIconEl = document.querySelector(".js-volume-icon");
+  const mainImgEl = document.querySelector(".main-img");
+
+  playerBarEl?.classList.remove("player-hidden");
 
   let response;
   let tracks = [];
@@ -85,30 +89,27 @@ export async function initSongDetailContent({ songId, contextSlug, type }) {
     }
   }
 
-  // Khởi tạo player
-  getOrCreateMusicPlayer({
-    // Elements
-    audioEl: audio,
-    currentTrackNameEl: currentTrackNameEl,
-    currentTrackThumbEl: currentTrackThumbEl,
-    songImgEl: songImg,
-    playBtn: playBtn,
-    progressEl: progress,
-    nextBtn: nextBtn,
-    prevBtn: prevBtn,
-    repeatBtn: repeatBtn,
-    shuffleBtn: shuffleBtn,
-    durationTimeEl: durationTime,
-    currentTimeEl: currentTime,
-    songTitleEl: songTitle,
-    randomBtn: randomBtn,
-    queueListContainer: queueListContainer,
-    volumeBtn: volumeBtn,
-    volumeEl: volumeEl,
-    volumeIconEl: volumeIconEl,
-
-    // Data
-    tracks: tracks,
-    initialSongId: songId,
+  // Khởi tạo / cập nhật UnifiedPlayer (Audio)
+  const player = getOrCreateUnifiedPlayer({
+    playerBarEl,
+    playBtnEl,
+    nextBtnEl,
+    prevBtnEl,
+    progressEl,
+    repeatBtnEl,
+    shuffleBtnEl,
+    currentTimeEl,
+    durationTimeEl,
+    titleEl,
+    metaEl,
+    thumbEl,
+    queueListEl,
+    volumeEl,
+    volumeBtnEl,
+    volumeIconEl,
+    mainImgEl,
   });
+
+  // Set queue + autoplay (nếu đang phát video thì sẽ dừng video trước)
+  player.setQueue({ mode: "audio", tracks, initialId: songId });
 }

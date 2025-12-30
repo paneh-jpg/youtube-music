@@ -1,6 +1,6 @@
 export function LoadingOverlay() {
   return `
-    <div id="global-loading" class="fixed inset-0 z-[9999] hidden" aria-hidden="true">
+    <div id="global-loading" class="fixed inset-0 z-9998 hidden" aria-hidden="true">
       <div class="absolute inset-0 bg-black/60 backdrop-blur-[2px]"></div>
 
       <div class="absolute inset-0 flex items-center justify-center">

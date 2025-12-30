@@ -1,9 +1,9 @@
 export const Panel = () => {
   return `        <!--  RIGHT: PANEL  -->
-        <aside class="js-panel h-full rounded-xl bg-black/40 border border-white/10 overflow-hidden flex flex-col">
+        <aside class="js-panel overflow-hidden h-[76vh] rounded-xl bg-black/40 text-white border border-white/10  flex flex-col">
           <!-- Tabs -->
           <div class="px-5 p-4">
-            <div class="flex items-center justify-between gap-8 border-b border-white/10">
+            <div class="flex  items-center justify-between gap-8 border-b border-white/10">
               <button class="tab-btn cursor-pointer pb-3 text-sm font-semibold tracking-wide text-white border-b-2 border-white" data-tab="next" >
                 TIẾP THEO
               </button>
@@ -17,26 +17,13 @@ export const Panel = () => {
           </div>
 
           <!-- Content -->
-          <div class="flex-1 min-h-0 overflow-hidden">
+          <div class="js-panel-content overflow-y-auto min-h-0  custom-scrollbar">
             <!--  TAB: NEXT  -->
-            <div class="tab-panel h-full flex flex-col min-h-0" data-panel="next">
-              <div class="px-5 pt-3 pb-4">
-                <div class="flex items-start justify-between gap-4">
-                  <div>
-                    <p class="text-xs text-white/60">Đang phát: </p>
-                    <h3 class="js-current-track-name mt-1 font-semibold leading-tight"> Nhạc Acoustic Album 9 - Bài 5</h3>
-                  </div>
-                </div>
-
-                <div class="mt-5 flex items-center justify-between">
-                  <p class="text-md font-semibold"> Các bài hát tiếp theo: </p>
-                </div>
-              </div>
-
-              <div class="border-t border-white/10"></div>
+            <div class="tab-panel panel-content flex flex-col min-h-0" data-panel="next">
 
               <!-- Queue list (scroll ở đây) -->
-              <div class="js-queue-list flex-1 min-h-0 overflow-y-auto custom-scrollbar">
+              <div class="js-queue-list flex-1 min-h-0 overflow-y-auto "></div>
+
                 <!-- Item active -->
               </div>
             </div>

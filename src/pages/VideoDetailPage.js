@@ -1,35 +1,107 @@
 import { getVideoById } from "../api/exploreApi.js";
+import { initPanel, Panel } from "../components/layout/Panel.js";
 import { VideoArea } from "../components/layout/VideoArea.js";
+import { closeSongDetail } from "../modules/SongDetailManager.js";
+import { getOrCreateUnifiedPlayer } from "../modules/playerSingleton.js";
+import { hideLoading, showLoading } from "../utils/loading.js";
 
+// khởi tạo trang chi tiết video
 export function VideoDetailPage() {
   return `
-    <div class="pb-5 -mt-5 overflow-hidden">
+    <div class="pb-5 -mt-7 overflow-hidden">
       <div class="mx-auto w-full overflow-hidden">
-        <div class="h-[calc(100vh-96px)] max-h-[calc(100vh-96px)] overflow-hidden flex items-center justify-center">
-          <div class="w-full max-w-275 overflow-hidden">
+        <div class="h-[80vh] pb-5">
+          <div class="mx-auto max-w-350 h-full min-h-0 pt-4
+                      grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_420px] gap-6 overflow-hidden">
             ${VideoArea(false)}
+            ${Panel()}
           </div>
         </div>
-
       </div>
     </div>
   `;
 }
 
-export async function initVideoDetailPage({ videoId, contextSlug } = {}) {}
+export async function initVideoDetailPage() {
+  initPanel();
+}
 
+// khởi tạo nội dung chi tiết video
 export async function initVideoDetailContent({ videoId }) {
-  const videoIframe = document.querySelector("#videoIframe");
+  const songDetailEl = document.querySelector(".js-song-detail");
+  if (songDetailEl) {
+    closeSongDetail({ remove: true });
+  }
 
-  const playerControl = document.querySelector(".player-bar");
-  const audioEl = document.querySelector("#audio");
-  console.log(playerControl);
+  // Dọn iframe cũ (nếu có)
+  const oldIframe = document.querySelector("#videoIframe iframe");
+  oldIframe?.remove();
 
-  playerControl.classList.replace("player-visible", "player-hidden");
-  audioEl.pause();
+  const playerBarEl = document.querySelector(".player-bar");
+  const playBtnEl = document.querySelector(".js-play");
+  const nextBtnEl = document.querySelector(".js-next");
+  const prevBtnEl = document.querySelector(".js-prev");
+  const progressEl = document.querySelector(".js-progress");
+  const repeatBtnEl = document.querySelector(".js-repeat");
+  const shuffleBtnEl = document.querySelector(".js-shuffle");
+  const currentTimeEl = document.querySelector(".js-current-time");
+  const durationTimeEl = document.querySelector(".js-duration-time");
+  const queueListEl = document.querySelector(".js-queue-list");
+  const titleEl = document.querySelector(".js-title");
+  const metaEl = document.querySelector(".js-meta");
+  const thumbEl = document.querySelector(".js-thumb");
+  const volumeEl = document.querySelector(".js-volume");
+  const volumeBtnEl = document.querySelector(".js-volume-btn");
+  const volumeIconEl = document.querySelector(".js-volume-icon");
 
-  const response = await getVideoById(videoId);
+  playerBarEl?.classList.remove("player-hidden");
 
-  let tracks = response.data.related;
-  videoIframe.src = `https://www.youtube.com/embed/${response.data.videoId}?autoplay=1&rel=0&playsinline=1`;
+  try {
+    showLoading();
+
+    // Lấy dữ liệu video
+    const res = await getVideoById(videoId);
+    const current = res.data;
+    const related = Array.isArray(res.data?.related) ? res.data.related : [];
+
+    const tracks = [
+      current,
+      ...related.filter((t) => t?.videoId !== current?.videoId),
+    ];
+    const initialId = current?.videoId;
+
+    // Khởi tạo / cập nhật UnifiedPlayer (Video)
+    const player = getOrCreateUnifiedPlayer({
+      playerBarEl,
+      playBtnEl,
+      nextBtnEl,
+      prevBtnEl,
+      progressEl,
+      repeatBtnEl,
+      shuffleBtnEl,
+      currentTimeEl,
+      durationTimeEl,
+      titleEl,
+      metaEl,
+      thumbEl,
+      queueListEl,
+      volumeEl,
+      volumeBtnEl,
+      volumeIconEl,
+    });
+
+    // Set queue + autoplay
+    player.setQueue({
+      mode: "video",
+      tracks,
+      initialId,
+      ytHostId: "videoIframe",
+    });
+  } catch (error) {
+    console.log(error);
+  } finally {
+    setTimeout(() => {
+      hideLoading();
+    }, 500);
+  }
 }

@@ -12,7 +12,7 @@ export function LoadingCard() {
         Here are the biggest enterprise technology acquisitions of 2021 so far.
       </p>
 
-      <div class="absolute inset-0 flex items-center justify-center">
+      <div class="absolute z-9999 inset-0 flex items-center justify-center">
         ${LoadingSpinner({ size: 8 })}
       </div>
     </div>

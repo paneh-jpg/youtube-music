@@ -2,7 +2,6 @@ import { SectionHeader } from "../components/section/SectionHeader.js";
 import {
   getAlbumsForYou,
   getTodayHits,
-  getPlaylistByCountry,
   getMoods,
   getQuickPick,
 } from "../api/homeApi.js";
@@ -12,26 +11,42 @@ import { getProfileApi } from "../api/userApi.js";
 import { router } from "../router/router.js";
 import { initCustomScrolling } from "../utils/horizontalScroll.js";
 import { hideLoading, showLoading } from "../utils/loading.js";
-import { saveListenHistory } from "../api/authApi.js";
+import { getListenHistory, saveListenHistory } from "../api/authApi.js";
 
 export function HomePage() {
   return `
       <!--  Main content  -->
       <div class="h-full ">
 
-        <h1 class=" text-5xl font-bold js-username"> </h1>
+        <h1 class=" text-5xl font-bold js-username">Chào mừng đến với YouTube Music</h1>
           <!--  Moods  -->
           <div class="relative">
             <!-- Mood List -->
             <div class="js-moods-list flex gap-3 mt-10 py-6 "></div>
           </div>  
 
+          <!--  Listen History  -->
+          <section class="js-listen-history mt-10 hidden">
+              ${SectionHeader({
+                title: "Đã nghe gần đây",
+                underline: false,
+                hasBtn: false,
+              })}
+  
+          <!-- content bên dưới (horizontal scroll cards) -->
+          <div class="js-listened-list-container overflow-x-auto custom-scrollbar pb-2.5 ">
+                <div class="js-listened-list grid grid-flow-col grid-rows-4 auto-cols-[calc(100%/3-40px)] gap-x-10 gap-y-2" >
+                       <!--   ALBUMs -->
+                </div>
+             </div>
+          </section>
+
           <!--  Quick pick  -->
           <section class="mt-10">
               ${SectionHeader({
                 title: "Chọn nhanh đài phát",
                 underline: false,
-                btnContent: "Xem tất cả",
+                hasBtn: false,
               })}
   
           <!-- content bên dưới (horizontal scroll cards) -->
@@ -47,7 +62,7 @@ export function HomePage() {
               ${SectionHeader({
                 title: "Album dành cho bạn",
                 underline: false,
-                btnContent: "Xem tất cả",
+                hasBtn: false,
               })}
   
           <!-- content bên dưới (horizontal scroll cards) -->
@@ -63,7 +78,7 @@ export function HomePage() {
               ${SectionHeader({
                 title: "Today's Hits",
                 underline: false,
-                btnContent: "Xem tất cả",
+                hasBtn: false,
               })}
   
           <!-- content bên dưới (horizontal scroll cards) -->
@@ -82,6 +97,7 @@ export function HomePage() {
 export function initHomePage() {
   initUserName();
   initMoods();
+  loadListenedList().then(initCustomScrolling());
   loadQuickPick().then(initCustomScrolling());
   loadAlbumsForYou().then(initCustomScrolling());
   loadTodayHits().then(initCustomScrolling());
@@ -92,7 +108,7 @@ const initUserName = async () => {
   if (!access_token) return;
   const usernameEl = document.querySelector(".js-username");
   const res = await getProfileApi();
-  usernameEl.innerHTML = `Xin chào ${res.data.name}`;
+  usernameEl.innerHTML = ` Xin chào ${res.data.name}`;
 };
 
 const initMoods = async () => {
@@ -121,6 +137,57 @@ const initMoods = async () => {
     hideLoading();
   }
 };
+
+async function loadListenedList() {
+  const access_token = localStorage.getItem("access_token");
+  if (!access_token) return;
+
+  const listenedListSection = document.querySelector(".js-listen-history");
+  if (!listenedListSection) return;
+  listenedListSection.classList.remove("hidden");
+
+  const container = document.querySelector(".js-listened-list");
+  if (!container) return;
+
+  try {
+    showLoading();
+    const response = await getListenHistory();
+    const listenedList = response.data;
+
+    container.innerHTML = listenedList
+      .map((item) =>
+        QuickPickCard({
+          id: item._id,
+          slug: item.slug,
+          thumbnail:
+            item.thumbnails.length > 0
+              ? item.thumbnails
+              : "https://picsum.photos/800/800?rand=${Date.now()}",
+          title: item.title,
+          type: item.type,
+          artist: item.artists,
+        })
+      )
+      .join("");
+
+    container.addEventListener("click", async (e) => {
+      const quickPick = e.target.closest(".js-quick-pick-card");
+
+      if (!quickPick) return;
+
+      const slug = quickPick.dataset.slug;
+      const id = quickPick.dataset.id;
+
+      router.navigate(`/albums/details/${encodeURIComponent(slug)}`);
+    });
+  } catch (error) {
+    console.log(error);
+  } finally {
+    setTimeout(() => {
+      hideLoading();
+    }, 500);
+  }
+}
 
 async function loadQuickPick() {
   const container = document.querySelector(".js-quick-pick-list");
